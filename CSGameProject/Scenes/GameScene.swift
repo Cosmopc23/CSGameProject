@@ -6,7 +6,6 @@
 //
 
 import SpriteKit
-// Testing
 
 class GameScene: SKScene {
     
