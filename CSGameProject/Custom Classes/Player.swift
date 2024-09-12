@@ -8,7 +8,7 @@
 import SpriteKit
 
 enum PlayerState {
-    case idle, running, sitting
+    case idle, running
 }
 
 class Player: SKSpriteNode {

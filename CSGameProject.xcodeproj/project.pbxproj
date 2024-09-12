@@ -21,6 +21,7 @@
 		324571412C8C83D7007A3AC7 /* CSGameProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324571402C8C83D7007A3AC7 /* CSGameProjectTests.swift */; };
 		3245714B2C8C83D7007A3AC7 /* CSGameProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245714A2C8C83D7007A3AC7 /* CSGameProjectUITests.swift */; };
 		3245714D2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */; };
+		CE2CA10F2C92DB8B004739B1 /* PhysicsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2CA10E2C92DB8A004739B1 /* PhysicsHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,7 @@
 		324571462C8C83D7007A3AC7 /* CSGameProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSGameProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3245714A2C8C83D7007A3AC7 /* CSGameProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameProjectUITests.swift; sourceTree = "<group>"; };
 		3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameProjectUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		CE2CA10E2C92DB8A004739B1 /* PhysicsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				324571262C8C83D4007A3AC7 /* AppDelegate.swift */,
+				321F1A022C91AFDF006AA50F /* GameConstants.swift */,
 			);
 			path = Template;
 			sourceTree = "<group>";
@@ -113,7 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				321F1A002C91AFD4006AA50F /* AnimationHelper.swift */,
-				321F1A022C91AFDF006AA50F /* GameConstants.swift */,
+				CE2CA10E2C92DB8A004739B1 /* PhysicsHelper.swift */,
 			);
 			path = "Helper Files";
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				321F19FE2C91AFA2006AA50F /* SKNode + Extensions.swift in Sources */,
+				CE2CA10F2C92DB8B004739B1 /* PhysicsHelper.swift in Sources */,
 				321F19FB2C91AF7F006AA50F /* Player.swift in Sources */,
 				321F1A012C91AFD4006AA50F /* AnimationHelper.swift in Sources */,
 				3245712D2C8C83D4007A3AC7 /* GameScene.swift in Sources */,
