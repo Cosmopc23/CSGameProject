@@ -7,11 +7,34 @@
 
 import SpriteKit
 
+
+
 enum GameState {
     case ready, ongoing, finished
 }
 
 class GameScene: SKScene {
+    
+    var worldLayer: Layer!
+    var mapNode: SKNode!
+    var tileMap: SKTileMapNode!
+    
+    override func didMove(to view: SKView) {
+        load(level: "100m")
+
+    }
+    
+    func load(level: String) {
+        if let levelNode = SKNode.unarchiveFromFile(file: level) {
+            mapNode = levelNode
+            worldLayer.addChild(mapNode)
+            loadTileMap()
+        }
+    }
+    
+    func loadTileMap() {
+        
+    }
     
     var player: Player!
     

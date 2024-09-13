@@ -23,6 +23,7 @@
 		3245714B2C8C83D7007A3AC7 /* CSGameProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245714A2C8C83D7007A3AC7 /* CSGameProjectUITests.swift */; };
 		3245714D2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */; };
 		CE2CA10F2C92DB8B004739B1 /* PhysicsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2CA10E2C92DB8A004739B1 /* PhysicsHelper.swift */; };
+		CEA8A00D2C947E20004C55C7 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA8A00C2C947E20004C55C7 /* Layer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +63,7 @@
 		3245714A2C8C83D7007A3AC7 /* CSGameProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameProjectUITests.swift; sourceTree = "<group>"; };
 		3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameProjectUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		CE2CA10E2C92DB8A004739B1 /* PhysicsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsHelper.swift; sourceTree = "<group>"; };
+		CEA8A00C2C947E20004C55C7 /* Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +180,7 @@
 		324571252C8C83D4007A3AC7 /* CSGameProject */ = {
 			isa = PBXGroup;
 			children = (
+				CEA8A00B2C947E16004C55C7 /* Layers */,
 				321F1A0B2C938FF0006AA50F /* Tiles */,
 				321F1A0A2C91B1EE006AA50F /* Scenes */,
 				321F19FF2C91AFC1006AA50F /* Helper Files */,
@@ -208,6 +211,14 @@
 				3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */,
 			);
 			path = CSGameProjectUITests;
+			sourceTree = "<group>";
+		};
+		CEA8A00B2C947E16004C55C7 /* Layers */ = {
+			isa = PBXGroup;
+			children = (
+				CEA8A00C2C947E20004C55C7 /* Layer.swift */,
+			);
+			path = Layers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,6 +360,7 @@
 				321F1A012C91AFD4006AA50F /* AnimationHelper.swift in Sources */,
 				3245712D2C8C83D4007A3AC7 /* GameScene.swift in Sources */,
 				321F1A032C91AFDF006AA50F /* GameConstants.swift in Sources */,
+				CEA8A00D2C947E20004C55C7 /* Layer.swift in Sources */,
 				3245712F2C8C83D4007A3AC7 /* GameViewController.swift in Sources */,
 				324571272C8C83D4007A3AC7 /* AppDelegate.swift in Sources */,
 			);
