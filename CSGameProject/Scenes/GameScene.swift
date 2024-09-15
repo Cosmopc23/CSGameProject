@@ -33,7 +33,16 @@ class GameScene: SKScene {
     }
     
     func loadTileMap() {
-        
+        if let groundTiles = mapNode.childNode(withName: GameConstants.StringConstants.groundTilesName) as? SKTileMapNode {
+            tileMap = groundTiles
+            tileMap.scale(to: frame.size, width: false, multiplier: 1.0)
+            PhysicsHelper.addPhysicsBody(to: tileMap, and: "ground")
+            for child in groundTiles.children {
+                if let sprite = child as? SKSpriteNode, sprite.name != nil {
+                    ObjectHelper.handleChild(sprite: sprite, with: sprite.name!)
+                }
+            }
+        }
     }
     
     var player: Player!

@@ -10,7 +10,10 @@ import CoreGraphics
 
 struct GameConstants {
     struct StringConstants {
+        static let groundTilesName = "Ground Tiles"
         static let playerName = "Player"
+        static let finishLineName = "Finish Line"
+        
         static let playerImageName = "idle_0"
         
         static let playerIdleAtlas = "Player Idle Atlas"
