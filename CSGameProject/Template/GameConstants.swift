@@ -15,7 +15,7 @@ struct GameConstants {
         static let finishLineName = "Finish Line"
         
         static let playerImageName = "idle_0"
-        
+        static let groundNodeName = "GroundNode"
         static let playerIdleAtlas = "Player Idle Atlas"
         static let idlePrefixKey = "idle_"
     }

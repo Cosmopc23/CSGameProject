@@ -43,6 +43,7 @@ class GameScene: SKScene {
                 }
             }
         }
+        addPlayer()
     }
     
     var player: Player!
