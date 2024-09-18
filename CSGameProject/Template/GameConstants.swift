@@ -30,5 +30,12 @@ struct GameConstants {
         static let ceilingCategory: UInt32 = 0x1 << 3
         static let finishCategory: UInt32 = 0x1 << 4
     }
+
+    struct zPositions {
+        static let backgroundZ: CGFloat = 0
+        static let objectZ: CGFloat = 1
+        static let playerZ: CGFloat = 2
+        static let hudZ: CGFloat = 3
+    }
 }
 
