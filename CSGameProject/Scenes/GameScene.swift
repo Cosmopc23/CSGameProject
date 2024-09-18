@@ -7,6 +7,9 @@
 
 import SpriteKit
 
+func test() {
+    print("Hello world")
+}
 
 
 enum GameState {
