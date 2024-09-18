@@ -54,11 +54,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createLayers() {
         worldLayer = Layer()
+        worldLayer.zPosition = GameConstants.zPositions.worldZ
         
         addChild(worldLayer)
         worldLayer.layerVelocity =  CGPoint(x: -200.0, y: 0.0)
         
         backgroundLayer = RepeatingLayer()
+        backgroundLayer.zPosition = GameConstants.zPositions.backgroundZ
         addChild(backgroundLayer)
         
         for i in 0...1 {
@@ -86,6 +88,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func loadTileMap() {
         if let groundTiles = mapNode.childNode(withName: GameConstants.StringConstants.groundTilesName) as? SKTileMapNode {
             tileMap = groundTiles
+            tileMap.zPosition = GameConstants.zPositions.objectZ
             tileMap.scale(to: frame.size, width: false, multiplier: 1.0)
             PhysicsHelper.addPhysicsBody(to: tileMap, and: "ground")
             for child in groundTiles.children {
@@ -107,6 +110,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.name = GameConstants.StringConstants.playerName
         PhysicsHelper.addPhysicsBody(to: player, with: player.name!)
         player.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
+        player.zPosition = GameConstants.zPositions.playerZ
         
         player.loadTextures()
         player.state = .idle

@@ -32,10 +32,11 @@ struct GameConstants {
     }
 
     struct zPositions {
-        static let backgroundZ: CGFloat = 0
-        static let objectZ: CGFloat = 1
-        static let playerZ: CGFloat = 2
-        static let hudZ: CGFloat = 3
+        static let worldZ: CGFloat = 0
+        static let backgroundZ: CGFloat = 1
+        static let objectZ: CGFloat = 2
+        static let playerZ: CGFloat = 3
+        static let hudZ: CGFloat = 4
     }
 }
 
