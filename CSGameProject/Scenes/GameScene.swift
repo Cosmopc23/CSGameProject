@@ -13,15 +13,63 @@ enum GameState {
     case ready, ongoing, finished
 }
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var worldLayer: Layer!
+    var backgroundLayer: RepeatingLayer!
     var mapNode: SKNode!
     var tileMap: SKTileMapNode!
+    var lastTime: TimeInterval = 0
+    var dt: TimeInterval = 0
+    
+    
+    var gameState = GameState.ready {
+        willSet {
+            switch newValue {
+            case .ongoing:
+                player.state = .running
+            case .finished:
+                player.state = .idle
+            default:
+                break
+            }
+        }
+    }
+    
+    
     
     override func didMove(to view: SKView) {
+        physicsWorld.contactDelegate = self
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: -9.8)
+        
+        physicsBody = SKPhysicsBody(edgeFrom: CGPoint(x: frame.minX, y: frame.minY), to: CGPoint(x: frame.maxX, y: frame.minY))
+        physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.frameCategory
+        physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
+        
+        createLayers()
+    }
+    
+    func createLayers() {
+        worldLayer = Layer()
+        
+        addChild(worldLayer)
+        worldLayer.layerVelocity =  CGPoint(x: -200.0, y: 0.0)
+        
+        backgroundLayer = RepeatingLayer()
+        addChild(backgroundLayer)
+        
+        for i in 0...1 {
+            let backgroundImage = SKSpriteNode(imageNamed: GameConstants.StringConstants.worldBackgroundName)
+            backgroundImage.name = String(i)
+            backgroundImage.scale(to: frame.size, width: false, multiplier: 1.0)
+            backgroundImage.anchorPoint = CGPoint.zero
+            backgroundImage.position = CGPoint(x: 0.0 + CGFloat(i) * backgroundImage.size.width, y: 0.0)
+            backgroundLayer.addChild(backgroundImage)
+        }
+        
+        backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
+        
         load(level: "100m")
-
     }
     
     func load(level: String) {
@@ -60,5 +108,19 @@ class GameScene: SKScene {
         player.loadTextures()
         player.state = .idle
     
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        if lastTime > 0 {
+            dt = currentTime - lastTime
+        } else {
+            dt = 0
+        }
+        lastTime = currentTime
+        
+        if gameState == .ongoing {
+            worldLayer.update(dt)
+            backgroundLayer.update(dt)
+        }
     }
 }
