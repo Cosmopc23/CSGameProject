@@ -7,10 +7,6 @@
 
 import SpriteKit
 
-func test() {
-    print("Hello world")
-}
-
 
 enum GameState {
     case ready, ongoing, finished
@@ -52,6 +48,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createLayers()
     }
     
+    func printSceneGraph(for node: SKNode, level: Int = 0) {
+        let indent = String(repeating: "  ", count: level)
+        print("\(indent)\(node.name ?? "unnamed") (Position: \(node.position), zPosition: \(node.zPosition))")
+        for child in node.children {
+            printSceneGraph(for: child, level: level + 1)
+        }
+    }
+    
+    
     func createLayers() {
         worldLayer = Layer()
         worldLayer.zPosition = GameConstants.zPositions.worldZ
@@ -88,8 +93,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func loadTileMap() {
         if let groundTiles = mapNode.childNode(withName: GameConstants.StringConstants.groundTilesName) as? SKTileMapNode {
             tileMap = groundTiles
-            tileMap.zPosition = GameConstants.zPositions.objectZ
+            
             tileMap.scale(to: frame.size, width: false, multiplier: 1.0)
+            worldLayer.addChild(tileMap)
             PhysicsHelper.addPhysicsBody(to: tileMap, and: "ground")
             for child in groundTiles.children {
                 if let sprite = child as? SKSpriteNode, sprite.name != nil {
@@ -115,6 +121,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.loadTextures()
         player.state = .idle
     
+        worldLayer.addChild(player)
+        
+        print("Scene size: \(self.size)")
+        print("View size: \(String(describing: view?.bounds.size))")
+        
+        print("WorldLayer - Position: \(worldLayer.position), Size: \(worldLayer.frame.size)")
+        print("TileMap - Position: \(tileMap?.position), Size: \(tileMap.frame.size)")
+        print("Player - Position: \(player?.position), Size: \(player.frame.size)")
+        
+        print("WorldLayer zPosition: \(worldLayer.zPosition)")
+        print("TileMap zPosition: \(tileMap.zPosition)")
+        print("Player zPosition: \(player.zPosition)")
+        
+        printSceneGraph(for: self)
     }
     
     override func update(_ currentTime: TimeInterval) {
