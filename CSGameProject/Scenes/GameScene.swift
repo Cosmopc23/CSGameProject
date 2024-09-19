@@ -35,6 +35,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    var player: Player!
+    
+    var touch = false
     
     
     override func didMove(to view: SKView) {
@@ -95,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             tileMap = groundTiles
             
             tileMap.scale(to: frame.size, width: false, multiplier: 1.0)
-            worldLayer.addChild(tileMap)
+            
             PhysicsHelper.addPhysicsBody(to: tileMap, and: "ground")
             for child in groundTiles.children {
                 if let sprite = child as? SKSpriteNode, sprite.name != nil {
@@ -106,7 +109,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addPlayer()
     }
     
-    var player: Player!
+
     
     
     // Adds player object by adding an idle image, scaling the size relative to the frame, adding a physics body, putting its initial position, loading the textures and setting the player state to idle so that the animation does not show the character running when it is not moving.
@@ -121,20 +124,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.loadTextures()
         player.state = .idle
     
-        worldLayer.addChild(player)
-        
-        print("Scene size: \(self.size)")
-        print("View size: \(String(describing: view?.bounds.size))")
-        
-        print("WorldLayer - Position: \(worldLayer.position), Size: \(worldLayer.frame.size)")
-        print("TileMap - Position: \(tileMap?.position), Size: \(tileMap.frame.size)")
-        print("Player - Position: \(player?.position), Size: \(player.frame.size)")
-        
-        print("WorldLayer zPosition: \(worldLayer.zPosition)")
-        print("TileMap zPosition: \(tileMap.zPosition)")
-        print("Player zPosition: \(player.zPosition)")
-        
-        printSceneGraph(for: self)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        switch gameState {
+        case .ready:
+            gameState = .ongoing
+        case .ongoing:
+            touch = true
+        default:
+            break
+        }
     }
     
     override func update(_ currentTime: TimeInterval) {
