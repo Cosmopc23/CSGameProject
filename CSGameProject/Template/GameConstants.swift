@@ -14,7 +14,7 @@ struct GameConstants {
         static let playerName = "Player"
         static let finishLineName = "Finish Line"
         
-        static let worldBackgroundName = "GrassBackground"
+        static let worldBackgroundName = "BackgroundDouble"
         static let playerImageName = "idle_0"
         static let groundNodeName = "GroundNode"
         static let playerIdleAtlas = "Player Idle Atlas"
