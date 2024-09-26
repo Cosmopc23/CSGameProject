@@ -14,13 +14,18 @@ class GroundNode: SKSpriteNode {
     init(with size: CGSize) {
         super.init(texture: nil, color: UIColor.clear, size: size)
         
-        let bodyInitialPoint = CGPoint(x: 0.0, y: size.height)
-        let bodyEndPoint = CGPoint(x: size.width, y: size.height)
-        
-        activatedBody = SKPhysicsBody(edgeFrom: bodyInitialPoint, to: bodyEndPoint)
+//        let bodyInitialPoint = CGPoint(x: 0.0, y: size.height)
+//        let bodyEndPoint = CGPoint(x: size.width, y: size.height)
+//        
+//        activatedBody = SKPhysicsBody(edgeFrom: bodyInitialPoint, to: bodyEndPoint)
+        self.physicsBody = SKPhysicsBody(rectangleOf: size)
+        activatedBody!.isDynamic = false
         activatedBody!.restitution = 0.0
         activatedBody!.categoryBitMask = GameConstants.PhysicsCategories.groundCategory
         activatedBody!.collisionBitMask = GameConstants.PhysicsCategories.playerCategory
+        
+
+        
         
         name = GameConstants.StringConstants.groundNodeName
     }

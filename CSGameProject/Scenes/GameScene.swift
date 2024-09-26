@@ -49,6 +49,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
         
         createLayers()
+
     }
     
     func printSceneGraph(for node: SKNode, level: Int = 0) {
@@ -107,6 +108,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         addPlayer()
+        printSceneGraph(for: player)
     }
     
 
@@ -120,13 +122,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         PhysicsHelper.addPhysicsBody(to: player, with: player.name!)
         player.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
         player.zPosition = GameConstants.zPositions.playerZ
+        player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         player.loadTextures()
         player.state = .idle
     
+        addChild(player)
+        
+        print("player is hidden: \(player.isHidden)")
+
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        printSceneGraph(for: player)
         switch gameState {
         case .ready:
             gameState = .ongoing
@@ -148,6 +156,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if gameState == .ongoing {
             worldLayer.update(dt)
             backgroundLayer.update(dt)
+        }
+    }
+    
+    override func didSimulatePhysics() {
+        for node in tileMap[GameConstants.StringConstants.groundNodeName] {
+            if let groundNode = node as? GroundNode {
+                let groundY = groundNode.position.y + groundNode.size.height) * tileMap.yScale
+                let playerY = player.position.y - player.size.height/3
+                groundNode.isBodyActivated = playerY > groundY
+            }
         }
     }
 }
