@@ -8,13 +8,18 @@
 import SpriteKit
 
 
+
+
 class PhysicsHelper {
     
     static func addPhysicsBody(to sprite: SKSpriteNode, with name: String) {
         
+        let offsetX: CGFloat = 0
+        let offsetY: CGFloat = -(sprite.size.height / 5)
+        
         switch name {
         case GameConstants.StringConstants.playerName:
-            sprite.physicsBody = SKPhysicsBody.init(rectangleOf: CGSize(width:sprite.size.width/2, height: sprite.size.height))
+            sprite.physicsBody = SKPhysicsBody.init(rectangleOf: CGSize(width:sprite.size.width/4, height: sprite.size.height/3), center: CGPoint(x: offsetX, y: offsetY))
             sprite.physicsBody!.restitution = 0.0
             sprite.physicsBody!.allowsRotation = false
             sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.playerCategory

@@ -42,14 +42,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
-        physicsWorld.gravity = CGVector(dx: 0.0, dy: -9.8)
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: 0)
         
         physicsBody = SKPhysicsBody(edgeFrom: CGPoint(x: frame.minX, y: frame.minY), to: CGPoint(x: frame.maxX, y: frame.minY))
         physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.frameCategory
         physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
         
         createLayers()
-
+        
     }
     
     func printSceneGraph(for node: SKNode, level: Int = 0) {
@@ -111,13 +111,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         printSceneGraph(for: player)
     }
     
-
+    
     
     
     // Adds player object by adding an idle image, scaling the size relative to the frame, adding a physics body, putting its initial position, loading the textures and setting the player state to idle so that the animation does not show the character running when it is not moving.
     func addPlayer() {
         player = Player(imageNamed: GameConstants.StringConstants.playerImageName)
-        player.scale(to: frame.size, width: false, multiplier: 0.1)
+        player.scale(to: frame.size, width: false, multiplier: 0.4)
         player.name = GameConstants.StringConstants.playerName
         PhysicsHelper.addPhysicsBody(to: player, with: player.name!)
         player.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
@@ -126,11 +126,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         player.loadTextures()
         player.state = .idle
-    
+        
         addChild(player)
         
         print("player is hidden: \(player.isHidden)")
-
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -159,13 +159,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    override func didSimulatePhysics() {
-        for node in tileMap[GameConstants.StringConstants.groundNodeName] {
-            if let groundNode = node as? GroundNode {
-                let groundY = groundNode.position.y + groundNode.size.height) * tileMap.yScale
-                let playerY = player.position.y - player.size.height/3
-                groundNode.isBodyActivated = playerY > groundY
-            }
+    func didBegin(_ contact: SKPhysicsContact) {
+        let bodyA = contact.bodyA
+        let bodyB = contact.bodyB
+        
+        // Check if the player and ground have collided
+        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.playerCategory &&
+            bodyB.categoryBitMask == GameConstants.PhysicsCategories.groundCategory) ||
+            (bodyB.categoryBitMask == GameConstants.PhysicsCategories.playerCategory &&
+             bodyA.categoryBitMask == GameConstants.PhysicsCategories.groundCategory) {
+            
+            print("Player collided with the ground")
+            
+            // Handle the collision (e.g., stop player falling, reset jump, etc.)
         }
     }
 }
