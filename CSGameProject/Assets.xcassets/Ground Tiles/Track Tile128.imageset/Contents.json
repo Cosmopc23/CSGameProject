@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "RunningTrackTile.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "Track Tile128.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
