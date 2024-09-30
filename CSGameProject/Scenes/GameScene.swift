@@ -42,7 +42,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMove(to view: SKView) {
         physicsWorld.contactDelegate = self
-        physicsWorld.gravity = CGVector(dx: 0.0, dy: 0)
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: -4)
         
         physicsBody = SKPhysicsBody(edgeFrom: CGPoint(x: frame.minX, y: frame.minY), to: CGPoint(x: frame.maxX, y: frame.minY))
         physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.frameCategory
@@ -98,6 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if let groundTiles = mapNode.childNode(withName: GameConstants.StringConstants.groundTilesName) as? SKTileMapNode {
             tileMap = groundTiles
             
+            
             tileMap.scale(to: frame.size, width: false, multiplier: 1.0)
             
             PhysicsHelper.addPhysicsBody(to: tileMap, and: "ground")
@@ -116,6 +117,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Adds player object by adding an idle image, scaling the size relative to the frame, adding a physics body, putting its initial position, loading the textures and setting the player state to idle so that the animation does not show the character running when it is not moving.
     func addPlayer() {
+        player = Player(imageNamed: GameConstants.StringConstants.playerImageName)
         player = Player(imageNamed: GameConstants.StringConstants.playerImageName)
         player.scale(to: frame.size, width: false, multiplier: 0.4)
         player.name = GameConstants.StringConstants.playerName

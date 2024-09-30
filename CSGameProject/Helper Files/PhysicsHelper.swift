@@ -44,26 +44,36 @@ class PhysicsHelper {
                 }
             }
             if tiles.contains(1) {
-                var platform = [Int]()
+                let x = CGFloat(0)
+                let y = CGFloat(row) * tileSize.height + (tileSize.height/2)
                 
-                for (index, tile) in tiles.enumerated() {
-                    if tile == 1 && index < (tileMap.numberOfColumns - 1) {
-                        platform.append(index)
-                    } else if !platform.isEmpty {
-                        let x = CGFloat(platform[0]) * tileSize.width
-                        let y = CGFloat(row) * tileSize.height
-                        let tileNode = GroundNode(with: CGSize(width: tileSize.width * CGFloat(platform.count), height: tileSize.height))
-                        
-                        tileNode.position = CGPoint(x: x, y: y)
-                        tileNode.anchorPoint = CGPoint.zero
-                        tileMap.addChild(tileNode)
-                        
-                        platform.removeAll()
-                    }
-                }
+                let totalGroundWidth = CGFloat(tileMap.numberOfColumns) * tileSize.width + 10000
+                
+                let tileNode = GroundNode(with: CGSize(width: totalGroundWidth, height: tileSize.height))
+                tileNode.position = CGPoint(x: x, y: y)
+                tileNode.anchorPoint = CGPoint.zero
+                tileMap.addChild(tileNode)
+                                          
+                                          
+//                var platform = [Int]()
+//                
+//                for (index, tile) in tiles.enumerated() {
+//                    if tile == 1 {
+//                        platform.append(index)
+//                    } else if !platform.isEmpty {
+//                        let x = CGFloat(platform[0]) * tileSize.width
+//                        let y = CGFloat(row) * tileSize.height + (tileSize.height / 2)
+//                        let tileNode = GroundNode(with: CGSize(width: tileSize.width * CGFloat(platform.count), height: tileSize.height))
+//                        
+//                        tileNode.position = CGPoint(x: x, y: y)
+//                        tileNode.anchorPoint = CGPoint.zero
+//                        tileMap.addChild(tileNode)
+//                        
+//                        platform.removeAll()
+//                    }
+//                }
+
             }
         }
     }
-
-    
 }
