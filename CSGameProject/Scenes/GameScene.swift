@@ -135,6 +135,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func handleFinish() {
+        gameState = .finished
+        print("End")
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         printSceneGraph(for: player)
         switch gameState {
@@ -158,6 +163,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if gameState == .ongoing {
             worldLayer.update(dt)
             backgroundLayer.update(dt)
+        } else if gameState == .finished {
+            backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
         }
     }
     
@@ -165,15 +172,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bodyA = contact.bodyA
         let bodyB = contact.bodyB
         
-        // Check if the player and ground have collided
-        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.playerCategory &&
-            bodyB.categoryBitMask == GameConstants.PhysicsCategories.groundCategory) ||
-            (bodyB.categoryBitMask == GameConstants.PhysicsCategories.playerCategory &&
-             bodyA.categoryBitMask == GameConstants.PhysicsCategories.groundCategory) {
-            
-            print("Player collided with the ground")
-            
-            // Handle the collision (e.g., stop player falling, reset jump, etc.)
+        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) {
+            handleFinish()
         }
     }
 }
