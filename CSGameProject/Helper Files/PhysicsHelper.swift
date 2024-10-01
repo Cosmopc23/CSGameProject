@@ -25,6 +25,14 @@ class PhysicsHelper {
             sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.playerCategory
             sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.groundCategory | GameConstants.PhysicsCategories.finishCategory
             sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.allCategory
+        case GameConstants.StringConstants.finishLineName:
+            sprite.physicsBody = SKPhysicsBody.init(rectangleOf: CGSize( width: sprite.size.width, height: sprite.size.height), center: CGPoint(x: 0.5, y: 0.5))
+            sprite.physicsBody!.affectedByGravity = false
+            sprite.physicsBody!.isDynamic = false
+            sprite.physicsBody!.allowsRotation = false
+            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.finishCategory
+            sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.playerCategory
+            sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
         default:
             sprite.physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
         }
