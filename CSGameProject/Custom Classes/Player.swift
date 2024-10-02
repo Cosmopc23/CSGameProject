@@ -13,6 +13,7 @@ enum PlayerState {
 
 class Player: SKSpriteNode {
     var idleFrames = [SKTexture]()
+    var runFrames = [SKTexture]()
     
     var state = PlayerState.idle {
         willSet {
@@ -22,6 +23,7 @@ class Player: SKSpriteNode {
     
     func loadTextures() {
         idleFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.playerIdleAtlas), withName: GameConstants.StringConstants.idlePrefixKey)
+        runFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.playerRunAtlas), withName: GameConstants.StringConstants.runPrefixKey)
     }
 
     
@@ -32,7 +34,7 @@ class Player: SKSpriteNode {
         case .idle:
             self.run(SKAction.repeatForever(SKAction.animate(withNormalTextures: idleFrames, timePerFrame: 0.05, resize: true, restore: true)))
         case .running:
-            break
+            self.run(SKAction.repeatForever(SKAction.animate(withNormalTextures: runFrames, timePerFrame: 0.05, resize: true, restore: true)))
         }
     }
 }

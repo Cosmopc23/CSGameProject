@@ -21,16 +21,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var lastTime: TimeInterval = 0
     var dt: TimeInterval = 0
     
+    // running bar
+    var progressBar: SKSpriteNode!
+    var currentValue: CGFloat = 0.0
+    var maxValue: CGFloat = 100.0
+    var minValue: CGFloat = 40.0
+    var decreaseRate: CGFloat = 0.5
+    var timer: Timer?
+    
+    var characterSpeed: CGFloat = 0.0 {
+        didSet{
+            updateLayerVelocities()
+        }
+    }
+    
     
     var gameState = GameState.ready {
         willSet {
             switch newValue {
+            case .ready:
+                player.state = .idle
             case .ongoing:
                 player.state = .running
             case .finished:
                 player.state = .idle
-            default:
-                break
             }
         }
     }
@@ -49,6 +63,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
         
         createLayers()
+        
+        // running bar
+        progressBar = SKSpriteNode(color: .green, size: CGSize(width: 300, height: 20))
+        progressBar.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        addChild(progressBar)
+        
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
         
     }
     
@@ -141,15 +162,56 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        printSceneGraph(for: player)
-        switch gameState {
-        case .ready:
-            gameState = .ongoing
-        case .ongoing:
-            touch = true
-        default:
-            break
+//        printSceneGraph(for: player)
+        if touch != true{
+            switch gameState {
+            case .ready:
+                gameState = .ongoing
+            case .ongoing:
+                touch = true
+            default:
+                break
+            }
+        } else {
+            currentValue += 10
+            if currentValue > maxValue {
+                currentValue = maxValue
+            }
+            updateProgressBar()
         }
+        
+    }
+    
+    @objc func decreaseValue(){
+        currentValue -= decreaseRate
+        if currentValue < 0 {
+            currentValue = 0
+        }
+        updateProgressBar()
+        adjustSpeed()
+    }
+    
+    func updateProgressBar() {
+        let width = (currentValue / maxValue) * 300
+        progressBar.size.width = width
+    }
+    
+    func adjustSpeed(){
+        if currentValue < minValue {
+            characterSpeed = 2.0
+        } else if currentValue > maxValue {
+            characterSpeed = 10.0
+        } else {
+            characterSpeed = 2.0 + (currentValue - minValue) / (maxValue - minValue) * (10.0 - 2.0)
+        }
+    }
+    
+    func updateLayerVelocities(){
+        let worldLayerSpeedFactor: CGFloat = 1.0
+        let backgroundLayerSpeedFactor: CGFloat = 0.375
+        
+        worldLayer.layerVelocity = CGPoint(x: -characterSpeed * worldLayerSpeedFactor, y: 0.0)
+        backgroundLayer.layerVelocity = CGPoint(x: -characterSpeed * backgroundLayerSpeedFactor, y: 0.0)
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -166,6 +228,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if gameState == .finished {
             backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
         }
+        
+        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {

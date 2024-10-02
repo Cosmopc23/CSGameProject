@@ -17,8 +17,12 @@ struct GameConstants {
         static let worldBackgroundName = "BackgroundDouble"
         static let playerImageName = "idle_0"
         static let groundNodeName = "GroundNode"
+        
         static let playerIdleAtlas = "Player Idle Atlas"
         static let idlePrefixKey = "idle_"
+        
+        static let playerRunAtlas = "Player Run Atlas"
+        static let runPrefixKey = "run_"
     }
     
     struct PhysicsCategories {
