@@ -21,6 +21,7 @@ class Player: SKSpriteNode {
         }
     }
     
+    
     func loadTextures() {
         idleFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.playerIdleAtlas), withName: GameConstants.StringConstants.idlePrefixKey)
         runFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.playerRunAtlas), withName: GameConstants.StringConstants.runPrefixKey)
@@ -32,9 +33,9 @@ class Player: SKSpriteNode {
         removeAllActions()
         switch state {
         case .idle:
-            self.run(SKAction.repeatForever(SKAction.animate(withNormalTextures: idleFrames, timePerFrame: 0.05, resize: true, restore: true)))
+            self.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: 0.05, resize: true, restore: true)))
         case .running:
-            self.run(SKAction.repeatForever(SKAction.animate(withNormalTextures: runFrames, timePerFrame: 0.05, resize: true, restore: true)))
+            self.run(SKAction.repeatForever(SKAction.animate(with: runFrames, timePerFrame: 0.05, resize: true, restore: true)))
         }
     }
 }

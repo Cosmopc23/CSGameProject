@@ -21,7 +21,7 @@ struct GameConstants {
         static let playerIdleAtlas = "Player Idle Atlas"
         static let idlePrefixKey = "idle_"
         
-        static let playerRunAtlas = "Player Run Atlas"
+        static let playerRunAtlas = "Player Running Atlas"
         static let runPrefixKey = "run_"
     }
     
