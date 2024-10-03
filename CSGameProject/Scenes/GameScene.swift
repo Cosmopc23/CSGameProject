@@ -26,8 +26,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var currentValue: CGFloat = 0.0
     var maxValue: CGFloat = 100.0
     var minValue: CGFloat = 40.0
-    var decreaseRate: CGFloat = 5
+    var decreaseRate: CGFloat = 4
     var timer: Timer?
+    
+    
+    let targetMinValue: CGFloat = 60
+    let targetMaxValue: CGFloat = 80
+    
+    var targetMinIndicator: SKSpriteNode!
+    var targetMaxIndicator: SKSpriteNode!
+    
     
     var characterSpeed: CGFloat = 0.0 {
         didSet{
@@ -65,13 +73,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         createLayers()
         
         // running bar
-        progressBar = SKSpriteNode(color: .green, size: CGSize(width: 300, height: 20))
-        progressBar.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        progressBar = SKSpriteNode(color: .red, size: CGSize(width: 300, height: 20))
+        progressBar.position = CGPoint(x: size.width / 3, y: size.height - 3*(progressBar.size.height))
         progressBar.zPosition = GameConstants.zPositions.hudZ
+        progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
         addChild(progressBar)
         
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
         
+        
+        targetMinIndicator = SKSpriteNode(color: .black, size: CGSize(width: 4, height: 20))
+        targetMinIndicator.zPosition = GameConstants.zPositions.hudZ + 1
+        progressBar.addChild(targetMinIndicator)
+
+        targetMaxIndicator = SKSpriteNode(color: .black, size: CGSize(width: 4, height: 20))
+        targetMaxIndicator.zPosition = GameConstants.zPositions.hudZ + 1
+        progressBar.addChild(targetMaxIndicator)
     }
     
     func printSceneGraph(for node: SKNode, level: Int = 0) {
@@ -172,7 +189,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             default:
                 break
             }
-            currentValue += 10
+            currentValue += 8
             if currentValue > maxValue {
                 currentValue = maxValue
             }
@@ -194,15 +211,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func updateProgressBar() {
         let width = (currentValue / maxValue) * 300
         progressBar.size.width = width
+        
+        if currentValue >= targetMinValue && currentValue <= targetMaxValue {
+                progressBar.color = .green
+            } else {
+                progressBar.color = .red
+            }
+        
+        
+        let targetMinX = (targetMinValue / maxValue) * 300
+        let targetMaxX = (targetMaxValue / maxValue) * 300
+        
+        targetMinIndicator.position = CGPoint(x: targetMinX, y: 0)
+        targetMaxIndicator.position = CGPoint(x: targetMaxX, y: 0)
     }
     
     func adjustSpeed(){
-        if currentValue < minValue {
-            characterSpeed = 6.0
-        } else if currentValue > maxValue {
-            characterSpeed = 30.0
+        if currentValue == 0 {
+            characterSpeed = 0
+        } else if currentValue < targetMinValue/2 {
+            characterSpeed = 4.0
+        } else if currentValue < targetMinValue {
+            characterSpeed = 10.0
+        } else if currentValue > targetMaxValue {
+            characterSpeed = 4.0 + (currentValue - minValue) / (maxValue - minValue) * (20.0 - 4.0)
         } else {
-            characterSpeed = 6.0 + (currentValue - minValue) / (maxValue - minValue) * (30.0 - 6.0)
+            characterSpeed = 20.0
         }
     }
     
