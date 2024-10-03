@@ -39,8 +39,11 @@ struct GameConstants {
         static let backgroundZ: CGFloat = 0
         static let worldZ: CGFloat = 1
         static let objectZ: CGFloat = 2
-        static let playerZ: CGFloat = 3
-        static let hudZ: CGFloat = 4
+        static let player4Z: CGFloat = 3
+        static let player3Z: CGFloat = 4
+        static let player2Z: CGFloat = 5
+        static let player1Z: CGFloat = 6
+        static let hudZ: CGFloat = 7
     }
 }
 

@@ -29,6 +29,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var decreaseRate: CGFloat = 4
     var timer: Timer?
     
+
+    
     
     let targetMinValue: CGFloat = 60
     let targetMaxValue: CGFloat = 80
@@ -78,17 +80,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         progressBar.zPosition = GameConstants.zPositions.hudZ
         progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
         addChild(progressBar)
+
+        let borderWidth: CGFloat = 2.0
+        let border = SKShapeNode(rectOf: CGSize(width: 300 + borderWidth, height: 20 + borderWidth), cornerRadius: 2.0)
+        border.strokeColor = .black
+        border.lineWidth = borderWidth
+        border.fillColor = .clear
+        border.position = CGPoint(x: (size.width / 3) + progressBar.size.width/2, y: size.height - 3*(progressBar.size.height))
+        border.zPosition = GameConstants.zPositions.hudZ - 0.1
+        
+        addChild(border)
+
+        targetMinIndicator = SKSpriteNode(color: .black, size: CGSize(width: 2, height: 20))
+        targetMinIndicator.zPosition = GameConstants.zPositions.hudZ + 1
+        progressBar.addChild(targetMinIndicator)
+        
+        targetMaxIndicator = SKSpriteNode(color: .black, size: CGSize(width: 2, height: 20))
+        targetMaxIndicator.zPosition = GameConstants.zPositions.hudZ + 1
+        progressBar.addChild(targetMaxIndicator)
+
         
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
         
-        
-        targetMinIndicator = SKSpriteNode(color: .black, size: CGSize(width: 4, height: 20))
-        targetMinIndicator.zPosition = GameConstants.zPositions.hudZ + 1
-        progressBar.addChild(targetMinIndicator)
 
-        targetMaxIndicator = SKSpriteNode(color: .black, size: CGSize(width: 4, height: 20))
-        targetMaxIndicator.zPosition = GameConstants.zPositions.hudZ + 1
-        progressBar.addChild(targetMaxIndicator)
     }
     
     func printSceneGraph(for node: SKNode, level: Int = 0) {
@@ -162,7 +176,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.name = GameConstants.StringConstants.playerName
         PhysicsHelper.addPhysicsBody(to: player, with: player.name!)
         player.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
-        player.zPosition = GameConstants.zPositions.playerZ
+        player.zPosition = GameConstants.zPositions.player1Z
         player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         player.loadTextures()
@@ -172,6 +186,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         print("player is hidden: \(player.isHidden)")
         
+    }
+    
+    func addCompetitor() {
+ 
     }
     
     func handleFinish() {
