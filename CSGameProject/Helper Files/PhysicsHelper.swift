@@ -25,6 +25,32 @@ class PhysicsHelper {
             sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.playerCategory
             sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.groundCategory | GameConstants.PhysicsCategories.finishCategory
             sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.allCategory
+            
+        case GameConstants.StringConstants.competitor1Name:
+            sprite.physicsBody = SKPhysicsBody.init(rectangleOf: CGSize(width:sprite.size.width/4, height: sprite.size.height/3), center: CGPoint(x: offsetX, y: offsetY))
+            sprite.physicsBody!.restitution = 0.0
+            sprite.physicsBody!.allowsRotation = false
+            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.playerCategory
+            sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.groundCategory | GameConstants.PhysicsCategories.finishCategory
+            sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.allCategory
+            
+        case GameConstants.StringConstants.competitor2Name:
+            sprite.physicsBody = SKPhysicsBody.init(rectangleOf: CGSize(width:sprite.size.width/4, height: sprite.size.height/3), center: CGPoint(x: offsetX, y: offsetY))
+            sprite.physicsBody!.restitution = 0.0
+            sprite.physicsBody!.allowsRotation = false
+            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.playerCategory
+            sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.groundCategory | GameConstants.PhysicsCategories.finishCategory
+            sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.allCategory
+            
+        case GameConstants.StringConstants.competitor3Name:
+            sprite.physicsBody = SKPhysicsBody.init(rectangleOf: CGSize(width:sprite.size.width/4, height: sprite.size.height/3), center: CGPoint(x: offsetX, y: offsetY))
+            sprite.physicsBody!.restitution = 0.0
+            sprite.physicsBody!.allowsRotation = false
+            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.playerCategory
+            sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.groundCategory | GameConstants.PhysicsCategories.finishCategory
+            sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.allCategory
+            
+            
         case GameConstants.StringConstants.finishLineName:
             sprite.physicsBody = SKPhysicsBody.init(rectangleOf: CGSize( width: sprite.size.width, height: sprite.size.height), center: CGPoint(x: 0.5, y: 0.5))
             sprite.physicsBody!.affectedByGravity = false
@@ -33,6 +59,7 @@ class PhysicsHelper {
             sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.finishCategory
             sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.playerCategory
             sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
+        
         default:
             sprite.physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
         }
@@ -55,7 +82,7 @@ class PhysicsHelper {
                 let x = CGFloat(0)
                 let y = CGFloat(row) * tileSize.height + (tileSize.height/2)
                 
-                let totalGroundWidth = CGFloat(tileMap.numberOfColumns) * tileSize.width + 10000
+                let totalGroundWidth = CGFloat(tileMap.numberOfColumns) * tileSize.width + 1000000000
                 
                 let tileNode = GroundNode(with: CGSize(width: totalGroundWidth, height: tileSize.height))
                 tileNode.position = CGPoint(x: x, y: y)

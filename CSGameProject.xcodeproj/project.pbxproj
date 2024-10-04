@@ -22,6 +22,7 @@
 		324571412C8C83D7007A3AC7 /* CSGameProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324571402C8C83D7007A3AC7 /* CSGameProjectTests.swift */; };
 		3245714B2C8C83D7007A3AC7 /* CSGameProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245714A2C8C83D7007A3AC7 /* CSGameProjectUITests.swift */; };
 		3245714D2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */; };
+		325250642CB0484C00CCC726 /* Competitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325250632CB0484C00CCC726 /* Competitors.swift */; };
 		32A2C6582C9A1BFE00294609 /* ObjectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A2C6572C9A1BFE00294609 /* ObjectHelper.swift */; };
 		32A2C65A2C9A2A0E00294609 /* GroundNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A2C6592C9A2A0E00294609 /* GroundNode.swift */; };
 		CE2BC6DD2C9AEC350046CD20 /* RepeatingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2BC6DC2C9AEC350046CD20 /* RepeatingLayer.swift */; };
@@ -65,6 +66,7 @@
 		324571462C8C83D7007A3AC7 /* CSGameProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSGameProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3245714A2C8C83D7007A3AC7 /* CSGameProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameProjectUITests.swift; sourceTree = "<group>"; };
 		3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameProjectUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		325250632CB0484C00CCC726 /* Competitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Competitors.swift; sourceTree = "<group>"; };
 		32A2C6572C9A1BFE00294609 /* ObjectHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectHelper.swift; sourceTree = "<group>"; };
 		32A2C6592C9A2A0E00294609 /* GroundNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroundNode.swift; sourceTree = "<group>"; };
 		CE2BC6DC2C9AEC350046CD20 /* RepeatingLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatingLayer.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 			children = (
 				321F19FA2C91AF7F006AA50F /* Player.swift */,
 				32A2C6592C9A2A0E00294609 /* GroundNode.swift */,
+				325250632CB0484C00CCC726 /* Competitors.swift */,
 			);
 			path = "Custom Classes";
 			sourceTree = "<group>";
@@ -371,6 +374,7 @@
 				321F1A032C91AFDF006AA50F /* GameConstants.swift in Sources */,
 				32A2C6582C9A1BFE00294609 /* ObjectHelper.swift in Sources */,
 				CEA8A00D2C947E20004C55C7 /* Layer.swift in Sources */,
+				325250642CB0484C00CCC726 /* Competitors.swift in Sources */,
 				32A2C65A2C9A2A0E00294609 /* GroundNode.swift in Sources */,
 				3245712F2C8C83D4007A3AC7 /* GameViewController.swift in Sources */,
 				324571272C8C83D4007A3AC7 /* AppDelegate.swift in Sources */,

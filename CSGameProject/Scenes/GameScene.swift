@@ -29,7 +29,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var decreaseRate: CGFloat = 4
     var timer: Timer?
     
-
+    var player: Player!
+    var competitor1: Competitor1!
+    
+    var touch = false
     
     
     let targetMinValue: CGFloat = 60
@@ -51,17 +54,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             switch newValue {
             case .ready:
                 player.state = .idle
+                competitor1.state = .idle
             case .ongoing:
                 player.state = .running
+                competitor1.state = .running
             case .finished:
                 player.state = .idle
+                competitor1.state = .idle
             }
         }
     }
     
-    var player: Player!
-    
-    var touch = false
     
     
     override func didMove(to view: SKView) {
@@ -80,7 +83,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         progressBar.zPosition = GameConstants.zPositions.hudZ
         progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
         addChild(progressBar)
-
+        
         let borderWidth: CGFloat = 2.0
         let border = SKShapeNode(rectOf: CGSize(width: 300 + borderWidth, height: 20 + borderWidth), cornerRadius: 2.0)
         border.strokeColor = .black
@@ -90,7 +93,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         border.zPosition = GameConstants.zPositions.hudZ - 0.1
         
         addChild(border)
-
+        
         targetMinIndicator = SKSpriteNode(color: .black, size: CGSize(width: 2, height: 20))
         targetMinIndicator.zPosition = GameConstants.zPositions.hudZ + 1
         progressBar.addChild(targetMinIndicator)
@@ -98,16 +101,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         targetMaxIndicator = SKSpriteNode(color: .black, size: CGSize(width: 2, height: 20))
         targetMaxIndicator.zPosition = GameConstants.zPositions.hudZ + 1
         progressBar.addChild(targetMaxIndicator)
-
+        
         
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
         
-
+        
     }
     
     func printSceneGraph(for node: SKNode, level: Int = 0) {
         let indent = String(repeating: "  ", count: level)
-        print("\(indent)\(node.name ?? "unnamed") (Position: \(node.position), zPosition: \(node.zPosition))")
+        let nodeName = node.name ?? "unnamed"
+        print("\(indent)\(nodeName) (Position: \(node.position), zPosition: \(node.zPosition))")
         for child in node.children {
             printSceneGraph(for: child, level: level + 1)
         }
@@ -162,7 +166,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         addPlayer()
-        printSceneGraph(for: player)
+        addCompetitor1()
     }
     
     
@@ -171,12 +175,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Adds player object by adding an idle image, scaling the size relative to the frame, adding a physics body, putting its initial position, loading the textures and setting the player state to idle so that the animation does not show the character running when it is not moving.
     func addPlayer() {
         player = Player(imageNamed: GameConstants.StringConstants.playerImageName)
-        player = Player(imageNamed: GameConstants.StringConstants.playerImageName)
         player.scale(to: frame.size, width: false, multiplier: 0.4)
         player.name = GameConstants.StringConstants.playerName
         PhysicsHelper.addPhysicsBody(to: player, with: player.name!)
         player.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
-        player.zPosition = GameConstants.zPositions.player1Z
+        player.zPosition = GameConstants.zPositions.playerZ
         player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         player.loadTextures()
@@ -188,9 +191,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func addCompetitor() {
- 
+    func addCompetitor1() {
+        competitor1 = Competitor1(imageNamed: GameConstants.StringConstants.competitor1ImageName)
+        competitor1.scale(to: frame.size, width: false, multiplier: 0.4)
+        competitor1.name = GameConstants.StringConstants.competitor1Name
+        PhysicsHelper.addPhysicsBody(to: competitor1, with: competitor1.name!)
+        competitor1.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
+        competitor1.zPosition = GameConstants.zPositions.competitor1Z
+        competitor1.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        competitor1.loadTextures()
+        competitor1.state = .idle
+        
+        addChild(competitor1)
     }
+
+    
     
     func handleFinish() {
         gameState = .finished
@@ -199,23 +215,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         printSceneGraph(for: player)
-            switch gameState {
-            case .ready:
-                gameState = .ongoing
-            case .ongoing:
-                touch = true
-            default:
-                break
-            }
-            currentValue += 8
-            if currentValue > maxValue {
-                currentValue = maxValue
-            }
-            updateProgressBar()
-            printSceneGraph(for: player)
+        printSceneGraph(for: competitor1)
         
-            print("Current value: \(currentValue)")
+        switch gameState {
+        case .ready:
+            gameState = .ongoing
+        case .ongoing:
+            touch = true
+        default:
+            break
         }
+        currentValue += 8
+        if currentValue > maxValue {
+            currentValue = maxValue
+        }
+        updateProgressBar()
+        printSceneGraph(for: player)
+        
+        
+        print("Current value: \(currentValue)")
+    }
     
     @objc func decreaseValue(){
         currentValue -= decreaseRate
@@ -231,10 +250,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         progressBar.size.width = width
         
         if currentValue >= targetMinValue && currentValue <= targetMaxValue {
-                progressBar.color = .green
-            } else {
-                progressBar.color = .red
-            }
+            progressBar.color = .green
+        } else {
+            progressBar.color = .red
+        }
         
         
         let targetMinX = (targetMinValue / maxValue) * 300
@@ -248,19 +267,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if currentValue == 0 {
             characterSpeed = 0
         } else if currentValue < targetMinValue/2 {
-            characterSpeed = 4.0
+            characterSpeed = 16.0
         } else if currentValue < targetMinValue {
-            characterSpeed = 10.0
+            characterSpeed = 40.0
         } else if currentValue > targetMaxValue {
-            characterSpeed = 4.0 + (currentValue - minValue) / (maxValue - minValue) * (20.0 - 4.0)
+            characterSpeed = 16.0 + (currentValue - minValue) / (maxValue - minValue) * (80.0 - 16.0)
         } else {
-            characterSpeed = 20.0
+            characterSpeed = 80.0
         }
     }
     
     func updateLayerVelocities(){
         let worldLayerSpeedFactor: CGFloat = 10.0
-        let backgroundLayerSpeedFactor: CGFloat = 3.75
+        let backgroundLayerSpeedFactor: CGFloat = 5
         
         worldLayer.layerVelocity = CGPoint(x: -characterSpeed * worldLayerSpeedFactor, y: 0.0)
         backgroundLayer.layerVelocity = CGPoint(x: -characterSpeed * backgroundLayerSpeedFactor, y: 0.0)
@@ -272,21 +291,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else {
             dt = 0
         }
-        lastTime = currentTime
         
+        
+        let deltaTime = currentTime - lastTime
+        lastTime = currentTime
+                
         if gameState == .ongoing {
             worldLayer.update(dt)
             backgroundLayer.update(dt)
-//            if currentValue == 0 {
-//                player.state = .idle
-//            } else {
-//                player.state = .running
-//            }
+            
+            let speedDifference = characterSpeed - competitor1.competitor1Speed
+            competitor1.position.x -= speedDifference * CGFloat(deltaTime) * 3
+
         } else if gameState == .finished {
             backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
         }
-        
-        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
@@ -297,4 +316,5 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             handleFinish()
         }
     }
+    
 }

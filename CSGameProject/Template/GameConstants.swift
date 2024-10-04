@@ -14,6 +14,11 @@ struct GameConstants {
         static let playerName = "Player"
         static let finishLineName = "Finish Line"
         
+        static let competitor1Name = "Competitor1"
+        static let competitor2Name = "Competitor2"
+        static let competitor3Name = "Competitor3"
+        
+        
         static let worldBackgroundName = "BackgroundDouble"
         static let playerImageName = "idle_0"
         static let groundNodeName = "GroundNode"
@@ -23,6 +28,27 @@ struct GameConstants {
         
         static let playerRunAtlas = "Player Running Atlas"
         static let runPrefixKey = "run_"
+        
+        static let competitor1ImageName = "1idle_0"
+        static let competitor1IdleAtlas = "Competitor1 Idle Atlas"
+        static let competitor1IdlePrefixKey = "1idle_"
+        
+        static let competitor1RunAtlas = "Competitor1 Running Atlas"
+        static let competitor1RunPrefixKey = "1run_"
+        
+        static let competitor2ImageName = "2idle_0"
+        static let competitor2IdleAtlas = "Competitor2 Idle Atlas"
+        static let competitor2IdlePrefixKey = "2idle_"
+        
+        static let competitor2RunAtlas = "Competitor2 Running Atlas"
+        static let competitor2RunPrefixKey = "2run_"
+        
+        static let competitor3ImageName = "3idle_0"
+        static let competitor3IdleAtlas = "Competitor3 Idle Atlas"
+        static let competitor3IdlePrefixKey = "3idle_"
+        
+        static let competitor3RunAtlas = "Competitor3 Running Atlas"
+        static let competitor3RunPrefixKey = "3run_"
     }
     
     struct PhysicsCategories {
@@ -39,10 +65,10 @@ struct GameConstants {
         static let backgroundZ: CGFloat = 0
         static let worldZ: CGFloat = 1
         static let objectZ: CGFloat = 2
-        static let player4Z: CGFloat = 3
-        static let player3Z: CGFloat = 4
-        static let player2Z: CGFloat = 5
-        static let player1Z: CGFloat = 6
+        static let competitor3Z: CGFloat = 3
+        static let competitor2Z: CGFloat = 4
+        static let competitor1Z: CGFloat = 5
+        static let playerZ: CGFloat = 6
         static let hudZ: CGFloat = 7
     }
 }
