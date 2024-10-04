@@ -26,7 +26,7 @@ class Competitor1: SKSpriteNode {
     
     func loadTextures() {
         idleFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor1IdleAtlas), withName: GameConstants.StringConstants.competitor1IdlePrefixKey)
-        runFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor2RunAtlas), withName: GameConstants.StringConstants.competitor2RunPrefixKey)
+        runFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor1RunAtlas), withName: GameConstants.StringConstants.competitor1RunPrefixKey)
     }
     
     func animate(for state: Competitor1State) {
