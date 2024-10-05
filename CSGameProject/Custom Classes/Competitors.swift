@@ -26,7 +26,7 @@ class Competitor1: SKSpriteNode {
     
     func loadTextures() {
         idleFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor1IdleAtlas), withName: GameConstants.StringConstants.competitor1IdlePrefixKey)
-        runFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor1RunAtlas), withName: GameConstants.StringConstants.competitor1RunPrefixKey)
+        runFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor3RunAtlas), withName: GameConstants.StringConstants.competitor3RunPrefixKey)
     }
     
     func animate(for state: Competitor1State) {
@@ -37,11 +37,9 @@ class Competitor1: SKSpriteNode {
 //        }
 //        
         
-        print("Run Atlas \(GameConstants.StringConstants.competitor1RunAtlas)")
-        print("Run Prefix \(GameConstants.StringConstants.competitor1RunPrefixKey)")
-        
-        print("Idle Atlas \(GameConstants.StringConstants.competitor1IdleAtlas)")
-        print("Idle Prefix \(GameConstants.StringConstants.competitor1IdlePrefixKey)")
+        print("Loading textures from: \(GameConstants.StringConstants.competitor1RunAtlas)")
+        print("Using prefix: \(GameConstants.StringConstants.competitor1RunPrefixKey)")
+
         
         print("Idle Frames: \(idleFrames)")
         print("Run Frames: \(runFrames)")
