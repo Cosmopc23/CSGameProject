@@ -26,23 +26,85 @@ class Competitor1: SKSpriteNode {
     
     func loadTextures() {
         idleFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor1IdleAtlas), withName: GameConstants.StringConstants.competitor1IdlePrefixKey)
-        runFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor3RunAtlas), withName: GameConstants.StringConstants.competitor3RunPrefixKey)
+        runFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor1RunAtlas), withName: GameConstants.StringConstants.competitor1RunPrefixKey)
     }
     
     func animate(for state: Competitor1State) {
         
-//        guard !idleFrames.isEmpty && !runFrames.isEmpty else {
-//            print("Warning: Attempting to animate with empty texture arrays")
-//            return
-//        }
+        
+//        print("Loading textures from: \(GameConstants.StringConstants.competitor1RunAtlas)")
+//        print("Using prefix: \(GameConstants.StringConstants.competitor1RunPrefixKey)")
+//
 //        
+//        print("Idle Frames: \(idleFrames)")
+//        print("Run Frames: \(runFrames)")
         
-        print("Loading textures from: \(GameConstants.StringConstants.competitor1RunAtlas)")
-        print("Using prefix: \(GameConstants.StringConstants.competitor1RunPrefixKey)")
+        removeAllActions()
+        switch state {
+        case .idle:
+            self.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: 0.05, resize: true, restore: true)))
+        case .running:
+            self.run(SKAction.repeatForever(SKAction.animate(with: runFrames, timePerFrame: 0.05, resize: true, restore: true)))
+        }
+    }
+}
 
+
+enum Competitor2State {
+    case idle, running
+}
+
+class Competitor2: SKSpriteNode {
+    var idleFrames = [SKTexture]()
+    var runFrames = [SKTexture]()
+    
+    var competitor2Speed: CGFloat = 75.0
+    
+    var state = Competitor2State.idle {
+        willSet {
+            animate(for: newValue)
+        }
+    }
+    
+    func loadTextures() {
+        idleFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor2IdleAtlas), withName: GameConstants.StringConstants.competitor2IdlePrefixKey)
+        runFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor2RunAtlas), withName: GameConstants.StringConstants.competitor2RunPrefixKey)
+    }
+    
+    func animate(for state: Competitor2State) {
         
-        print("Idle Frames: \(idleFrames)")
-        print("Run Frames: \(runFrames)")
+        removeAllActions()
+        switch state {
+        case .idle:
+            self.run(SKAction.repeatForever(SKAction.animate(with: idleFrames, timePerFrame: 0.05, resize: true, restore: true)))
+        case .running:
+            self.run(SKAction.repeatForever(SKAction.animate(with: runFrames, timePerFrame: 0.05, resize: true, restore: true)))
+        }
+    }
+}
+
+enum Competitor3State {
+    case idle, running
+}
+
+class Competitor3: SKSpriteNode {
+    var idleFrames = [SKTexture]()
+    var runFrames = [SKTexture]()
+    
+    var competitor3Speed: CGFloat = 70.0
+    
+    var state = Competitor3State.idle {
+        willSet {
+            animate(for: newValue)
+        }
+    }
+    
+    func loadTextures() {
+        idleFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor3IdleAtlas), withName: GameConstants.StringConstants.competitor3IdlePrefixKey)
+        runFrames = AnimationHelper.loadTextures(from: SKTextureAtlas(named: GameConstants.StringConstants.competitor3RunAtlas), withName: GameConstants.StringConstants.competitor3RunPrefixKey)
+    }
+    
+    func animate(for state: Competitor3State) {
         
         removeAllActions()
         switch state {

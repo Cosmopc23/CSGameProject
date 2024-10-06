@@ -30,7 +30,7 @@ class PhysicsHelper {
             sprite.physicsBody = SKPhysicsBody.init(rectangleOf: CGSize(width:sprite.size.width/4, height: sprite.size.height/3), center: CGPoint(x: offsetX, y: offsetY))
             sprite.physicsBody!.restitution = 0.0
             sprite.physicsBody!.allowsRotation = false
-            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.playerCategory
+            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.competitor1Category
             sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.groundCategory | GameConstants.PhysicsCategories.finishCategory
             sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.allCategory
             
@@ -38,7 +38,7 @@ class PhysicsHelper {
             sprite.physicsBody = SKPhysicsBody.init(rectangleOf: CGSize(width:sprite.size.width/4, height: sprite.size.height/3), center: CGPoint(x: offsetX, y: offsetY))
             sprite.physicsBody!.restitution = 0.0
             sprite.physicsBody!.allowsRotation = false
-            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.playerCategory
+            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.competitor2Category
             sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.groundCategory | GameConstants.PhysicsCategories.finishCategory
             sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.allCategory
             
@@ -46,7 +46,7 @@ class PhysicsHelper {
             sprite.physicsBody = SKPhysicsBody.init(rectangleOf: CGSize(width:sprite.size.width/4, height: sprite.size.height/3), center: CGPoint(x: offsetX, y: offsetY))
             sprite.physicsBody!.restitution = 0.0
             sprite.physicsBody!.allowsRotation = false
-            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.playerCategory
+            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.competitor3Category
             sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.groundCategory | GameConstants.PhysicsCategories.finishCategory
             sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.allCategory
             

@@ -29,8 +29,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var decreaseRate: CGFloat = 4
     var timer: Timer?
     
+    var finishTimes: [String:TimeInterval] = [:]
+    var raceStartTime: TimeInterval = 0
+    var playerTime: TimeInterval = 0
+    var competitor1Time: TimeInterval = 0
+    var competitor2Time: TimeInterval = 0
+    var competitor3Time: TimeInterval = 0
+    
     var player: Player!
     var competitor1: Competitor1!
+    var competitor2: Competitor2!
+    var competitor3: Competitor3!
+    var finishers: Int = 0
     
     var touch = false
     
@@ -40,6 +50,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var targetMinIndicator: SKSpriteNode!
     var targetMaxIndicator: SKSpriteNode!
+    
+
     
     
     var characterSpeed: CGFloat = 0.0 {
@@ -55,19 +67,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             case .ready:
                 player.state = .idle
                 competitor1.state = .idle
+                competitor2.state = .idle
+                competitor2.state = .idle
             case .ongoing:
                 player.state = .running
                 competitor1.state = .running
+                competitor2.state = .running
+                competitor3.state = .running
             case .finished:
                 player.state = .idle
                 competitor1.state = .idle
+                competitor2.state = .idle
+                competitor3.state = .idle
             }
         }
     }
-    
-    
+
     
     override func didMove(to view: SKView) {
+        
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -4)
         
@@ -167,6 +185,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         addPlayer()
         addCompetitor1()
+        addCompetitor2()
+        addCompetitor3()
     }
     
     
@@ -205,35 +225,134 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         addChild(competitor1)
     }
+    
+    func addCompetitor2() {
+        competitor2 = Competitor2(imageNamed: GameConstants.StringConstants.competitor2ImageName)
+        competitor2.scale(to: frame.size, width: false, multiplier: 0.4)
+        competitor2.name = GameConstants.StringConstants.competitor2Name
+        PhysicsHelper.addPhysicsBody(to: competitor2, with: competitor2.name!)
+        competitor2.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
+        competitor2.zPosition = GameConstants.zPositions.competitor2Z
+        competitor2.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        competitor2.loadTextures()
+        competitor2.state = .idle
+        
+        addChild(competitor2)
+    }
+    
+    func addCompetitor3() {
+        competitor3 = Competitor3(imageNamed: GameConstants.StringConstants.competitor3ImageName)
+        competitor3.scale(to: frame.size, width: false, multiplier: 0.4)
+        competitor3.name = GameConstants.StringConstants.competitor3Name
+        PhysicsHelper.addPhysicsBody(to: competitor3, with: competitor3.name!)
+        competitor3.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
+        competitor3.zPosition = GameConstants.zPositions.competitor3Z
+        competitor3.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        competitor3.loadTextures()
+        competitor3.state = .idle
+        
+        addChild(competitor3)
+    }
+
 
     
     
     func handleFinish() {
         gameState = .finished
         print("End")
+        
+        self.isPaused = true
+        showFinishLineScreen()
     }
     
+    func showFinishLineScreen() {
+        let finishScreen = SKSpriteNode(color: .black, size: CGSize(width: self.size.width, height: self.size.height))
+        finishScreen.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+        finishScreen.zPosition = GameConstants.zPositions.finishScreenZ
+        finishScreen.alpha = 0.75
+        self.addChild(finishScreen)
+        
+        let titleLabel = SKLabelNode(text: "Race Results")
+        titleLabel.fontSize = 40
+        titleLabel.fontColor = .white
+        titleLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 100)
+        titleLabel.zPosition = GameConstants.zPositions.topZ
+        self.addChild(titleLabel)
+        
+        let sortedResults = finishTimes.sorted { $0.value < $1.value }
+        
+        var yOffSet: CGFloat = 100
+        
+        for (character,time) in sortedResults {
+            let resultLabel = SKLabelNode(text: "\(character.capitalized): \(String(format: "%.2f", time)) seconds")
+            resultLabel.fontSize = 24
+            resultLabel.fontColor = .white
+            resultLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 150 - yOffSet)
+            resultLabel.zPosition = GameConstants.zPositions.topZ
+            self.addChild(resultLabel)
+            
+            yOffSet -= 30
+        }
+        
+        
+        let restartButton = SKLabelNode(text: "Tap to Restart")
+        restartButton.fontSize = 30
+        restartButton.fontColor = .yellow
+        restartButton.position = CGPoint(x: self.size.width / 2, y: 100)
+        restartButton.zPosition = GameConstants.zPositions.topZ
+        restartButton.name = "restartButton"
+        self.addChild(restartButton)
+    }
+
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        printSceneGraph(for: player)
-        printSceneGraph(for: competitor1)
+//        printSceneGraph(for: player)
+//        printSceneGraph(for: competitor1)
         
         switch gameState {
         case .ready:
             gameState = .ongoing
+            raceStartTime = CACurrentMediaTime()
         case .ongoing:
-            touch = true
-        default:
-            break
+            currentValue += 8
+            if currentValue > maxValue {
+                currentValue = maxValue
+            }
+            updateProgressBar()
+        case .finished:
+            let touch = touches.first!
+            let location = touch.location(in: self)
+            let nodeAtPoint = atPoint(location)
+            print("Touched at: \(location)")
+            if nodeAtPoint.name == "restartButton"{
+                restartRace()
+            }
         }
-        currentValue += 8
-        if currentValue > maxValue {
-            currentValue = maxValue
-        }
-        updateProgressBar()
-        printSceneGraph(for: player)
+//        printSceneGraph(for: player)
         
         
-        print("Current value: \(currentValue)")
+//        print("Current value: \(currentValue)")
+        
+        
+    }
+    
+    func restartRace() {
+        
+        finishTimes.removeAll()
+        finishers = 0
+        gameState = .ready
+        
+        let transition = SKTransition.fade(withDuration: 1.0)
+        let scene = GameScene(size: self.size)
+        scene.scaleMode = .aspectFill
+        self.view?.presentScene(scene, transition: transition)
+        
+        player.position = CGPoint(x: frame.midX / 2.0, y: frame.midY)
+        competitor1.position = CGPoint(x: frame.midX / 2.0, y: frame.midY)
+        competitor2.position = CGPoint(x: frame.midX / 2.0, y: frame.midY)
+        competitor3.position = CGPoint(x: frame.midX / 2.0, y: frame.midY)
     }
     
     @objc func decreaseValue(){
@@ -300,8 +419,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             worldLayer.update(dt)
             backgroundLayer.update(dt)
             
-            let speedDifference = characterSpeed - competitor1.competitor1Speed
-            competitor1.position.x -= speedDifference * CGFloat(deltaTime) * 3
+            let speedDifference1 = characterSpeed - competitor1.competitor1Speed
+            competitor1.position.x -= speedDifference1 * CGFloat(deltaTime) * 3
+            
+            let speedDifference2 = characterSpeed - competitor2.competitor2Speed
+            competitor2.position.x -= speedDifference2 * CGFloat(deltaTime) * 3
+            
+            let speedDifference3 = characterSpeed - competitor3.competitor3Speed
+            competitor3.position.x -= speedDifference3 * CGFloat(deltaTime) * 3
 
         } else if gameState == .finished {
             backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
@@ -313,8 +438,56 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bodyB = contact.bodyB
         
         if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) {
+            
+            let currentTime = CACurrentMediaTime()
+            playerTime = raceStartTime - currentTime
+            finishTimes["Player"] = playerTime
+            
+            finishers += 1
+            characterSpeed = 0
+            player.state = .idle
+            print("Player Finish")
+        }
+        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor1Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor1Category) {
+            
+            let currentTime = CACurrentMediaTime()
+            competitor1Time = raceStartTime - currentTime
+            finishTimes["Competitor 1"] = competitor1Time
+            
+            
+            finishers += 1
+            competitor1.competitor1Speed = 0
+            competitor1.state = .idle
+            print("Competitor1 Finish")
+        }
+        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor2Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor2Category) {
+            
+            let currentTime = CACurrentMediaTime()
+            competitor2Time = raceStartTime - currentTime
+            finishTimes["Competitor 2"] = competitor2Time
+            
+            
+            finishers += 1
+            competitor2.competitor2Speed = 0
+            competitor2.state = .idle
+            print("Competitor2 Finish")
+        }
+        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor3Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor3Category) {
+            
+            let currentTime = CACurrentMediaTime()
+            competitor3Time = raceStartTime - currentTime
+            finishTimes["Competitor 3"] = competitor3Time
+            
+            
+            finishers += 1
+            competitor3.competitor3Speed = 0
+            competitor3.state = .idle
+            print("Competitor3 Finish")
+        }
+        
+        if finishers == 4 {
+            print("Finish")
             handleFinish()
         }
     }
-    
 }

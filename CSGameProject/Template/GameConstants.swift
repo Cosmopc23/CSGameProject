@@ -59,6 +59,9 @@ struct GameConstants {
         static let frameCategory: UInt32 = 0x1 << 2
         static let ceilingCategory: UInt32 = 0x1 << 3
         static let finishCategory: UInt32 = 0x1 << 4
+        static let competitor1Category: UInt32 = 0x1 << 5
+        static let competitor2Category: UInt32 = 0x1 << 6
+        static let competitor3Category: UInt32 = 0x1 << 7
     }
 
     struct zPositions {
@@ -70,6 +73,8 @@ struct GameConstants {
         static let competitor1Z: CGFloat = 5
         static let playerZ: CGFloat = 6
         static let hudZ: CGFloat = 7
+        static let finishScreenZ: CGFloat = 8
+        static let topZ: CGFloat = 9
     }
 }
 
