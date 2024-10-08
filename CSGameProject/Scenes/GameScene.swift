@@ -68,7 +68,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 player.state = .idle
                 competitor1.state = .idle
                 competitor2.state = .idle
-                competitor2.state = .idle
+                competitor3.state = .idle
             case .ongoing:
                 player.state = .running
                 competitor1.state = .running
@@ -438,7 +438,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bodyB = contact.bodyB
         
         if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) {
-            
             let currentTime = CACurrentMediaTime()
             playerTime = raceStartTime - currentTime
             finishTimes["Player"] = playerTime

@@ -29,7 +29,6 @@ class Player: SKSpriteNode {
 
     
     func animate(for state: PlayerState) {
-        
         removeAllActions()
         switch state {
         case .idle:
@@ -39,3 +38,5 @@ class Player: SKSpriteNode {
         }
     }
 }
+
+

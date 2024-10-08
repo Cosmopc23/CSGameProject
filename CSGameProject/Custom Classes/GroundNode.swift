@@ -16,7 +16,7 @@ class GroundNode: SKSpriteNode {
         
 
 
-        self.physicsBody = SKPhysicsBody(rectangleOf: size) // This should replace activatedBody!
+        self.physicsBody = SKPhysicsBody(rectangleOf: size)
         self.physicsBody?.isDynamic = false
         self.physicsBody?.restitution = 0.0
         self.physicsBody?.categoryBitMask = GameConstants.PhysicsCategories.groundCategory
@@ -32,3 +32,4 @@ class GroundNode: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
