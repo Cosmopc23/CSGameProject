@@ -28,6 +28,7 @@
 		CE2BC6DD2C9AEC350046CD20 /* RepeatingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2BC6DC2C9AEC350046CD20 /* RepeatingLayer.swift */; };
 		CE2CA10F2C92DB8B004739B1 /* PhysicsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2CA10E2C92DB8A004739B1 /* PhysicsHelper.swift */; };
 		CEA8A00D2C947E20004C55C7 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA8A00C2C947E20004C55C7 /* Layer.swift */; };
+		CEFA15252CB7C6ED005AB5E1 /* Javelin.sks in Resources */ = {isa = PBXBuildFile; fileRef = CEFA15242CB7C6ED005AB5E1 /* Javelin.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		CE2BC6DC2C9AEC350046CD20 /* RepeatingLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatingLayer.swift; sourceTree = "<group>"; };
 		CE2CA10E2C92DB8A004739B1 /* PhysicsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsHelper.swift; sourceTree = "<group>"; };
 		CEA8A00C2C947E20004C55C7 /* Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
+		CEFA15242CB7C6ED005AB5E1 /* Javelin.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Javelin.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				321F1A082C91B055006AA50F /* 100m.sks */,
+				CEFA15242CB7C6ED005AB5E1 /* Javelin.sks */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				324571322C8C83D4007A3AC7 /* Main.storyboard in Resources */,
+				CEFA15252CB7C6ED005AB5E1 /* Javelin.sks in Resources */,
 				324571342C8C83D6007A3AC7 /* Assets.xcassets in Resources */,
 				321F1A0F2C939031006AA50F /* TileSets.sks in Resources */,
 				321F1A092C91B055006AA50F /* 100m.sks in Resources */,
