@@ -1,5 +1,5 @@
 //
-//  GameScene.swift
+//  HundredScene.swift
 //  CSGameProject
 //
 //  Created by Cosmo Page-Croft on 07/09/2024.
@@ -12,7 +12,7 @@ enum GameState {
     case ready, ongoing, finished
 }
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class HundredScene: SKScene, SKPhysicsContactDelegate {
     
     var worldLayer: Layer!
     var backgroundLayer: RepeatingLayer!
@@ -349,7 +349,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         gameState = .ready
         
         let transition = SKTransition.fade(withDuration: 1.0)
-        let scene = GameScene(size: self.size)
+        let scene = HundredScene(size: self.size)
         scene.scaleMode = .aspectFill
         self.view?.presentScene(scene, transition: transition)
         
