@@ -29,6 +29,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var decreaseRate: CGFloat = 4
     var timer: Timer?
     
+    let targetMinValue: CGFloat = 60
+    let targetMaxValue: CGFloat = 80
+    
+    var targetMinIndicator: SKSpriteNode!
+    var targetMaxIndicator: SKSpriteNode!
+    
+    
+    
     var finishTimes: [String:TimeInterval] = [:]
     var raceStartTime: TimeInterval = 0
     var playerTime: TimeInterval = 0
@@ -44,12 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var touch = false
     
-    
-    let targetMinValue: CGFloat = 60
-    let targetMaxValue: CGFloat = 80
-    
-    var targetMinIndicator: SKSpriteNode!
-    var targetMaxIndicator: SKSpriteNode!
+
     
 
     
@@ -340,6 +343,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func restartRace() {
         
+        
         finishTimes.removeAll()
         finishers = 0
         gameState = .ready
@@ -390,7 +394,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if currentValue < targetMinValue {
             characterSpeed = 40.0
         } else if currentValue > targetMaxValue {
-            characterSpeed = 16.0 + (currentValue - minValue) / (maxValue - minValue) * (80.0 - 16.0)
+            characterSpeed = 50.0
         } else {
             characterSpeed = 80.0
         }
