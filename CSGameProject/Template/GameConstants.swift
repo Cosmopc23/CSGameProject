@@ -14,9 +14,9 @@ struct GameConstants {
         static let playerName = "Player"
         static let finishLineName = "Finish Line"
         
-        static let competitor1Name = "Competitor1"
-        static let competitor2Name = "Competitor2"
-        static let competitor3Name = "Competitor3"
+        static let competitor1Name = "JamesBot"
+        static let competitor2Name = "BellaBot"
+        static let competitor3Name = "PeterBot"
         
         
         static let worldBackgroundName = "BackgroundDouble"

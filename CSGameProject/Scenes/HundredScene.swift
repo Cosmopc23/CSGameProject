@@ -455,7 +455,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             
             let currentTime = CACurrentMediaTime()
             competitor1Time = raceStartTime - currentTime
-            finishTimes["Competitor 1"] = competitor1Time
+            finishTimes[GameConstants.StringConstants.competitor1Name] = competitor1Time
             
             
             finishers += 1
@@ -467,7 +467,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             
             let currentTime = CACurrentMediaTime()
             competitor2Time = raceStartTime - currentTime
-            finishTimes["Competitor 2"] = competitor2Time
+            finishTimes[GameConstants.StringConstants.competitor2Name] = competitor2Time
             
             
             finishers += 1
@@ -479,7 +479,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             
             let currentTime = CACurrentMediaTime()
             competitor3Time = raceStartTime - currentTime
-            finishTimes["Competitor 3"] = competitor3Time
+            finishTimes[GameConstants.StringConstants.competitor3Name] = competitor3Time
             
             
             finishers += 1
