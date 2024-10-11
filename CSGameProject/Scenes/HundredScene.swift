@@ -6,6 +6,7 @@
 //
 
 import SpriteKit
+import Foundation
 
 
 enum GameState {
@@ -287,7 +288,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         let sortedResults = finishTimes.sorted { $0.value < $1.value }
         
         var yOffSet: CGFloat = 100
-        var i = 1
+        var i = 4
         
         for (character,time) in sortedResults {
             let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", time)) seconds")
@@ -296,18 +297,18 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             resultLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 150 - yOffSet)
             resultLabel.zPosition = GameConstants.zPositions.topZ
             self.addChild(resultLabel)
-            i += 1
+            i -= 1
             
             yOffSet -= 30
         }
         
         
-        let restartButton = SKLabelNode(text: "Tap to Restart")
+        let restartButton = SKLabelNode(text: "Return to Menu")
         restartButton.fontSize = 30
         restartButton.fontColor = .yellow
         restartButton.position = CGPoint(x: self.size.width / 2, y: 100)
         restartButton.zPosition = GameConstants.zPositions.topZ
-        restartButton.name = "restartButton"
+        restartButton.name = "returnToMenu"
         self.addChild(restartButton)
     }
 
@@ -331,8 +332,8 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             let location = touch.location(in: self)
             let nodeAtPoint = atPoint(location)
             print("Touched at: \(location)")
-            if nodeAtPoint.name == "restartButton"{
-                restartRace()
+            if nodeAtPoint.name == "returnToMenu"{
+                returnToMenu()
             }
         }
 //        printSceneGraph(for: player)
@@ -343,22 +344,13 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func restartRace() {
-        
-        
-        finishTimes.removeAll()
-        finishers = 0
-        gameState = .ready
+    func returnToMenu() {
         
         let transition = SKTransition.fade(withDuration: 1.0)
-        let scene = HundredScene(size: self.size)
+        let scene = MenuScene(size: self.size)
         scene.scaleMode = .aspectFill
         self.view?.presentScene(scene, transition: transition)
-        
-        player.position = CGPoint(x: frame.midX / 2.0, y: frame.midY)
-        competitor1.position = CGPoint(x: frame.midX / 2.0, y: frame.midY)
-        competitor2.position = CGPoint(x: frame.midX / 2.0, y: frame.midY)
-        competitor3.position = CGPoint(x: frame.midX / 2.0, y: frame.midY)
+
     }
     
     @objc func decreaseValue(){

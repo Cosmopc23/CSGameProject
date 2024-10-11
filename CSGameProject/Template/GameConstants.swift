@@ -19,6 +19,10 @@ struct GameConstants {
         static let competitor3Name = "PeterBot"
         
         
+        static let hundredLinker = "Hundred Link"
+        static let javelinLinker = "Javelin Link"
+        
+        
         static let worldBackgroundName = "BackgroundDouble"
         static let playerImageName = "idle_0"
         static let groundNodeName = "GroundNode"
