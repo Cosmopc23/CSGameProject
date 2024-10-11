@@ -287,14 +287,16 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         let sortedResults = finishTimes.sorted { $0.value < $1.value }
         
         var yOffSet: CGFloat = 100
+        var i = 1
         
         for (character,time) in sortedResults {
-            let resultLabel = SKLabelNode(text: "\(character.capitalized): \(String(format: "%.2f", time)) seconds")
+            let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", time)) seconds")
             resultLabel.fontSize = 24
             resultLabel.fontColor = .white
             resultLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 150 - yOffSet)
             resultLabel.zPosition = GameConstants.zPositions.topZ
             self.addChild(resultLabel)
+            i += 1
             
             yOffSet -= 30
         }
