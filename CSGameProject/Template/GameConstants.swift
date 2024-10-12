@@ -53,6 +53,10 @@ struct GameConstants {
         
         static let competitor3RunAtlas = "Competitor3 Running Atlas"
         static let competitor3RunPrefixKey = "3run_"
+        
+        static let speedKey = "playerSpeed"
+        static let strengthKey = "playerStrength"
+        static let skillKey = "playerSkill"
     }
     
     struct PhysicsCategories {

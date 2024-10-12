@@ -15,6 +15,7 @@ enum GameState {
 
 class HundredScene: SKScene, SKPhysicsContactDelegate {
     
+    
     var playerFinishPosition: Int = 0
     
     var rewards: [Double] = [40.0, 30.0, 20.0, 10.0]
@@ -90,6 +91,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
+    
 
     
     override func didMove(to view: SKView) {
@@ -130,7 +132,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         
         
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
-        
         
     }
     
@@ -229,6 +230,10 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         competitor1.zPosition = GameConstants.zPositions.competitor1Z
         competitor1.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
+        competitor1.competitor1Speed = 0.0
+        competitor1.competitor1Acceleration = CGFloat.random(in: 5...10)
+        competitor1.competitor1TopSpeed = CGFloat.random(in: 73...90)
+        
         competitor1.loadTextures()
         competitor1.state = .idle
         
@@ -244,6 +249,10 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         competitor2.zPosition = GameConstants.zPositions.competitor2Z
         competitor2.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
+        competitor2.competitor2Speed = 0.0
+        competitor2.competitor2Acceleration = CGFloat.random(in: 5...10)
+        competitor2.competitor2TopSpeed = CGFloat.random(in: 73...90)
+    
         competitor2.loadTextures()
         competitor2.state = .idle
         
@@ -258,6 +267,10 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         competitor3.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
         competitor3.zPosition = GameConstants.zPositions.competitor3Z
         competitor3.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        competitor3.competitor3Speed = 0.0
+        competitor3.competitor3Acceleration = CGFloat.random(in: 5...10)
+        competitor3.competitor3TopSpeed = CGFloat.random(in: 73...90)
         
         competitor3.loadTextures()
         competitor3.state = .idle
@@ -296,6 +309,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         var i = 4
         
         for (character,time) in sortedResults {
+           
             let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", time)) seconds    Reward: \(rewards[(i-1)])")
             resultLabel.fontSize = 24
             resultLabel.fontColor = .white
@@ -305,8 +319,8 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             i -= 1
             
             if character == "Player" {
-                i = playerFinishPosition
-                MenuScene.reward(amount: rewards[i])
+                playerFinishPosition = i
+                MenuScene.reward(amount: rewards[playerFinishPosition])
             }
             
             yOffSet -= 30
@@ -392,9 +406,9 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         if currentValue == 0 {
             characterSpeed = 0
         } else if currentValue < targetMinValue/2 {
-            characterSpeed = 16.0
+            characterSpeed = 25.0
         } else if currentValue < targetMinValue {
-            characterSpeed = 40.0
+            characterSpeed = 50.0
         } else if currentValue > targetMaxValue {
             characterSpeed = 50.0
         } else {
@@ -417,7 +431,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             dt = 0
         }
         
-        print("Competitor1: \(String(describing: competitor1))")
+//        print("Competitor1: \(String(describing: competitor1))")
         
         
         
@@ -428,11 +442,44 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             worldLayer.update(dt)
             backgroundLayer.update(dt)
             
-            let speedDifference1 = characterSpeed - competitor1.competitor1CurrentSpeed
+            if competitor1.competitor1Speed > competitor1.competitor1TopSpeed {
+                competitor1.competitor1Speed = competitor1.competitor1TopSpeed
+            } else if (competitor1.competitor1Speed) > (competitor1.competitor1TopSpeed - 15) {
+                let randomChange = CGFloat.random(in: -10...10)
+                competitor1.competitor1Speed += randomChange
+            } else {
+                competitor1.competitor1Speed += competitor1.competitor1Acceleration
+            }
+            
+            let speedDifference1 = characterSpeed - competitor1.competitor1Speed
             competitor1.position.x -= speedDifference1 * CGFloat(deltaTime) * 3
+            
+            
+            
+            
+            if competitor2.competitor2Speed > competitor2.competitor2TopSpeed {
+                competitor2.competitor2Speed = competitor2.competitor2TopSpeed
+            } else if (competitor2.competitor2Speed) > (competitor2.competitor2TopSpeed - 15) {
+                let randomChange = CGFloat.random(in: -10...10)
+                competitor2.competitor2Speed += randomChange
+            } else {
+                competitor2.competitor2Speed += competitor2.competitor2Acceleration
+            }
             
             let speedDifference2 = characterSpeed - competitor2.competitor2Speed
             competitor2.position.x -= speedDifference2 * CGFloat(deltaTime) * 3
+            
+            
+            
+            
+            if competitor3.competitor3Speed > competitor3.competitor3TopSpeed {
+                competitor3.competitor3Speed = competitor3.competitor3TopSpeed
+            } else if (competitor3.competitor3Speed) > (competitor3.competitor3TopSpeed - 15) {
+                let randomChange = CGFloat.random(in: -10...10)
+                competitor3.competitor3Speed += randomChange
+            } else {
+                competitor3.competitor3Speed += competitor3.competitor3Acceleration
+            }
             
             let speedDifference3 = characterSpeed - competitor3.competitor3Speed
             competitor3.position.x -= speedDifference3 * CGFloat(deltaTime) * 3
@@ -464,7 +511,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             
             
             finishers += 1
-            competitor1.competitor1CurrentSpeed = 0
+            competitor1.competitor1Speed = 0
             competitor1.state = .idle
             print("Competitor1 Finish")
         }

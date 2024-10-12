@@ -10,7 +10,11 @@ import Foundation
 
 class MenuScene: SKScene {
     
-    let xBuffer: CGFloat = 60
+    var speedBar: ProgressBar!
+    var strengthBar: ProgressBar!
+    var skillBar: ProgressBar!
+    
+    let xBuffer: CGFloat = 70
     let yBuffer: CGFloat = 30
     
     override func didMove(to view: SKView) {
@@ -43,6 +47,22 @@ class MenuScene: SKScene {
         label.position = CGPoint(x: frame.minX + xBuffer, y: frame.maxY - yBuffer)
 
         addChild(label)
+        
+        speedBar = ProgressBar(labelText: "Speed", key: GameConstants.StringConstants.speedKey)
+        speedBar.position = CGPoint(x: (frame.minX + 3*(xBuffer)), y: (frame.minY + (yBuffer)))
+        speedBar.bar.anchorPoint = CGPoint(x: 0, y: 0)
+        
+        strengthBar = ProgressBar(labelText: "Strength", key: GameConstants.StringConstants.strengthKey)
+        strengthBar.position = CGPoint(x: (frame.minX + 3*(xBuffer)), y: (frame.minY + 2*(yBuffer)))
+        strengthBar.bar.anchorPoint = CGPoint(x: 0, y: 0)
+        
+        skillBar = ProgressBar(labelText: "Skill", key: GameConstants.StringConstants.skillKey)
+        strengthBar.position = CGPoint(x: (frame.minX + 3*(xBuffer)), y: (frame.minY + 3*(yBuffer)))
+        skillBar.bar.anchorPoint = CGPoint(x: 0, y: 0)
+        
+        addChild(speedBar)
+        addChild(strengthBar)
+        addChild(skillBar)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

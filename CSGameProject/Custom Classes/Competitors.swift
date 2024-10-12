@@ -16,7 +16,9 @@ class Competitor1: SKSpriteNode {
     var idleFrames = [SKTexture]()
     var runFrames = [SKTexture]()
     
-    var competitor1CurrentSpeed: CGFloat = 0
+    var competitor1Speed: CGFloat = 0.0
+    var competitor1Acceleration: CGFloat = 0.0
+    var competitor1TopSpeed: CGFloat = 0.0
 
     var state = Competitor1State.idle {
         willSet {
@@ -63,7 +65,9 @@ class Competitor2: SKSpriteNode {
     var idleFrames = [SKTexture]()
     var runFrames = [SKTexture]()
     
-    var competitor2Speed: CGFloat = 75.0
+    var competitor2Speed: CGFloat = 0.0
+    var competitor2Acceleration: CGFloat = 0.0
+    var competitor2TopSpeed: CGFloat = 0.0
     
     var state = Competitor2State.idle {
         willSet {
@@ -96,7 +100,9 @@ class Competitor3: SKSpriteNode {
     var idleFrames = [SKTexture]()
     var runFrames = [SKTexture]()
     
-    var competitor3Speed: CGFloat = 70.0
+    var competitor3Speed: CGFloat = 0.0
+    var competitor3Acceleration: CGFloat = 0.0
+    var competitor3TopSpeed: CGFloat = 0.0
     
     var state = Competitor3State.idle {
         willSet {
