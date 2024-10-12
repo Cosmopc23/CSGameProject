@@ -18,10 +18,9 @@ class GameViewController: UIViewController {
             
             let scene = MenuScene(size: view.bounds.size)
                 
-            // Set the scale mode to scale to fit the window
             scene.scaleMode = .aspectFill
                 
-            // Present the scene
+
             view.presentScene(scene)
             
             view.ignoresSiblingOrder = true

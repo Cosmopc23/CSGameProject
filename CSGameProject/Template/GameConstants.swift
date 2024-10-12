@@ -80,5 +80,9 @@ struct GameConstants {
         static let finishScreenZ: CGFloat = 8
         static let topZ: CGFloat = 9
     }
+    
+    struct cashKeys {
+        static let bankBalanceKey = "bankBalance"
+    }
 }
 
