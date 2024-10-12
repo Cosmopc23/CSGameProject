@@ -15,6 +15,10 @@ enum GameState {
 
 class HundredScene: SKScene, SKPhysicsContactDelegate {
     
+    var playerFinishPosition: Int = 0
+    
+    var rewards: [Double] = [40.0, 30.0, 20.0, 10.0]
+    
     var worldLayer: Layer!
     var backgroundLayer: RepeatingLayer!
     var mapNode: SKNode!
@@ -217,6 +221,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
     
     func addCompetitor1() {
         competitor1 = Competitor1(imageNamed: GameConstants.StringConstants.competitor1ImageName)
+
         competitor1.scale(to: frame.size, width: false, multiplier: 0.4)
         competitor1.name = GameConstants.StringConstants.competitor1Name
         PhysicsHelper.addPhysicsBody(to: competitor1, with: competitor1.name!)
@@ -291,13 +296,18 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         var i = 4
         
         for (character,time) in sortedResults {
-            let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", time)) seconds")
+            let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", time)) seconds    Reward: \(rewards[(i-1)])")
             resultLabel.fontSize = 24
             resultLabel.fontColor = .white
             resultLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 150 - yOffSet)
             resultLabel.zPosition = GameConstants.zPositions.topZ
             self.addChild(resultLabel)
             i -= 1
+            
+            if character == "Player" {
+                i = playerFinishPosition
+                MenuScene.reward(amount: rewards[i])
+            }
             
             yOffSet -= 30
         }
@@ -314,8 +324,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
 
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        printSceneGraph(for: player)
-//        printSceneGraph(for: competitor1)
         
         switch gameState {
         case .ready:
@@ -409,6 +417,9 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             dt = 0
         }
         
+        print("Competitor1: \(String(describing: competitor1))")
+        
+        
         
         let deltaTime = currentTime - lastTime
         lastTime = currentTime
@@ -417,7 +428,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             worldLayer.update(dt)
             backgroundLayer.update(dt)
             
-            let speedDifference1 = characterSpeed - competitor1.competitor1Speed
+            let speedDifference1 = characterSpeed - competitor1.competitor1CurrentSpeed
             competitor1.position.x -= speedDifference1 * CGFloat(deltaTime) * 3
             
             let speedDifference2 = characterSpeed - competitor2.competitor2Speed
@@ -453,7 +464,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             
             
             finishers += 1
-            competitor1.competitor1Speed = 0
+            competitor1.competitor1CurrentSpeed = 0
             competitor1.state = .idle
             print("Competitor1 Finish")
         }
