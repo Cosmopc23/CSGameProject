@@ -1,5 +1,5 @@
 //
-//  MenuScreen.swift
+//  MenuScene.swift
 //  CSGameProject
 //
 //  Created by Cosmo Page-Croft on 11/10/2024.
@@ -35,10 +35,11 @@ class MenuScene: SKScene {
         addChild(startButton)
         
         
-        let javelinButton = SKLabelNode(text: "Javelin (Coming Soon)")
+        let javelinButton = SKLabelNode(text: "Javelin")
         javelinButton.fontSize = 30
         javelinButton.fontColor = .gray
         javelinButton.position = CGPoint(x: frame.midX, y: frame.midY - 50)
+        javelinButton.name = GameConstants.StringConstants.javelinLinker
         addChild(javelinButton)
         
         let label = SKLabelNode(text: "Balance: \(MenuScene.getBankBalance()) ")
@@ -75,6 +76,10 @@ class MenuScene: SKScene {
             
             let transition = SKTransition.fade(withDuration: 1.0)
             let gameScene = HundredScene(size: self.size)
+            view?.presentScene(gameScene, transition: transition)
+        } else if node.name == GameConstants.StringConstants.javelinLinker {
+            let transition = SKTransition.fade(withDuration: 1.0)
+            let gameScene = JavelinScene(size: self.size)
             view?.presentScene(gameScene, transition: transition)
         }
     }

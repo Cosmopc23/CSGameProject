@@ -57,6 +57,12 @@ struct GameConstants {
         static let speedKey = "playerSpeed"
         static let strengthKey = "playerStrength"
         static let skillKey = "playerSkill"
+        
+        static let throwingIdleAtlas = "Player Throwing Idle Atlas"
+        static let throwingRunningAtlas = "Player Throwing Running Atlas"
+        static let playerThrowingImageName = "throwingIdle_0"
+        static let throwingIdlePrefixKey = "throwingIdle_"
+        static let throwingRunningPrefixKey = "throwingRunning_"
     }
     
     struct PhysicsCategories {

@@ -9,7 +9,7 @@ import SpriteKit
 import Foundation
 
 
-enum GameState {
+enum HundredGameState {
     case ready, ongoing, finished
 }
 
@@ -70,7 +70,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    var gameState = GameState.ready {
+    var gameState = HundredGameState.ready {
         willSet {
             switch newValue {
             case .ready:
