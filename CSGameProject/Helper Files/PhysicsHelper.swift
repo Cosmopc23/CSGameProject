@@ -60,6 +60,23 @@ class PhysicsHelper {
             sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.playerCategory
             sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
         
+        case GameConstants.StringConstants.javelinName:
+            
+           
+            sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
+            
+            
+            sprite.physicsBody!.affectedByGravity = true
+            sprite.physicsBody!.isDynamic = true
+            sprite.physicsBody!.allowsRotation = true
+            sprite.physicsBody!.restitution = 0
+            sprite.physicsBody!.friction = 1.0
+
+            
+            sprite.physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.javelinCategory
+            sprite.physicsBody!.collisionBitMask = GameConstants.PhysicsCategories.groundCategory
+            sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.groundCategory
+            
         default:
             sprite.physicsBody = SKPhysicsBody(rectangleOf: sprite.size)
         }

@@ -22,6 +22,8 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
     
     var player: Player!
     
+    let javelinSprite = SKSpriteNode(imageNamed: "Javelin")
+    
     
     var gameState = JavelinGameState.ready {
         willSet{
@@ -84,6 +86,7 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         if let groundTiles = mapNode.childNode(withName: GameConstants.StringConstants.groundTilesName) as? SKTileMapNode {
             tileMap = groundTiles
             
+            
             tileMap.scale(to: frame.size, width: false, multiplier: 1.0)
             
             PhysicsHelper.addPhysicsBody(to: tileMap, and: "ground")
@@ -92,11 +95,10 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
                     ObjectHelper.handleChild(sprite: sprite, with: sprite.name!)
                 }
             }
-            
-
         }
         
         addPlayer()
+        addJavelin()
     }
     
     func addPlayer() {
@@ -112,6 +114,16 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         player.state = .idle
         
         addChild(player)
+    }
+    
+    func addJavelin() {
+        PhysicsHelper.addPhysicsBody(to: javelinSprite, with: GameConstants.StringConstants.javelinName)
+        javelinSprite.scale(to: frame.size, width: false, multiplier: 0.4)
+        javelinSprite.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
+        javelinSprite.zPosition = GameConstants.zPositions.objectZ
+        javelinSprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        addChild(javelinSprite)
     }
     
     
@@ -137,6 +149,18 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
             worldLayer.update(dt)
             backgroundLayer.update(dt)
             backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
+        }
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        
+        let bodyA = contact.bodyA
+        let bodyB = contact.bodyB
+        
+        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.javelinCategory) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.groundCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.groundCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.javelinCategory) {
+            javelinSprite.physicsBody!.velocity = CGVector(dx: 0, dy: 0)
+            javelinSprite.physicsBody!.allowsRotation = false
+            javelinSprite.physicsBody!.angularVelocity = 0
         }
     }
 }

@@ -63,6 +63,8 @@ struct GameConstants {
         static let playerThrowingImageName = "throwingIdle_0"
         static let throwingIdlePrefixKey = "throwingIdle_"
         static let throwingRunningPrefixKey = "throwingRunning_"
+        
+        static let javelinName = "Javelin"
     }
     
     struct PhysicsCategories {
@@ -76,6 +78,7 @@ struct GameConstants {
         static let competitor1Category: UInt32 = 0x1 << 5
         static let competitor2Category: UInt32 = 0x1 << 6
         static let competitor3Category: UInt32 = 0x1 << 7
+        static let javelinCategory: UInt32 = 0x1 << 8
     }
 
     struct zPositions {
