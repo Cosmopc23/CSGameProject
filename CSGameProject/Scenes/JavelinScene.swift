@@ -24,6 +24,16 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
     
     let javelinSprite = SKSpriteNode(imageNamed: "Javelin")
     
+    var tileSize = CGFloat(10)
+    
+    var xHandPosition: Double = 0.0
+    var yHandPosition: Double = 0.0
+    
+    var currentHandFrameIndex = 0
+    
+    
+
+    
     
     var gameState = JavelinGameState.ready {
         willSet{
@@ -98,6 +108,11 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         }
         
         addPlayer()
+        
+
+        yHandPosition = frame.minY + tileSize + player.size.height * 254/1023
+        xHandPosition = frame.midX/2.0
+        
         addJavelin()
     }
     
@@ -111,17 +126,18 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         player.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         player.loadTextures()
-        player.state = .idle
+        player.state = .throwIdle
         
         addChild(player)
     }
     
     func addJavelin() {
         PhysicsHelper.addPhysicsBody(to: javelinSprite, with: GameConstants.StringConstants.javelinName)
-        javelinSprite.scale(to: frame.size, width: false, multiplier: 0.4)
-        javelinSprite.position = CGPoint(x: frame.midX/2.0, y: frame.midY)
+        javelinSprite.scale(to: frame.size, width: false, multiplier: 0.165)
+        javelinSprite.position = CGPoint(x: xHandPosition, y: yHandPosition)
         javelinSprite.zPosition = GameConstants.zPositions.objectZ
         javelinSprite.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        javelinSprite.zRotation = -0.1
         
         addChild(javelinSprite)
     }
@@ -150,6 +166,7 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
             backgroundLayer.update(dt)
             backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
         }
+        
     }
     
     func didBegin(_ contact: SKPhysicsContact) {

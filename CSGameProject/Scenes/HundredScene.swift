@@ -60,8 +60,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
     
 
     
-
-    
     
     var characterSpeed: CGFloat = 0.0 {
         didSet{

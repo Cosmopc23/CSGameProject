@@ -15,7 +15,7 @@ class MenuScene: SKScene {
     var skillBar: ProgressBar!
     
     let xBuffer: CGFloat = 70
-    let yBuffer: CGFloat = 30
+    let yBuffer: CGFloat = 15
     
     override func didMove(to view: SKView) {
         backgroundColor = .white
@@ -50,20 +50,29 @@ class MenuScene: SKScene {
         addChild(label)
         
         speedBar = ProgressBar(labelText: "Speed", key: GameConstants.StringConstants.speedKey)
-        speedBar.position = CGPoint(x: (frame.minX + 3*(xBuffer)), y: (frame.minY + (yBuffer)))
+        speedBar.position = CGPoint(x: (frame.midX/4.0), y: frame.midY/2.0)
         speedBar.bar.anchorPoint = CGPoint(x: 0, y: 0)
         
         strengthBar = ProgressBar(labelText: "Strength", key: GameConstants.StringConstants.strengthKey)
-        strengthBar.position = CGPoint(x: (frame.minX + 3*(xBuffer)), y: (frame.minY + 2*(yBuffer)))
+        strengthBar.position = CGPoint(x: frame.midX/4.0, y: (frame.midY/2.0)-yBuffer)
         strengthBar.bar.anchorPoint = CGPoint(x: 0, y: 0)
         
         skillBar = ProgressBar(labelText: "Skill", key: GameConstants.StringConstants.skillKey)
-        strengthBar.position = CGPoint(x: (frame.minX + 3*(xBuffer)), y: (frame.minY + 3*(yBuffer)))
+        strengthBar.position = CGPoint(x: frame.midX/4.0, y: (frame.midY/2.0))
         skillBar.bar.anchorPoint = CGPoint(x: 0, y: 0)
         
         addChild(speedBar)
         addChild(strengthBar)
         addChild(skillBar)
+        
+        let squareSize = CGSize(width: 300, height: 150)
+        let greySquare = SKSpriteNode(color: .gray, size: squareSize)
+        
+        greySquare.anchorPoint = CGPoint(x: 0, y: 0)
+        
+        greySquare.position = CGPoint(x: 0, y: 0)
+        
+        addChild(greySquare)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

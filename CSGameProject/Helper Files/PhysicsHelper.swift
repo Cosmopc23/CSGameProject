@@ -65,8 +65,8 @@ class PhysicsHelper {
            
             sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
             
-            
-            sprite.physicsBody!.affectedByGravity = true
+            sprite.isHidden = true
+            sprite.physicsBody!.affectedByGravity = false
             sprite.physicsBody!.isDynamic = true
             sprite.physicsBody!.allowsRotation = true
             sprite.physicsBody!.restitution = 0

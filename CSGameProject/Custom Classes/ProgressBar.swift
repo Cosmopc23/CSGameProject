@@ -24,7 +24,6 @@ class ProgressBar: SKNode {
 
 
         let background = SKSpriteNode(color: .darkGray, size: CGSize(width: 200, height: 20))
-        background.position = CGPoint(x: 0, y: 0)
         self.addChild(background)
 
 
@@ -33,8 +32,8 @@ class ProgressBar: SKNode {
 
 
         self.label.fontSize = 14
-        self.label.fontColor = .white
-        self.label.position = CGPoint(x: 0, y: 25)
+        self.label.fontColor = .red
+        self.label.position = CGPoint(x: 10, y: 0)
         self.addChild(self.label)
 
 
