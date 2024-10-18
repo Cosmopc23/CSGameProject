@@ -30,8 +30,6 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
     var yHandPosition: Double = 0.0
     
     var currentHandFrameIndex = 0
-    
-    
 
     
     

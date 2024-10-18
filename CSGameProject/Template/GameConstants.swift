@@ -96,6 +96,9 @@ struct GameConstants {
     
     struct cashKeys {
         static let bankBalanceKey = "bankBalance"
+        static let speedKey = "speed"
+        static let strengthKey = "strength"
+        static let skillKey = "skill"
     }
 }
 
