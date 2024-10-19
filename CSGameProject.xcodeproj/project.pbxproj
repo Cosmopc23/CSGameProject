@@ -23,6 +23,7 @@
 		3245714B2C8C83D7007A3AC7 /* CSGameProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245714A2C8C83D7007A3AC7 /* CSGameProjectUITests.swift */; };
 		3245714D2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */; };
 		325250642CB0484C00CCC726 /* Competitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325250632CB0484C00CCC726 /* Competitors.swift */; };
+		3265059E2CC324050044CBB0 /* Coaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3265059D2CC324050044CBB0 /* Coaches.swift */; };
 		32A2C6582C9A1BFE00294609 /* ObjectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A2C6572C9A1BFE00294609 /* ObjectHelper.swift */; };
 		32A2C65A2C9A2A0E00294609 /* GroundNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A2C6592C9A2A0E00294609 /* GroundNode.swift */; };
 		32CFA2F92CB9DBD40041929C /* MenuScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CFA2F82CB9DBD40041929C /* MenuScreen.swift */; };
@@ -71,6 +72,7 @@
 		3245714A2C8C83D7007A3AC7 /* CSGameProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameProjectUITests.swift; sourceTree = "<group>"; };
 		3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameProjectUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		325250632CB0484C00CCC726 /* Competitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Competitors.swift; sourceTree = "<group>"; };
+		3265059D2CC324050044CBB0 /* Coaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coaches.swift; sourceTree = "<group>"; };
 		32A2C6572C9A1BFE00294609 /* ObjectHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectHelper.swift; sourceTree = "<group>"; };
 		32A2C6592C9A2A0E00294609 /* GroundNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroundNode.swift; sourceTree = "<group>"; };
 		32CFA2F82CB9DBD40041929C /* MenuScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScreen.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				32A2C6592C9A2A0E00294609 /* GroundNode.swift */,
 				325250632CB0484C00CCC726 /* Competitors.swift */,
 				32CFA2FA2CBB28F40041929C /* ProgressBar.swift */,
+				3265059D2CC324050044CBB0 /* Coaches.swift */,
 			);
 			path = "Custom Classes";
 			sourceTree = "<group>";
@@ -380,6 +383,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				321F19FE2C91AFA2006AA50F /* SKNode + Extensions.swift in Sources */,
+				3265059E2CC324050044CBB0 /* Coaches.swift in Sources */,
 				CE2CA10F2C92DB8B004739B1 /* PhysicsHelper.swift in Sources */,
 				321F19FB2C91AF7F006AA50F /* Player.swift in Sources */,
 				321F1A012C91AFD4006AA50F /* AnimationHelper.swift in Sources */,

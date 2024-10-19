@@ -94,7 +94,7 @@ struct GameConstants {
         static let topZ: CGFloat = 9
     }
     
-    struct cashKeys {
+    struct Keys {
         static let bankBalanceKey = "bankBalance"
         static let speedKey = "speed"
         static let strengthKey = "strength"
