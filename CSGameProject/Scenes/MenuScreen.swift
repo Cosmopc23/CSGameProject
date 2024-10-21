@@ -21,6 +21,13 @@ class MenuScene: SKScene {
     let trainingLayer = SKNode()
     let sponsorshipLayer = SKNode()
     let calendarLayer = SKNode()
+    let tier1Layer = SKNode()
+    let tier2Layer = SKNode()
+    let tier3Layer = SKNode()
+    let tier4Layer = SKNode()
+    let tier5Layer = SKNode()
+    let tier6Layer = SKNode()
+    let tier7Layer = SKNode()
     
     let borderWidth: CGFloat = 2.0
     
@@ -45,7 +52,13 @@ class MenuScene: SKScene {
     
     
     override func didMove(to view: SKView) {
-        currentCoach = coaches[loadCurrentCoachIndex() ?? 0]
+//        currentCoach = coaches[loadCurrentCoachIndex() ?? 0]
+        currentCoach = coaches[0]
+        
+        speedCurrentValue = getStat(key: GameConstants.Keys.speedKey)
+        skillCurrentValue = getStat(key: GameConstants.Keys.skillKey)
+        strengthCurrentValue = getStat(key: GameConstants.Keys.skillKey)
+        
         addChild(outerLayer)
         
         setupOuterLayer()
@@ -87,62 +100,62 @@ class MenuScene: SKScene {
         } else if node.name == "calendarButton" {
             showLayer(calendarLayer)
         } else if node.name == "coachDetailNode" {
-            scrollableArea.isHidden = false
+//            scrollableArea.isHidden = false
             print("Coach button hit")
-        } else if let name = node.name, coaches.contains(where: { $0.name == name }) {
-                var i = 0
-                for coach in coaches {
-                    if coach.name == node.name {
-                        showAlertForCoach(coach: coach) { confirmed in
-                            if confirmed {
-                                if MenuScene.transaction(amount: coach.price) {
-                                    self.newCoach(oldCoach: self.currentCoach, newCoach: coach)
-                                    self.saveCurrentCoachIndex(i)
-                                } else {
-                                    let alert = UIAlertController(title: "Insufficient Funds", message: "You do not have enough money to make this transaction", preferredStyle: .alert)
-                                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                                }
-                        }
-                    }
-                }
-                i += 1
-            }
-            scrollableArea.isHidden = true
+//        } else if let name = node.name, coaches.contains(where: { $0.name == name }) {
+//                var i = 0
+//                for coach in coaches {
+//                    if coach.name == node.name {
+//                        showAlertForCoach(coach: coach) { confirmed in
+//                            if confirmed {
+//                                if MenuScene.transaction(amount: coach.price) {
+//                                    self.newCoach(oldCoach: self.currentCoach, newCoach: coach)
+//                                    self.saveCurrentCoachIndex(i)
+//                                } else {
+//                                    let alert = UIAlertController(title: "Insufficient Funds", message: "You do not have enough money to make this transaction", preferredStyle: .alert)
+//                                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//                                }
+//                        }
+//                    }
+//                }
+//                i += 1
+//            }
+//            scrollableArea.isHidden = true
         }
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-            let touchLocation = touch.location(in: self)
-            
-
-            if scrollableArea.contains(touchLocation), let previousY = previousTouchPositionY {
-                let deltaY = touchLocation.y - previousY
-                coachesNode.position.y += deltaY
-                previousTouchPositionY = touchLocation.y
-            }
-    }
+//    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        guard let touch = touches.first else { return }
+//            let touchLocation = touch.location(in: self)
+//            
+//
+//            if scrollableArea.contains(touchLocation), let previousY = previousTouchPositionY {
+//                let deltaY = touchLocation.y - previousY
+//                coachesNode.position.y += deltaY
+//                previousTouchPositionY = touchLocation.y
+//            }
+//    }
     
-    func showAlertForCoach(coach: Coach, completion: @escaping (Bool) -> Void) {
-        let alert = UIAlertController(title: "Confirm Coach",
-                                      message: "Do you want to hire \(coach.name) for \(coach.price) currency?",
-                                      preferredStyle: .alert)
-
-        let confirmAction = UIAlertAction(title: "Yes", style: .default) { _ in
-            completion(true)
-        }
-
-        let cancelAction = UIAlertAction(title: "No", style: .cancel) { _ in
-            completion(false)
-        }
-
-        alert.addAction(confirmAction)
-        alert.addAction(cancelAction)
-
-        if let viewController = self.scene?.view?.window?.rootViewController {
-            viewController.present(alert, animated: true, completion: nil)
-        }
-    }
+//    func showAlertForCoach(coach: Coach, completion: @escaping (Bool) -> Void) {
+//        let alert = UIAlertController(title: "Confirm Coach",
+//                                      message: "Do you want to hire \(coach.name) for \(coach.price) currency?",
+//                                      preferredStyle: .alert)
+//
+//        let confirmAction = UIAlertAction(title: "Yes", style: .default) { _ in
+//            completion(true)
+//        }
+//
+//        let cancelAction = UIAlertAction(title: "No", style: .cancel) { _ in
+//            completion(false)
+//        }
+//
+//        alert.addAction(confirmAction)
+//        alert.addAction(cancelAction)
+//
+//        if let viewController = self.scene?.view?.window?.rootViewController {
+//            viewController.present(alert, animated: true, completion: nil)
+//        }
+//    }
 
     
     func setupOuterLayer() {
@@ -276,6 +289,36 @@ class MenuScene: SKScene {
         setupCurrentCoachNode()
     }
     
+    func addCoachNodes(coachArray: [Int]) {
+        
+    }
+    
+    
+    func setupChooseCoachLayer(tier: Int) {
+        if tier == 1 {
+            tier1Layer.name = "Tier1Layer"
+            addCoachNodes(coachArray: [1,2,3,4])
+        } else if tier == 2 {
+            tier2Layer.name = "Tier1Layer"
+            addCoachNodes(coachArray: [5,6,7,8])
+        } else if tier == 3 {
+            tier3Layer.name = "Tier1Layer"
+            addCoachNodes(coachArray: [9,10,11,12])
+        } else if tier == 4 {
+            tier4Layer.name = "Tier1Layer"
+            addCoachNodes(coachArray: [13,14,15,16])
+        } else if tier == 5 {
+            tier5Layer.name = "Tier1Layer"
+            addCoachNodes(coachArray: [17,18,19,20])
+        } else if tier == 6 {
+            tier6Layer.name = "Tier1Layer"
+            addCoachNodes(coachArray: [21,22,23,24,25])
+        } else if tier == 7 {
+            tier7Layer.name = "Tier1Layer"
+            addCoachNodes(coachArray: [26])
+        }
+    }
+    
     func setupSponsorLayer () {
         sponsorshipLayer.name = "SponsorshipLayer"
         let label = SKLabelNode(text: "Sponsorship Layer")
@@ -309,6 +352,13 @@ class MenuScene: SKScene {
         trainingLayer.isHidden = true
         sponsorshipLayer.isHidden = true
         calendarLayer.isHidden = true
+        tier1Layer.isHidden = true
+        tier2Layer.isHidden = true
+        tier3Layer.isHidden = true
+        tier4Layer.isHidden = true
+        tier5Layer.isHidden = true
+        tier6Layer.isHidden = true
+        tier7Layer.isHidden = true
         
         layer.isHidden = false
         
@@ -336,41 +386,41 @@ class MenuScene: SKScene {
         trainingLayer.addChild(borderCoach)
         
         
-        setupScrollableArea()
+//        setupScrollableArea()
     }
     
-    func setupScrollableArea() {
-        scrollableArea.position = CGPoint(x: frame.midX, y: frame.midY)
-        scrollableArea.isHidden = true
-        scrollableArea.zPosition = GameConstants.zPositions.topZ
-        trainingLayer.addChild(scrollableArea)
-        
-        coachesNode.position = CGPoint(x: 0, y: -scrollableArea.size.height / 2)
-        scrollableArea.addChild(coachesNode)
-        
-        var yOffset = 10.0
-        for coach in coaches {
-            let coachNode = SKLabelNode(text: "\(coach.name): Price: \(coach.price), Speed: \(coach.speedBoost), Skill: \(coach.skillBoost), Strength: \(coach.strengthBoost)")
-            coachNode.zPosition = GameConstants.zPositions.topZ + 0.1
-            coachNode.position = CGPoint(x: frame.minX + 20, y: frame.maxY - yOffset)
-            coachNode.fontSize = 15
-            coachNode.fontName = "Helvetica-Bold"
-            coachesNode.addChild(coachNode)
-            
-            let border = SKShapeNode(rectOf: CGSize(width: (frame.maxX - 150)+borderWidth, height: 20+borderWidth), cornerRadius: 2.0)
-            border.strokeColor = .black
-            border.lineWidth = borderWidth
-            border.fillColor = .clear
-            border.position = CGPoint(x: frame.minX + 30, y: frame.maxY - yOffset + 3)
-            border.zPosition = GameConstants.zPositions.topZ + 0.2
-            border.name = coach.name
-            coachesNode.addChild(border)
-            
-            yOffset -= 40
-        }
-        
-        coachesNode.position.y = -CGFloat(coaches.count * 40) / 2
-    }
+//    func setupScrollableArea() {
+//        scrollableArea.position = CGPoint(x: frame.midX, y: frame.midY)
+//        scrollableArea.isHidden = true
+//        scrollableArea.zPosition = GameConstants.zPositions.topZ
+//        trainingLayer.addChild(scrollableArea)
+//        
+//        coachesNode.position = CGPoint(x: 0, y: -scrollableArea.size.height / 2)
+//        scrollableArea.addChild(coachesNode)
+//        
+//        var yOffset = 10.0
+//        for coach in coaches {
+//            let coachNode = SKLabelNode(text: "\(coach.name): Price: \(coach.price), Speed: \(coach.speedBoost), Skill: \(coach.skillBoost), Strength: \(coach.strengthBoost)")
+//            coachNode.zPosition = GameConstants.zPositions.topZ + 0.1
+//            coachNode.position = CGPoint(x: frame.minX + 20, y: frame.maxY - yOffset)
+//            coachNode.fontSize = 15
+//            coachNode.fontName = "Helvetica-Bold"
+//            coachesNode.addChild(coachNode)
+//            
+//            let border = SKShapeNode(rectOf: CGSize(width: (frame.maxX - 150)+borderWidth, height: 20+borderWidth), cornerRadius: 2.0)
+//            border.strokeColor = .black
+//            border.lineWidth = borderWidth
+//            border.fillColor = .clear
+//            border.position = CGPoint(x: frame.minX + 30, y: frame.maxY - yOffset + 3)
+//            border.zPosition = GameConstants.zPositions.topZ + 0.2
+//            border.name = coach.name
+//            coachesNode.addChild(border)
+//            
+//            yOffset -= 40
+//        }
+//        
+//        coachesNode.position.y = -CGFloat(coaches.count * 40) / 2
+//    }
     
     func createMultilineLabel(text: String, fontSize: CGFloat, position: CGPoint) -> SKNode {
         let lines = text.components(separatedBy: "\n")
