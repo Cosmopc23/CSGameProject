@@ -17,6 +17,7 @@ struct Coach {
 }
 
 let coaches = [
+    
     Coach(name: "Coach Basics", price: 0.0, speedBoost: 10.0, skillBoost: 10.0, strengthBoost: 10.0),
 
     Coach(name: "Coach Davey", price: 100.0, speedBoost: 15.0, skillBoost: 20.0, strengthBoost: 15.0),
@@ -50,7 +51,7 @@ let coaches = [
     Coach(name: "Coach Helios", price: 2600.0, speedBoost: 100.0, skillBoost: 70.0, strengthBoost: 60.0),
     Coach(name: "Coach Athena", price: 2800.0, speedBoost: 80.0, skillBoost: 80.0, strengthBoost: 80.0),
 
-    Coach(name: "Coach LeBron", price: 3500.0, speedBoost: 100.0, skillBoost: 100.0, strengthBoost: 100.0)
-
+    Coach(name: "Coach Bolt", price: 3500.0, speedBoost: 100.0, skillBoost: 100.0, strengthBoost: 100.0)
+    
 ]
 

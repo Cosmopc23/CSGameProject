@@ -99,6 +99,7 @@ struct GameConstants {
         static let speedKey = "speed"
         static let strengthKey = "strength"
         static let skillKey = "skill"
+        static let coachKey = "coach"
     }
 }
 
