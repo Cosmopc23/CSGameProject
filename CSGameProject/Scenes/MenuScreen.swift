@@ -100,37 +100,15 @@ class MenuScene: SKScene {
         } else if node.name == "calendarButton" {
             showLayer(calendarLayer)
         } else if node.name == "coachDetailNode" {
-            scrollableArea.isHidden = false
+            
+            isUserInteractionEnabled = false
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.scrollableArea.isHidden = false
+                self.isUserInteractionEnabled = true
+            }
             print("Coach button hit")
         } else if let name = node.name, coaches.contains(where: { $0.name == name }) {
-                var i = 0
-                for coach in coaches {
-                    if coach.name == node.name {
-                        showAlertForCoach(coach: coach) { confirmed in
-                            if confirmed {
-                                if MenuScene.transaction(amount: coach.price) {
-                                    self.newCoach(oldCoach: self.currentCoach, newCoach: coach)
-                                    self.saveCurrentCoachIndex(i)
-                                } else {
-                                    let alert = UIAlertController(title: "Insufficient Funds", message: "You do not have enough money to make this transaction", preferredStyle: .alert)
-                                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                                }
-                        }
-                    }
-                }
-                i += 1
-            }
-            scrollableArea.isHidden = true
-        }
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        let touch = touches.first!
-        let location = touch.location(in: self)
-        let node = self.atPoint(location)
-        
-        if let name = node.name, coaches.contains(where: { $0.name == name }) {
             var i = 0
             for coach in coaches {
                 if coach.name == node.name {
@@ -139,12 +117,19 @@ class MenuScene: SKScene {
                             if MenuScene.transaction(amount: coach.price) {
                                 self.newCoach(oldCoach: self.currentCoach, newCoach: coach)
                                 self.saveCurrentCoachIndex(i)
+                                self.scrollableArea.isHidden = true
                             } else {
-                                let alert = UIAlertController(title: "Insufficient Funds", message: "You do not have enough money to make this transaction", preferredStyle: .alert)
+                                let alert = UIAlertController(
+                                    title: "Insufficient Funds",
+                                    message: "You do not have enough money to make this transaction",
+                                    preferredStyle: .alert
+                                )
                                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                                 
-                                if let viewController = self.scene?.view?.window?.rootViewController {
+                                
+                                if let viewController = self.view?.window?.rootViewController {
                                     viewController.present(alert, animated: true, completion: nil)
+                                    self.scrollableArea.isHidden = true
                                 }
                             }
                         }
@@ -152,10 +137,10 @@ class MenuScene: SKScene {
                 }
                 i += 1
             }
-            scrollableArea.isHidden = true
-            
         }
     }
+
+   
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
             let touchLocation = touch.location(in: self)
@@ -212,7 +197,7 @@ class MenuScene: SKScene {
         balanceLabel.fontName = "Helvetica-Bold"
         balanceLabel.fontSize = 15
         balanceLabel.fontColor = .black
-        balanceLabel.zPosition = GameConstants.zPositions.topZ + 0.1
+        balanceLabel.zPosition = GameConstants.zPositions.topZ + 100
         balanceLabel.position = CGPoint(x: frame.minX + xBuffer, y: frame.maxY - yBuffer)
         
         outerLayer.addChild(balanceLabel)
@@ -401,7 +386,7 @@ class MenuScene: SKScene {
     }
     
     func setupCurrentCoachNode() {
-        let currentCoach = coaches[0]
+        let currentCoach = coaches[4]
         
         let coachText = "\(currentCoach.name)\n Speed Boost: \(currentCoach.speedBoost)\n Skill Boost: \(currentCoach.skillBoost) \n StrengthBoost: \(currentCoach.strengthBoost)"
         let coachDetailNode = createMultilineLabel(text: coachText, fontSize: 12, position: CGPoint(x: frame.midX, y: frame.midY + 65))
@@ -440,7 +425,7 @@ class MenuScene: SKScene {
             coachNode.fontName = "Helvetica-Bold"
             coachesNode.addChild(coachNode)
             
-            let border = SKShapeNode(rectOf: CGSize(width: (frame.maxX - 150)+borderWidth, height: 20+borderWidth), cornerRadius: 2.0)
+            let border = SKShapeNode(rectOf: CGSize(width: (frame.maxX - 330)+borderWidth, height: 20+borderWidth), cornerRadius: 2.0)
             border.strokeColor = .black
             border.lineWidth = borderWidth
             border.fillColor = .clear

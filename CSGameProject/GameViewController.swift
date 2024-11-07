@@ -37,4 +37,9 @@ class GameViewController: UIViewController {
     override var prefersHomeIndicatorAutoHidden: Bool {
         return true
     }
+    
+    func showAlert(_ alert: UIAlertController) {
+        self.present(alert, animated: true, completion: nil)
+    }
+
 }
