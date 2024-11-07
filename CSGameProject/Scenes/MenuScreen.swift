@@ -52,12 +52,7 @@ class MenuScene: SKScene {
     
     
     override func didMove(to view: SKView) {
-//        currentCoach = coaches[loadCurrentCoachIndex() ?? 0]
-        currentCoach = coaches[0]
-        
-        speedCurrentValue = getStat(key: GameConstants.Keys.speedKey)
-        skillCurrentValue = getStat(key: GameConstants.Keys.skillKey)
-        strengthCurrentValue = getStat(key: GameConstants.Keys.skillKey)
+        MenuScene.saveBankBalance(10000)
         
         addChild(outerLayer)
         
@@ -73,6 +68,27 @@ class MenuScene: SKScene {
         setupCalendarLayer()
         
         showLayer(calendarLayer)
+        
+        updateMenu()
+        
+    }
+    
+    func updateMenu(){
+        print(getCurrentCoachIndex()!)
+        currentCoach = coaches[getCurrentCoachIndex() ?? 0]
+        
+        saveStat(currentCoach.speedBoost, key: GameConstants.Keys.speedKey)
+        saveStat(currentCoach.skillBoost, key: GameConstants.Keys.skillKey)
+        saveStat(currentCoach.strengthBoost, key: GameConstants.Keys.strengthKey)
+        
+        speedCurrentValue = getStat(key: GameConstants.Keys.speedKey)
+        skillCurrentValue = getStat(key: GameConstants.Keys.skillKey)
+        strengthCurrentValue = getStat(key: GameConstants.Keys.strengthKey)
+        
+        updateProgressbar(progressBar: speedProgressBar, currentValue: speedCurrentValue)
+        updateProgressbar(progressBar: skillProgressBar, currentValue: skillCurrentValue)
+        updateProgressbar(progressBar: strengthProgressBar, currentValue: strengthCurrentValue)
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -134,6 +150,8 @@ class MenuScene: SKScene {
                             }
                         }
                     }
+                    updateMenu()
+                    break
                 }
                 i += 1
             }
@@ -386,7 +404,7 @@ class MenuScene: SKScene {
     }
     
     func setupCurrentCoachNode() {
-        let currentCoach = coaches[4]
+        currentCoach = coaches[getCurrentCoachIndex() ?? 0]
         
         let coachText = "\(currentCoach.name)\n Speed Boost: \(currentCoach.speedBoost)\n Skill Boost: \(currentCoach.skillBoost) \n StrengthBoost: \(currentCoach.strengthBoost)"
         let coachDetailNode = createMultilineLabel(text: coachText, fontSize: 12, position: CGPoint(x: frame.midX, y: frame.midY + 65))
@@ -521,10 +539,9 @@ class MenuScene: SKScene {
     
     func saveCurrentCoachIndex(_ index: Int) {
         UserDefaults.standard.set(index, forKey: GameConstants.Keys.coachKey)
-        UserDefaults.standard.synchronize()
     }
     
-    func loadCurrentCoachIndex() -> Int? {
+    func getCurrentCoachIndex() -> Int? {
         return UserDefaults.standard.value(forKey: GameConstants.Keys.coachKey) as? Int
     }
 
