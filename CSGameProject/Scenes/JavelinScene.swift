@@ -107,6 +107,7 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         
         addPlayer()
         
+        player.isHidden = false
 
         yHandPosition = frame.minY + tileSize + player.size.height * 254/1023
         xHandPosition = frame.midX/2.0

@@ -61,8 +61,6 @@ class PhysicsHelper {
             sprite.physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
         
         case GameConstants.StringConstants.javelinName:
-            
-           
             sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
             
             sprite.isHidden = true
