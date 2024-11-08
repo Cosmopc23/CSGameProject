@@ -52,7 +52,7 @@ class MenuScene: SKScene {
     
     
     override func didMove(to view: SKView) {
-        MenuScene.saveBankBalance(10000)
+//        MenuScene.saveBankBalance(10000)
         
         addChild(outerLayer)
         
@@ -74,7 +74,7 @@ class MenuScene: SKScene {
     }
     
     func updateMenu(){
-        print(getCurrentCoachIndex()!)
+//        print(getCurrentCoachIndex()!)
         currentCoach = coaches[getCurrentCoachIndex() ?? 0]
         
         saveStat(currentCoach.speedBoost, key: GameConstants.Keys.speedKey)
@@ -116,7 +116,6 @@ class MenuScene: SKScene {
         } else if node.name == "calendarButton" {
             showLayer(calendarLayer)
         } else if node.name == "coachDetailNode" {
-            
             isUserInteractionEnabled = false
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -124,6 +123,8 @@ class MenuScene: SKScene {
                 self.isUserInteractionEnabled = true
             }
             print("Coach button hit")
+        } else if node.name == "backButton" {
+            scrollableArea.isHidden = true
         } else if let name = node.name, coaches.contains(where: { $0.name == name }) {
             var i = 0
             for coach in coaches {
@@ -134,6 +135,7 @@ class MenuScene: SKScene {
                                 self.newCoach(oldCoach: self.currentCoach, newCoach: coach)
                                 self.saveCurrentCoachIndex(i)
                                 self.scrollableArea.isHidden = true
+                                self.updateMenu()
                             } else {
                                 let alert = UIAlertController(
                                     title: "Insufficient Funds",
@@ -455,7 +457,30 @@ class MenuScene: SKScene {
             yOffset -= 40
         }
         
+        let backButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
+        backButton.name = "backButton"
+        backButton.position = CGPoint(x: frame.minX - 300, y: frame.midY - 300)
+        backButton.zPosition = GameConstants.zPositions.hudZ + 0.1
+        scrollableArea.addChild(backButton)
+        
+        let border = SKShapeNode(rectOf: CGSize(width: 90+borderWidth, height: 40+borderWidth), cornerRadius: 2.0)
+        border.strokeColor = .black
+        border.lineWidth = borderWidth
+        border.fillColor = .clear
+        border.position = CGPoint(x: frame.minX - 300, y: frame.midY - 300)
+        border.zPosition = GameConstants.zPositions.hudZ - 0.1
+        scrollableArea.addChild(border)
+        
         coachesNode.position.y = -CGFloat(coaches.count * 40) / 2
+        
+        let backLabel = SKLabelNode(text: "Back")
+        backLabel.fontName = "Helvetica-Bold"
+        backLabel.fontColor = .black
+        backLabel.fontSize = 12
+        backLabel.verticalAlignmentMode = .center
+        backLabel.position = CGPoint(x: frame.minX - 300, y: frame.midY - 300)
+        backLabel.zPosition = GameConstants.zPositions.hudZ + 0.2
+        scrollableArea.addChild(backLabel)
     }
     
     func createMultilineLabel(text: String, fontSize: CGFloat, position: CGPoint) -> SKNode {
@@ -495,6 +520,7 @@ class MenuScene: SKScene {
         if amount <= currentBalance {
             currentBalance -= amount
             saveBankBalance(currentBalance)
+            print(getBankBalance())
             return true
         } else {
             return false
