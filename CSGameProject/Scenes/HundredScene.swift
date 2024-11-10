@@ -8,24 +8,13 @@
 import SpriteKit
 import Foundation
 
-
 enum HundredGameState {
     case ready, ongoing, finished
 }
 
-class HundredScene: SKScene, SKPhysicsContactDelegate {
-    
-    
+class HundredScene: BaseGameScene {
     var playerFinishPosition: Int = 0
-    
     var rewards: [Double] = [40.0, 30.0, 20.0, 10.0]
-    
-    var worldLayer: Layer!
-    var backgroundLayer: RepeatingLayer!
-    var mapNode: SKNode!
-    var tileMap: SKTileMapNode!
-    var lastTime: TimeInterval = 0
-    var dt: TimeInterval = 0
     
     // running bar
     var progressBar: SKSpriteNode!
@@ -41,8 +30,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
     var targetMinIndicator: SKSpriteNode!
     var targetMaxIndicator: SKSpriteNode!
     
-    
-    
     var finishTimes: [String:TimeInterval] = [:]
     var raceStartTime: TimeInterval = 0
     var playerTime: TimeInterval = 0
@@ -57,16 +44,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
     var finishers: Int = 0
     
     var touch = false
-    
-
-    
-    
-    var characterSpeed: CGFloat = 0.0 {
-        didSet{
-            updateLayerVelocities()
-        }
-    }
-    
     
     var gameState = HundredGameState.ready {
         willSet {
@@ -90,18 +67,8 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-
-    
     override func didMove(to view: SKView) {
-        
-        physicsWorld.contactDelegate = self
-        physicsWorld.gravity = CGVector(dx: 0.0, dy: -4)
-        
-        physicsBody = SKPhysicsBody(edgeFrom: CGPoint(x: frame.minX, y: frame.minY), to: CGPoint(x: frame.maxX, y: frame.minY))
-        physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.frameCategory
-        physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
-        
-        createLayers()
+        super.didMove(to: view)
         
         // running bar
         progressBar = SKSpriteNode(color: .red, size: CGSize(width: 300, height: 20))
@@ -128,78 +95,15 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         targetMaxIndicator.zPosition = GameConstants.zPositions.hudZ + 1
         progressBar.addChild(targetMaxIndicator)
         
-        
         timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
         
-    }
-    
-    func printSceneGraph(for node: SKNode, level: Int = 0) {
-        let indent = String(repeating: "  ", count: level)
-        let nodeName = node.name ?? "unnamed"
-        print("\(indent)\(nodeName) (Position: \(node.position), zPosition: \(node.zPosition))")
-        for child in node.children {
-            printSceneGraph(for: child, level: level + 1)
-        }
-    }
-    
-    
-    func createLayers() {
-        worldLayer = Layer()
-        worldLayer.zPosition = GameConstants.zPositions.worldZ
-        
-        addChild(worldLayer)
-        worldLayer.layerVelocity =  CGPoint(x: -200.0, y: 0.0)
-        
-        backgroundLayer = RepeatingLayer()
-        backgroundLayer.zPosition = GameConstants.zPositions.backgroundZ
-        addChild(backgroundLayer)
-        
-        for i in 0...1 {
-            let backgroundImage = SKSpriteNode(imageNamed: GameConstants.StringConstants.worldBackgroundName)
-            backgroundImage.name = String(i)
-            backgroundImage.scale(to: frame.size, width: false, multiplier: 1.0)
-            backgroundImage.anchorPoint = CGPoint.zero
-            backgroundImage.position = CGPoint(x: 0.0 + CGFloat(i) * backgroundImage.size.width, y: 0.0)
-            backgroundLayer.addChild(backgroundImage)
-        }
-        
-        backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
-        
         load(level: "100m")
-    }
-    
-    func load(level: String) {
-        if let levelNode = SKNode.unarchiveFromFile(file: level) {
-            mapNode = levelNode
-            worldLayer.addChild(mapNode)
-            loadTileMap()
-        }
-    }
-    
-    func loadTileMap() {
-        if let groundTiles = mapNode.childNode(withName: GameConstants.StringConstants.groundTilesName) as? SKTileMapNode {
-            tileMap = groundTiles
-            
-            
-            tileMap.scale(to: frame.size, width: false, multiplier: 1.0)
-            
-            PhysicsHelper.addPhysicsBody(to: tileMap, and: "ground")
-            for child in groundTiles.children {
-                if let sprite = child as? SKSpriteNode, sprite.name != nil {
-                    ObjectHelper.handleChild(sprite: sprite, with: sprite.name!)
-                }
-            }
-        }
         addPlayer()
         addCompetitor1()
         addCompetitor2()
         addCompetitor3()
     }
     
-    
-    
-    
-    // Adds player object by adding an idle image, scaling the size relative to the frame, adding a physics body, putting its initial position, loading the textures and setting the player state to idle so that the animation does not show the character running when it is not moving.
     func addPlayer() {
         player = Player(imageNamed: GameConstants.StringConstants.playerImageName)
         player.scale(to: frame.size, width: false, multiplier: 0.4)
@@ -213,14 +117,10 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         player.state = .idle
         
         addChild(player)
-        
-        print("player is hidden: \(player.isHidden)")
-        
     }
     
     func addCompetitor1() {
         competitor1 = Competitor1(imageNamed: GameConstants.StringConstants.competitor1ImageName)
-
         competitor1.scale(to: frame.size, width: false, multiplier: 0.4)
         competitor1.name = GameConstants.StringConstants.competitor1Name
         PhysicsHelper.addPhysicsBody(to: competitor1, with: competitor1.name!)
@@ -250,7 +150,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         competitor2.competitor2Speed = 0.0
         competitor2.competitor2Acceleration = CGFloat.random(in: 5...10)
         competitor2.competitor2TopSpeed = CGFloat.random(in: 73...90)
-    
+        
         competitor2.loadTextures()
         competitor2.state = .idle
         
@@ -275,9 +175,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         
         addChild(competitor3)
     }
-
-
-    
     
     func handleFinish() {
         gameState = .finished
@@ -307,7 +204,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         var i = 4
         
         for (character,time) in sortedResults {
-           
             let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", time)) seconds    Reward: \(rewards[(i-1)])")
             resultLabel.fontSize = 24
             resultLabel.fontColor = .white
@@ -324,7 +220,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             yOffSet -= 30
         }
         
-        
         let restartButton = SKLabelNode(text: "Return to Menu")
         restartButton.fontSize = 30
         restartButton.fontColor = .yellow
@@ -333,10 +228,8 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         restartButton.name = "returnToMenu"
         self.addChild(restartButton)
     }
-
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
         switch gameState {
         case .ready:
             gameState = .ongoing
@@ -356,24 +249,16 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
                 returnToMenu()
             }
         }
-//        printSceneGraph(for: player)
-        
-        
-//        print("Current value: \(currentValue)")
-        
-        
     }
     
     func returnToMenu() {
-        
         let transition = SKTransition.fade(withDuration: 1.0)
         let scene = MenuScene(size: self.size)
         scene.scaleMode = .aspectFill
         self.view?.presentScene(scene, transition: transition)
-
     }
     
-    @objc func decreaseValue(){
+    @objc func decreaseValue() {
         currentValue -= decreaseRate
         if currentValue < 0 {
             currentValue = 0
@@ -392,7 +277,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             progressBar.color = .red
         }
         
-        
         let targetMinX = (targetMinValue / maxValue) * 300
         let targetMaxX = (targetMaxValue / maxValue) * 300
         
@@ -400,7 +284,7 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         targetMaxIndicator.position = CGPoint(x: targetMaxX, y: 0)
     }
     
-    func adjustSpeed(){
+    func adjustSpeed() {
         if currentValue == 0 {
             characterSpeed = 0
         } else if currentValue < targetMinValue/2 {
@@ -414,14 +298,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func updateLayerVelocities(){
-        let worldLayerSpeedFactor: CGFloat = 10.0
-        let backgroundLayerSpeedFactor: CGFloat = 5
-        
-        worldLayer.layerVelocity = CGPoint(x: -characterSpeed * worldLayerSpeedFactor, y: 0.0)
-        backgroundLayer.layerVelocity = CGPoint(x: -characterSpeed * backgroundLayerSpeedFactor, y: 0.0)
-    }
-    
     override func update(_ currentTime: TimeInterval) {
         if lastTime > 0 {
             dt = currentTime - lastTime
@@ -429,13 +305,9 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             dt = 0
         }
         
-//        print("Competitor1: \(String(describing: competitor1))")
-        
-        
-        
         let deltaTime = currentTime - lastTime
         lastTime = currentTime
-                
+        
         if gameState == .ongoing {
             worldLayer.update(dt)
             backgroundLayer.update(dt)
@@ -452,9 +324,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             let speedDifference1 = characterSpeed - competitor1.competitor1Speed
             competitor1.position.x -= speedDifference1 * CGFloat(deltaTime) * 3
             
-            
-            
-            
             if competitor2.competitor2Speed > competitor2.competitor2TopSpeed {
                 competitor2.competitor2Speed = competitor2.competitor2TopSpeed
             } else if (competitor2.competitor2Speed) > (competitor2.competitor2TopSpeed - 15) {
@@ -467,9 +336,6 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             let speedDifference2 = characterSpeed - competitor2.competitor2Speed
             competitor2.position.x -= speedDifference2 * CGFloat(deltaTime) * 3
             
-            
-            
-            
             if competitor3.competitor3Speed > competitor3.competitor3TopSpeed {
                 competitor3.competitor3Speed = competitor3.competitor3TopSpeed
             } else if (competitor3.competitor3Speed) > (competitor3.competitor3TopSpeed - 15) {
@@ -481,66 +347,63 @@ class HundredScene: SKScene, SKPhysicsContactDelegate {
             
             let speedDifference3 = characterSpeed - competitor3.competitor3Speed
             competitor3.position.x -= speedDifference3 * CGFloat(deltaTime) * 3
-
+            
         } else if gameState == .finished {
             backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
         }
     }
     
-    func didBegin(_ contact: SKPhysicsContact) {
-        let bodyA = contact.bodyA
-        let bodyB = contact.bodyB
-        
-        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) {
-            let currentTime = CACurrentMediaTime()
-            playerTime = raceStartTime - currentTime
-            finishTimes["Player"] = playerTime
+    override func didBegin(_ contact: SKPhysicsContact) {
+            let bodyA = contact.bodyA
+            let bodyB = contact.bodyB
             
-            finishers += 1
-            characterSpeed = 0
-            player.state = .idle
-            print("Player Finish")
-        }
-        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor1Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor1Category) {
+            if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) {
+                let currentTime = CACurrentMediaTime()
+                playerTime = raceStartTime - currentTime
+                finishTimes["Player"] = playerTime
+                
+                finishers += 1
+                characterSpeed = 0
+                player.state = .idle
+                print("Player Finish")
+            }
+            if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor1Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor1Category) {
+                
+                let currentTime = CACurrentMediaTime()
+                competitor1Time = raceStartTime - currentTime
+                finishTimes[GameConstants.StringConstants.competitor1Name] = competitor1Time
+                
+                finishers += 1
+                competitor1.competitor1Speed = 0
+                competitor1.state = .idle
+                print("Competitor1 Finish")
+            }
+            if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor2Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor2Category) {
+                
+                let currentTime = CACurrentMediaTime()
+                competitor2Time = raceStartTime - currentTime
+                finishTimes[GameConstants.StringConstants.competitor2Name] = competitor2Time
+                
+                finishers += 1
+                competitor2.competitor2Speed = 0
+                competitor2.state = .idle
+                print("Competitor2 Finish")
+            }
+            if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor3Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor3Category) {
+                
+                let currentTime = CACurrentMediaTime()
+                competitor3Time = raceStartTime - currentTime
+                finishTimes[GameConstants.StringConstants.competitor3Name] = competitor3Time
+                
+                finishers += 1
+                competitor3.competitor3Speed = 0
+                competitor3.state = .idle
+                print("Competitor3 Finish")
+            }
             
-            let currentTime = CACurrentMediaTime()
-            competitor1Time = raceStartTime - currentTime
-            finishTimes[GameConstants.StringConstants.competitor1Name] = competitor1Time
-            
-            
-            finishers += 1
-            competitor1.competitor1Speed = 0
-            competitor1.state = .idle
-            print("Competitor1 Finish")
-        }
-        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor2Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor2Category) {
-            
-            let currentTime = CACurrentMediaTime()
-            competitor2Time = raceStartTime - currentTime
-            finishTimes[GameConstants.StringConstants.competitor2Name] = competitor2Time
-            
-            
-            finishers += 1
-            competitor2.competitor2Speed = 0
-            competitor2.state = .idle
-            print("Competitor2 Finish")
-        }
-        if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor3Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor3Category) {
-            
-            let currentTime = CACurrentMediaTime()
-            competitor3Time = raceStartTime - currentTime
-            finishTimes[GameConstants.StringConstants.competitor3Name] = competitor3Time
-            
-            
-            finishers += 1
-            competitor3.competitor3Speed = 0
-            competitor3.state = .idle
-            print("Competitor3 Finish")
-        }
-        
-        if finishers == 4 {
-            print("Finish")
-            handleFinish()
+            if finishers == 4 {
+                print("Finish")
+                handleFinish()
+            }
         }
     }
-}

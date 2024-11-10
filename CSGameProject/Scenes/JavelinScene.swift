@@ -12,178 +12,96 @@ enum JavelinGameState {
     case ready, ongoing, throwing, thrown
 }
 
-class JavelinScene: SKScene, SKPhysicsContactDelegate {
-    var worldLayer: Layer!
-    var backgroundLayer: RepeatingLayer!
-    var mapNode: SKNode!
-    var tileMap: SKTileMapNode!
-    var lastTime: TimeInterval = 0
-    var dt: TimeInterval = 0
-    
+class JavelinScene: BaseGameScene {
     var player: Player!
-    
     let javelinSprite = SKSpriteNode(imageNamed: "Javelin")
-    
     var tileSize = CGFloat(10)
     
     var xHandPosition: Double = 0.0
     var yHandPosition: Double = 0.0
-    
     var currentHandFrameIndex = 0
     
+    // Progress bar
     var progressBar: SKSpriteNode!
     var currentValue: CGFloat = 0.0
     var decreaseRate: CGFloat = 6
     var maxValue: CGFloat = 100.0
-    
     var timer: Timer?
     
-    var characterSpeed: CGFloat = 0.0 {
-        didSet{
-            updateLayerVelocities()
-        }
-    }
-
-    
-    
     var gameState = JavelinGameState.ready {
-        willSet{
+        willSet {
             switch newValue {
-            case.ready:
+            case .ready:
                 player.state = .throwIdle
+                characterSpeed = 0  // Make sure to stop when ready
             case .ongoing:
                 player.state = .throwRunning
             case .throwing:
                 player.state = .throwIdle // need to change to throw action
+                characterSpeed = 0  // Stop when throwing
             case .thrown:
                 player.state = .idle
+                characterSpeed = 0  // Stop when thrown
             }
         }
     }
     
     override func didMove(to view: SKView) {
-        
-        physicsWorld.contactDelegate = self
-        physicsWorld.gravity = CGVector(dx: 0.0, dy: -4)
-        
-        physicsBody = SKPhysicsBody(edgeFrom: CGPoint(x: frame.minX, y: frame.minY), to: CGPoint(x: frame.maxX, y: frame.minY))
-        physicsBody!.categoryBitMask = GameConstants.PhysicsCategories.frameCategory
-        physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
-        
-        createLayers()
-        
-        progressBar = SKSpriteNode(color: .green, size: CGSize(width: 300, height: 20))
-        progressBar.position = CGPoint(x: size.width / 3, y: size.height - 3*(progressBar.size.height))
-        progressBar.zPosition = GameConstants.zPositions.hudZ
-        progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
-        addChild(progressBar)
-        
-        let borderWidth: CGFloat = 2.0
-        let border = SKShapeNode(rectOf: CGSize(width: 300 + borderWidth, height: 20 + borderWidth), cornerRadius: 2.0)
-        border.strokeColor = .black
-        border.lineWidth = borderWidth
-        border.fillColor = .clear
-        border.position = CGPoint(x: (size.width / 3) + progressBar.size.width/2, y: size.height - 3*(progressBar.size.height))
-        border.zPosition = GameConstants.zPositions.hudZ - 0.1
-        
-        addChild(border)
-        
-        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
+        super.didMove(to: view)
+            
+            // Progress bar setup
+            progressBar = SKSpriteNode(color: .green, size: CGSize(width: 300, height: 20))
+            progressBar.position = CGPoint(x: size.width / 3, y: size.height - 3*(progressBar.size.height))
+            progressBar.zPosition = GameConstants.zPositions.hudZ
+            progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+            addChild(progressBar)
+            
+            let borderWidth: CGFloat = 2.0
+            let border = SKShapeNode(rectOf: CGSize(width: 300 + borderWidth, height: 20 + borderWidth), cornerRadius: 2.0)
+            border.strokeColor = .black
+            border.lineWidth = borderWidth
+            border.fillColor = .clear
+            border.position = CGPoint(x: (size.width / 3) + progressBar.size.width/2, y: size.height - 3*(progressBar.size.height))
+            border.zPosition = GameConstants.zPositions.hudZ - 0.1
+            
+            addChild(border)
+            
+            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
+            
+            load(level: "Javelin")
+        }
+    
+    override func loadTileMap() {
+        super.loadTileMap()
+        addPlayer()
+        player.isHidden = false
+        addJavelin()
     }
     
-    @objc func decreaseValue(){
-        currentValue -= decreaseRate
-        if currentValue < 0 {
-            currentValue = 0
+    @objc func decreaseValue() {
+            currentValue -= decreaseRate
+            if currentValue < 0 {
+                currentValue = 0
+            }
+            updateProgressBar()
+            adjustSpeed()
         }
-        updateProgressBar()
-        adjustSpeed()
-        
-        print("currentValue = \(currentValue)")
-    }
     
-    func adjustSpeed(){
-        if currentValue == 0 {
-            characterSpeed = 0
-        } else if currentValue < 30 {
-            characterSpeed = 25.0
-        } else if currentValue < 60 {
-            characterSpeed = 50.0
-        } else if currentValue > 80 {
-            characterSpeed = 50.0
-        } else {
-            characterSpeed = 80.0
+    func adjustSpeed() {
+            if gameState == .ongoing {
+                characterSpeed = currentValue
+                updateLayerVelocities()
+            } else {
+                characterSpeed = 0
+                updateLayerVelocities()
+            }
+        print("Currentvalue = \(currentValue)")
+        print("Characterspeed = \(characterSpeed)")
         }
-        
-        print(currentValue)
-        print(characterSpeed)
-    }
     
     func updateProgressBar() {
         let width = (currentValue / maxValue) * 300
         progressBar.size.width = width
-    }
-    
-    func createLayers() {
-        worldLayer = Layer()
-        worldLayer.zPosition = GameConstants.zPositions.worldZ
-        
-        addChild(worldLayer)
-        worldLayer.layerVelocity = CGPoint(x: -200.0, y: 0.0)
-        
-        backgroundLayer = RepeatingLayer()
-        backgroundLayer.zPosition = GameConstants.zPositions.backgroundZ
-        
-        addChild(backgroundLayer)
-        
-        for i in 0...1 {
-            let backgroundImage = SKSpriteNode(imageNamed: GameConstants.StringConstants.worldBackgroundName)
-            backgroundImage.name = String(i)
-            backgroundImage.scale(to: frame.size, width: false, multiplier: 1.0)
-            backgroundImage.anchorPoint = CGPoint.zero
-            backgroundImage.position = CGPoint(x: 0.0 + CGFloat(i) * backgroundImage.size.width, y: 0.0)
-            backgroundLayer.addChild(backgroundImage)
-        }
-        backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
-        
-        load(level: "Javelin")
-    }
-    
-    func updateLayerVelocities(){
-        let worldLayerSpeedFactor: CGFloat = 10.0
-        let backgroundLayerSpeedFactor: CGFloat = 5
-        
-        worldLayer.layerVelocity = CGPoint(x: -characterSpeed * worldLayerSpeedFactor, y: 0.0)
-        backgroundLayer.layerVelocity = CGPoint(x: -characterSpeed * backgroundLayerSpeedFactor, y: 0.0)
-    }
-    
-    func load(level: String) {
-        if let levelNode = SKNode.unarchiveFromFile(file: level) {
-            mapNode = levelNode
-            worldLayer.addChild(mapNode)
-            loadTileMap()
-        }
-    }
-    func loadTileMap() {
-        if let groundTiles = mapNode.childNode(withName: GameConstants.StringConstants.groundTilesName) as? SKTileMapNode {
-            tileMap = groundTiles
-            
-            
-            tileMap.scale(to: frame.size, width: false, multiplier: 1.0)
-            
-            PhysicsHelper.addPhysicsBody(to: tileMap, and: "ground")
-            for child in groundTiles.children {
-                if let sprite = child as? SKSpriteNode, sprite.name != nil {
-                    ObjectHelper.handleChild(sprite: sprite, with: sprite.name!)
-                }
-            }
-        }
-        
-        addPlayer()
-        
-        player.isHidden = false
-        
-        addJavelin()
     }
     
     func addPlayer() {
@@ -212,39 +130,39 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         addChild(javelinSprite)
     }
     
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        switch gameState {
-        case .ready:
-            gameState = .ongoing
-        case .ongoing:
-            currentValue += 50
-            if currentValue > maxValue {
-                currentValue = maxValue
+            switch gameState {
+            case .ready:
+                gameState = .ongoing
+                characterSpeed = 10
+                updateLayerVelocities()
+            case .ongoing:
+                currentValue += 10
+                if currentValue > maxValue {
+                    currentValue = maxValue
+                }
+                updateProgressBar()
+                adjustSpeed()
+            default:
+                break
             }
-            updateProgressBar()
-        default:
-            break
         }
-    }
-    
-    
     
     override func update(_ currentTime: TimeInterval) {
-        if lastTime > 0 {
-            dt = currentTime - lastTime
-        } else {
-            dt = 0
+            if lastTime > 0 {
+                dt = currentTime - lastTime
+            } else {
+                dt = 0
+            }
+            lastTime = currentTime
+            
+            if gameState == .ongoing {
+                worldLayer.update(dt)
+                backgroundLayer.update(dt)
+            }
         }
-        if gameState == .ongoing {
-            worldLayer.update(dt)
-            backgroundLayer.update(dt)
-        }
-        
-    }
     
-    func didBegin(_ contact: SKPhysicsContact) {
-        
+    override func didBegin(_ contact: SKPhysicsContact) {
         let bodyA = contact.bodyA
         let bodyB = contact.bodyB
         
