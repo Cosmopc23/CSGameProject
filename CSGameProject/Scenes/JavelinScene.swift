@@ -30,6 +30,19 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
     var yHandPosition: Double = 0.0
     
     var currentHandFrameIndex = 0
+    
+    var progressBar: SKSpriteNode!
+    var currentValue: CGFloat = 0.0
+    var decreaseRate: CGFloat = 6
+    var maxValue: CGFloat = 100.0
+    
+    var timer: Timer?
+    
+    var characterSpeed: CGFloat = 0.0 {
+        didSet{
+            updateLayerVelocities()
+        }
+    }
 
     
     
@@ -58,6 +71,57 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
         
         createLayers()
+        
+        progressBar = SKSpriteNode(color: .green, size: CGSize(width: 300, height: 20))
+        progressBar.position = CGPoint(x: size.width / 3, y: size.height - 3*(progressBar.size.height))
+        progressBar.zPosition = GameConstants.zPositions.hudZ
+        progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+        addChild(progressBar)
+        
+        let borderWidth: CGFloat = 2.0
+        let border = SKShapeNode(rectOf: CGSize(width: 300 + borderWidth, height: 20 + borderWidth), cornerRadius: 2.0)
+        border.strokeColor = .black
+        border.lineWidth = borderWidth
+        border.fillColor = .clear
+        border.position = CGPoint(x: (size.width / 3) + progressBar.size.width/2, y: size.height - 3*(progressBar.size.height))
+        border.zPosition = GameConstants.zPositions.hudZ - 0.1
+        
+        addChild(border)
+        
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
+    }
+    
+    @objc func decreaseValue(){
+        currentValue -= decreaseRate
+        if currentValue < 0 {
+            currentValue = 0
+        }
+        updateProgressBar()
+        adjustSpeed()
+        
+        print("currentValue = \(currentValue)")
+    }
+    
+    func adjustSpeed(){
+        if currentValue == 0 {
+            characterSpeed = 0
+        } else if currentValue < 30 {
+            characterSpeed = 25.0
+        } else if currentValue < 60 {
+            characterSpeed = 50.0
+        } else if currentValue > 80 {
+            characterSpeed = 50.0
+        } else {
+            characterSpeed = 80.0
+        }
+        
+        print(currentValue)
+        print(characterSpeed)
+    }
+    
+    func updateProgressBar() {
+        let width = (currentValue / maxValue) * 300
+        progressBar.size.width = width
     }
     
     func createLayers() {
@@ -65,6 +129,7 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         worldLayer.zPosition = GameConstants.zPositions.worldZ
         
         addChild(worldLayer)
+        worldLayer.layerVelocity = CGPoint(x: -200.0, y: 0.0)
         
         backgroundLayer = RepeatingLayer()
         backgroundLayer.zPosition = GameConstants.zPositions.backgroundZ
@@ -79,8 +144,17 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
             backgroundImage.position = CGPoint(x: 0.0 + CGFloat(i) * backgroundImage.size.width, y: 0.0)
             backgroundLayer.addChild(backgroundImage)
         }
+        backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
         
         load(level: "Javelin")
+    }
+    
+    func updateLayerVelocities(){
+        let worldLayerSpeedFactor: CGFloat = 10.0
+        let backgroundLayerSpeedFactor: CGFloat = 5
+        
+        worldLayer.layerVelocity = CGPoint(x: -characterSpeed * worldLayerSpeedFactor, y: 0.0)
+        backgroundLayer.layerVelocity = CGPoint(x: -characterSpeed * backgroundLayerSpeedFactor, y: 0.0)
     }
     
     func load(level: String) {
@@ -108,9 +182,6 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         addPlayer()
         
         player.isHidden = false
-
-        yHandPosition = frame.minY + tileSize + player.size.height * 254/1023
-        xHandPosition = frame.midX/2.0
         
         addJavelin()
     }
@@ -146,10 +217,17 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         switch gameState {
         case .ready:
             gameState = .ongoing
+        case .ongoing:
+            currentValue += 50
+            if currentValue > maxValue {
+                currentValue = maxValue
+            }
+            updateProgressBar()
         default:
             break
         }
     }
+    
     
     
     override func update(_ currentTime: TimeInterval) {
@@ -158,12 +236,9 @@ class JavelinScene: SKScene, SKPhysicsContactDelegate {
         } else {
             dt = 0
         }
-        
-        
         if gameState == .ongoing {
             worldLayer.update(dt)
             backgroundLayer.update(dt)
-            backgroundLayer.layerVelocity = CGPoint(x: -75.0, y: 0.0)
         }
         
     }

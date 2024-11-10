@@ -406,6 +406,9 @@ class MenuScene: SKScene {
     }
     
     func setupCurrentCoachNode() {
+        if (getCurrentCoachIndex() ?? 0) > 26 {
+            saveCurrentCoachIndex(0)
+        }
         currentCoach = coaches[getCurrentCoachIndex() ?? 0]
         
         let coachText = "\(currentCoach.name)\n Speed Boost: \(currentCoach.speedBoost)\n Skill Boost: \(currentCoach.skillBoost) \n StrengthBoost: \(currentCoach.strengthBoost)"
