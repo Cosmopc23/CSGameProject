@@ -28,6 +28,21 @@ class JavelinScene: BaseGameScene {
     var maxValue: CGFloat = 100.0
     var timer: Timer?
     
+    private var throwAngle: CGFloat = 0.0
+    private var initialVelocity: CGFloat = 0.0
+    private var throwStartTime: TimeInterval = 0
+    private var throwStartPosition: CGPoint = .zero
+    private var distanceTraveled: CGFloat = 0.0
+    private var virtualPositionX: CGFloat = 0.0
+    private let gravity: CGFloat = -9.81
+    
+    private var angleBar: SKSpriteNode!
+    private var angleIndicator: SKSpriteNode!
+    private var currentAngle: CGFloat = 0.0
+    private var angleSwingSpeed: CGFloat = 2.0
+    private var isSwingingAngle: Bool = false
+    private var angleDirection: CGFloat = 1.0
+    
     var gameState = JavelinGameState.ready {
         willSet {
             switch newValue {
@@ -49,26 +64,28 @@ class JavelinScene: BaseGameScene {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
             
-            // Progress bar setup
-            progressBar = SKSpriteNode(color: .green, size: CGSize(width: 300, height: 20))
-            progressBar.position = CGPoint(x: size.width / 3, y: size.height - 3*(progressBar.size.height))
-            progressBar.zPosition = GameConstants.zPositions.hudZ
-            progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
-            addChild(progressBar)
-            
-            let borderWidth: CGFloat = 2.0
-            let border = SKShapeNode(rectOf: CGSize(width: 300 + borderWidth, height: 20 + borderWidth), cornerRadius: 2.0)
-            border.strokeColor = .black
-            border.lineWidth = borderWidth
-            border.fillColor = .clear
-            border.position = CGPoint(x: (size.width / 3) + progressBar.size.width/2, y: size.height - 3*(progressBar.size.height))
-            border.zPosition = GameConstants.zPositions.hudZ - 0.1
-            
-            addChild(border)
-            
-            timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
-            
-            load(level: "Javelin")
+        // Progress bar setup
+        progressBar = SKSpriteNode(color: .green, size: CGSize(width: 300, height: 20))
+        progressBar.position = CGPoint(x: size.width / 3, y: size.height - 3*(progressBar.size.height))
+        progressBar.zPosition = GameConstants.zPositions.hudZ
+        progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+        addChild(progressBar)
+        
+        let borderWidth: CGFloat = 2.0
+        let border = SKShapeNode(rectOf: CGSize(width: 300 + borderWidth, height: 20 + borderWidth), cornerRadius: 2.0)
+        border.strokeColor = .black
+        border.lineWidth = borderWidth
+        border.fillColor = .clear
+        border.position = CGPoint(x: (size.width / 3) + progressBar.size.width/2, y: size.height - 3*(progressBar.size.height))
+        border.zPosition = GameConstants.zPositions.hudZ - 0.1
+        
+        addChild(border)
+        
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(decreaseValue), userInfo: nil, repeats: true)
+        
+        
+        
+        load(level: "Javelin")
         }
     
     override func loadTileMap() {
