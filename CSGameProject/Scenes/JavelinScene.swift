@@ -238,6 +238,8 @@ class JavelinScene: BaseGameScene {
         javelinSprite.physicsBody?.isDynamic = true
         javelinSprite.physicsBody?.affectedByGravity = true
         
+        let initialTrajectoryAngle = atan2(sin(throwAngle),cos(throwAngle))
+        javelinSprite.zRotation = initialTrajectoryAngle - .pi/2
         
     }
     
@@ -356,8 +358,25 @@ class JavelinScene: BaseGameScene {
                 
                 // Update javelin position
                 let newPosition = CGPoint(x: throwStartPosition.x + virtualPositionX, y: verticalPosition)
-                javelinSprite.position = newPosition
                 
+                let vertAngle = (verticalVelocity * CGFloat(throwDuration)) +
+                (gravity * CGFloat(throwDuration * throwDuration))
+                
+                let trajectoryAngle = atan2(vertAngle, horizontalVelocity)
+                
+                print("=== Frame Debug ===")
+                print("Initial Velocity: \(initialVelocity)")
+                print("Throw Angle: \(throwAngle)")
+                print("Time Duration: \(throwDuration)")
+                print("Horizontal Velocity: \(horizontalVelocity)")
+                print("Vertical Velocity: \(verticalVelocity)")
+                print("Current Vertical: \(verticalVelocity + (gravity * throwDuration))")
+                print("Trajectory Angle: \(trajectoryAngle)")
+                print("==================")
+                
+                javelinSprite.zRotation = trajectoryAngle - .pi/2
+                
+                javelinSprite.position = newPosition
                 
             }
         default:
