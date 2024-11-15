@@ -238,7 +238,9 @@ class JavelinScene: BaseGameScene {
         javelinSprite.physicsBody?.isDynamic = true
         javelinSprite.physicsBody?.affectedByGravity = true
         
-        let initialTrajectoryAngle = atan2(sin(throwAngle),cos(throwAngle))
+        let verticalVelocity = initialVelocity * sin(throwAngle) * 2.0
+        let horizontalVelocity = initialVelocity * cos(throwAngle)
+        let initialTrajectoryAngle = atan2(verticalVelocity, horizontalVelocity)
         javelinSprite.zRotation = initialTrajectoryAngle - .pi/2
         
     }
@@ -359,20 +361,27 @@ class JavelinScene: BaseGameScene {
                 // Update javelin position
                 let newPosition = CGPoint(x: throwStartPosition.x + virtualPositionX, y: verticalPosition)
                 
-                let vertAngle = (verticalVelocity * CGFloat(throwDuration)) +
-                (gravity * CGFloat(throwDuration * throwDuration))
+                var trajectoryAngle = 0.0
                 
-                let trajectoryAngle = atan2(vertAngle, horizontalVelocity)
+                if throwDuration < 0.6 {
+                    let vertAngle = (verticalVelocity +
+                                     (gravity * CGFloat(throwDuration * throwDuration)))
+                    trajectoryAngle = atan2(vertAngle, horizontalVelocity)
+                } else {
+                    let vertAngle = (verticalVelocity * throwDuration +
+                                     (gravity * CGFloat(throwDuration * throwDuration)))
+                    trajectoryAngle = atan2(vertAngle, horizontalVelocity)
+                }
                 
-                print("=== Frame Debug ===")
-                print("Initial Velocity: \(initialVelocity)")
-                print("Throw Angle: \(throwAngle)")
-                print("Time Duration: \(throwDuration)")
-                print("Horizontal Velocity: \(horizontalVelocity)")
-                print("Vertical Velocity: \(verticalVelocity)")
-                print("Current Vertical: \(verticalVelocity + (gravity * throwDuration))")
-                print("Trajectory Angle: \(trajectoryAngle)")
-                print("==================")
+//                print("=== Frame Debug ===")
+//                print("Initial Velocity: \(initialVelocity)")
+//                print("Throw Angle: \(throwAngle)")
+//                print("Time Duration: \(throwDuration)")
+//                print("Horizontal Velocity: \(horizontalVelocity)")
+//                print("Vertical Velocity: \(verticalVelocity)")
+//                print("Current Vertical: \(verticalVelocity + (gravity * throwDuration))")
+//                print("Trajectory Angle: \(trajectoryAngle)")
+//                print("==================")
                 
                 javelinSprite.zRotation = trajectoryAngle - .pi/2
                 
