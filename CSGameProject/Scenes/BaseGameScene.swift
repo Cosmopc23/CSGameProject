@@ -16,6 +16,9 @@ class BaseGameScene: SKScene, SKPhysicsContactDelegate {
     var lastTime: TimeInterval = 0
     var dt: TimeInterval = 0
     
+    var playerFinishPosition: Int = 0
+    var rewards: [Double] = [40.0, 30.0, 20.0, 10.0]
+    
     var characterSpeed: CGFloat = 0.0 {
         didSet {
             updateLayerVelocities()
@@ -31,6 +34,28 @@ class BaseGameScene: SKScene, SKPhysicsContactDelegate {
         physicsBody!.contactTestBitMask = GameConstants.PhysicsCategories.playerCategory
         
         createLayers()
+    }
+    
+    func sortResults(string: String, sortedResults: [(String, Double)]){
+        var yOffSet: CGFloat = 100
+        var i = 4
+        
+        for (character, distance) in sortedResults {
+            let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", distance)) \(string) \(rewards[(i-1)])")
+            resultLabel.fontSize = 24
+            resultLabel.fontColor = .white
+            resultLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 150 - yOffSet)
+            resultLabel.zPosition = GameConstants.zPositions.topZ
+            self.addChild(resultLabel)
+            i -= 1
+            
+            if character == "Player" {
+                playerFinishPosition = i
+                MenuScene.reward(amount: rewards[playerFinishPosition])
+            }
+            
+            yOffSet -= 30
+        }
     }
     
     func createLayers() {

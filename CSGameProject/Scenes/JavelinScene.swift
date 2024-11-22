@@ -306,20 +306,8 @@ class JavelinScene: BaseGameScene {
         
         let sortedResults = distances.sorted { $0.value < $1.value }
         
-        var yOffSet: CGFloat = 100
-        var i = 4
         
-        for (character, time) in sortedResults {
-            let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", time)) m")
-            resultLabel.fontSize = 24
-            resultLabel.fontColor = .white
-            resultLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 150 - yOffSet)
-            resultLabel.zPosition = GameConstants.zPositions.topZ
-            self.addChild(resultLabel)
-            i -= 1
-            
-            yOffSet -= 30
-        }
+        sortResults(string: "m      Reward: ", sortedResults: sortedResults)
         
 //        let resultLabel = SKLabelNode(text: "Player Distance: \(String(format: "%.2f", finalDistance))m")
 //        resultLabel.position = CGPoint(x: frame.midX, y: frame.midY)
@@ -329,7 +317,7 @@ class JavelinScene: BaseGameScene {
 //        addChild(resultLabel)
         
         let menuButton = SKLabelNode(text: "Return to Menu")
-        menuButton.position = CGPoint(x: frame.midX, y: frame.midY - 50)
+        menuButton.position = CGPoint(x: frame.midX, y: frame.midY - 110)
         menuButton.fontColor = .yellow
         menuButton.fontSize = 24
         menuButton.name = "returnToMenu"

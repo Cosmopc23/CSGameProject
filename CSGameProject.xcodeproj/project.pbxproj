@@ -32,6 +32,7 @@
 		32CFA2FD2CBFD2810041929C /* JavelinScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CFA2FC2CBFD2810041929C /* JavelinScene.swift */; };
 		CE2BC6DD2C9AEC350046CD20 /* RepeatingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2BC6DC2C9AEC350046CD20 /* RepeatingLayer.swift */; };
 		CE2CA10F2C92DB8B004739B1 /* PhysicsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2CA10E2C92DB8A004739B1 /* PhysicsHelper.swift */; };
+		CE5B59942CF0FCD100300FF8 /* Sponsors.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5B59932CF0FCCE00300FF8 /* Sponsors.swift */; };
 		CEA8A00D2C947E20004C55C7 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEA8A00C2C947E20004C55C7 /* Layer.swift */; };
 		CEFA15252CB7C6ED005AB5E1 /* Javelin.sks in Resources */ = {isa = PBXBuildFile; fileRef = CEFA15242CB7C6ED005AB5E1 /* Javelin.sks */; };
 /* End PBXBuildFile section */
@@ -82,6 +83,7 @@
 		32CFA2FC2CBFD2810041929C /* JavelinScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavelinScene.swift; sourceTree = "<group>"; };
 		CE2BC6DC2C9AEC350046CD20 /* RepeatingLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatingLayer.swift; sourceTree = "<group>"; };
 		CE2CA10E2C92DB8A004739B1 /* PhysicsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsHelper.swift; sourceTree = "<group>"; };
+		CE5B59932CF0FCCE00300FF8 /* Sponsors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sponsors.swift; sourceTree = "<group>"; };
 		CEA8A00C2C947E20004C55C7 /* Layer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
 		CEFA15242CB7C6ED005AB5E1 /* Javelin.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Javelin.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +125,7 @@
 		321F19F92C91AF70006AA50F /* Custom Classes */ = {
 			isa = PBXGroup;
 			children = (
+				CE5B59932CF0FCCE00300FF8 /* Sponsors.swift */,
 				321F19FA2C91AF7F006AA50F /* Player.swift */,
 				32A2C6592C9A2A0E00294609 /* GroundNode.swift */,
 				325250632CB0484C00CCC726 /* Competitors.swift */,
@@ -402,6 +405,7 @@
 				3245712F2C8C83D4007A3AC7 /* GameViewController.swift in Sources */,
 				324571272C8C83D4007A3AC7 /* AppDelegate.swift in Sources */,
 				32CFA2FB2CBB28F40041929C /* ProgressBar.swift in Sources */,
+				CE5B59942CF0FCD100300FF8 /* Sponsors.swift in Sources */,
 				CE2BC6DD2C9AEC350046CD20 /* RepeatingLayer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

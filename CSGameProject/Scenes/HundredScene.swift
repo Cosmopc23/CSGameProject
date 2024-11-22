@@ -13,8 +13,6 @@ enum HundredGameState {
 }
 
 class HundredScene: BaseGameScene {
-    var playerFinishPosition: Int = 0
-    var rewards: [Double] = [40.0, 30.0, 20.0, 10.0]
     
     // running bar
     var progressBar: SKSpriteNode!
@@ -200,25 +198,7 @@ class HundredScene: BaseGameScene {
         
         let sortedResults = finishTimes.sorted { $0.value < $1.value }
         
-        var yOffSet: CGFloat = 100
-        var i = 4
-        
-        for (character,time) in sortedResults {
-            let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", time)) seconds    Reward: \(rewards[(i-1)])")
-            resultLabel.fontSize = 24
-            resultLabel.fontColor = .white
-            resultLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 150 - yOffSet)
-            resultLabel.zPosition = GameConstants.zPositions.topZ
-            self.addChild(resultLabel)
-            i -= 1
-            
-            if character == "Player" {
-                playerFinishPosition = i
-                MenuScene.reward(amount: rewards[playerFinishPosition])
-            }
-            
-            yOffSet -= 30
-        }
+        sortResults(string: " seconds    Reward: ", sortedResults: sortedResults)
         
         let restartButton = SKLabelNode(text: "Return to Menu")
         restartButton.fontSize = 30
