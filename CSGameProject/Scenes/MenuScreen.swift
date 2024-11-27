@@ -56,7 +56,10 @@ class MenuScene: SKScene {
     var strengthProgressBar: SKSpriteNode!
     var strengthCurrentValue: Double = 10
     
+    var reputationProgressBar: SKSpriteNode!
+    
     var reputationCurrentValue: Double = 0
+    var reputationCurrentLevel: Double = 0
     
     var previousTouchPositionY: CGFloat? = CGFloat(0)
     
@@ -90,11 +93,11 @@ class MenuScene: SKScene {
         saveStat(currentCoach.speedBoost, key: GameConstants.Keys.speedKey)
         saveStat(currentCoach.skillBoost, key: GameConstants.Keys.skillKey)
         saveStat(currentCoach.strengthBoost, key: GameConstants.Keys.strengthKey)
-        saveReputation(GameConstants.Keys.reputationKey)
         
         speedCurrentValue = getStat(key: GameConstants.Keys.speedKey)
         skillCurrentValue = getStat(key: GameConstants.Keys.skillKey)
         strengthCurrentValue = getStat(key: GameConstants.Keys.strengthKey)
+        
         
         updateProgressbar(progressBar: speedProgressBar, currentValue: speedCurrentValue)
         updateProgressbar(progressBar: skillProgressBar, currentValue: skillCurrentValue)
@@ -198,7 +201,7 @@ class MenuScene: SKScene {
                 if sponsor.name == node.name {
                     showAlertForSponsor(sponsor: sponsor) { confirmed in
                         if confirmed {
-                            if MenuScene.checkReputation(newReputation: sponsor.reputationRequirement) {
+                            if MenuScene.checkReputationLevel(newReputation: sponsor.reputationRequirement) {
                                 self.saveCurrentSponsorIndex(i)
                                 self.scrollableSponsors.isHidden = true
                                 self.updateMenu()
@@ -293,6 +296,8 @@ class MenuScene: SKScene {
         
         strengthProgressBar = SKSpriteNode(color: .blue, size: CGSize(width: 150, height: 15))
         
+        reputationProgressBar = SKSpriteNode(color: .yellow, size: CGSize(width: 150, height: 15))
+        
         backgroundColor = .white
         
         let titleLabel = SKLabelNode(text: "Olympics Game")
@@ -315,21 +320,29 @@ class MenuScene: SKScene {
         addLabel(label: "Speed", positionX: (frame.midX/4.0) - 40, positionY: ((frame.midY/3.0) + yBuffer - 5))
         addLabel(label: "Skill", positionX: (frame.midX/4.0) - 40, positionY: (frame.midY/3.0) - 5)
         addLabel(label: "Strength", positionX: (frame.midX/4.0) - 40, positionY: ((frame.midY/3.0) - yBuffer - 5))
+        addLabel(label: "Reputation", positionX: (frame.midX/4.0) - 40, positionY: ((frame.midY/3.0) + (2 * yBuffer) - 5))
         
         
         speedCurrentValue = getStat(key: GameConstants.Keys.speedKey)
         skillCurrentValue = getStat(key: GameConstants.Keys.skillKey)
         strengthCurrentValue = getStat(key: GameConstants.Keys.skillKey)
-        reputationCurrentValue = getReputation()
+        
+        reputationCurrentValue = MenuScene.getReputationBar()
+        reputationCurrentLevel = MenuScene.getReputationLevel()
         
         
         addProgressBar(progressBar: speedProgressBar, positionX: (frame.midX/4.0), positionY: (frame.midY/3.0) + yBuffer)
         addProgressBar(progressBar: skillProgressBar, positionX: frame.midX/4.0, positionY: (frame.midY/3.0))
         addProgressBar(progressBar: strengthProgressBar, positionX: frame.midX/4.0, positionY: ((frame.midY/3.0) - yBuffer))
         
+        addProgressBar(progressBar: reputationProgressBar, positionX: frame.midX/4.0, positionY: ((frame.midY/3.0) + (2 * yBuffer)))
+        
+        addLabel(label: "\(MenuScene.getReputationLevel())", positionX: frame.midX/4.0, positionY: ((frame.midY/3.0) + (2 * yBuffer) - 5))
+        
         updateProgressbar(progressBar: speedProgressBar, currentValue: speedCurrentValue)
         updateProgressbar(progressBar: skillProgressBar, currentValue: skillCurrentValue)
         updateProgressbar(progressBar: strengthProgressBar, currentValue: strengthCurrentValue)
+        updateProgressbar(progressBar: reputationProgressBar, currentValue: reputationCurrentValue)
         
         
         
@@ -631,12 +644,32 @@ class MenuScene: SKScene {
         return UserDefaults.standard.double(forKey: GameConstants.Keys.bankBalanceKey)
     }
     
-    static func saveReputation(_ level: Double) {
-        UserDefaults.standard.set(level, forKey: GameConstants.Keys.reputationKey)
+    static func increaseReputationLevel() {
+        var currentReputationLevel = getReputationLevel()
+        currentReputationLevel += 1
+        UserDefaults.standard.set(currentReputationLevel, forKey: GameConstants.Keys.reputationKey)
     }
     
-    static func getReputation() -> Double {
+    static func getReputationLevel() -> Double {
         return UserDefaults.standard.double(forKey: GameConstants.Keys.reputationKey)
+    }
+    
+    static func increaseReputationBar(_ amount: Double) -> Double {
+        let currentReputationBar = getReputationBar()
+        
+        var newReputation: Double = 0
+        if currentReputationBar + amount < 100 {
+            newReputation = currentReputationBar + amount
+            return newReputation
+        } else {
+            increaseReputationLevel()
+            newReputation = 100 - (currentReputationBar + amount)
+            return newReputation
+        }
+    }
+    
+    static func getReputationBar() -> Double {
+        return UserDefaults.standard.double(forKey: GameConstants.Keys.reputationBarKey)
     }
     
     static func reward(amount: Double) {
@@ -657,8 +690,8 @@ class MenuScene: SKScene {
         }
     }
     
-    static func checkReputation(newReputation: Double) -> Bool {
-        var currentReputation = getReputation()
+    static func checkReputationLevel(newReputation: Double) -> Bool {
+        var currentReputation = getReputationLevel()
         if newReputation <= currentReputation {
             return true
         } else {
