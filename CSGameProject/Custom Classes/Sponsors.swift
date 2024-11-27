@@ -7,15 +7,15 @@
 
 struct Sponsor {
     let name: String
-    let reputationRequirement: Int
+    let reputationRequirement: Double
     let lengthOfContract: Int
     let rewardMultiplier: Double
 }
 
 let sponsors = [
     // Tier 1: Newcomer Sponsors (Reputation 0–10)
-    Sponsor(name: "Speedup", reputationRequirement: 3, lengthOfContract: 3, rewardMultiplier: 1.1),
     Sponsor(name: "FirstStep Shoes", reputationRequirement: 0, lengthOfContract: 2, rewardMultiplier: 1),
+    Sponsor(name: "Speedup", reputationRequirement: 3, lengthOfContract: 3, rewardMultiplier: 1.1),
     Sponsor(name: "Sportify Gear", reputationRequirement: 8, lengthOfContract: 4, rewardMultiplier: 1.3),
     Sponsor(name: "Cheetah Tracks", reputationRequirement: 10, lengthOfContract: 5, rewardMultiplier: 1.4),
     Sponsor(name: "UnderWorld Armour", reputationRequirement: 10, lengthOfContract: 4, rewardMultiplier: 1.4),

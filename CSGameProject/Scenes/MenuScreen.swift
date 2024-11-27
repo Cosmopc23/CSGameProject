@@ -14,6 +14,9 @@ class MenuScene: SKScene {
     var strengthBar: ProgressBar!
     var skillBar: ProgressBar!
     
+    var previousCoachTouchY: CGFloat?
+    var previousSponsorTouchY: CGFloat?
+    
     let xBuffer: CGFloat = 100
     let yBuffer: CGFloat = 30
     
@@ -36,6 +39,11 @@ class MenuScene: SKScene {
     
     var currentCoach: Coach = coaches[0]
     
+    let scrollableSponsors = SKSpriteNode(color: .lightGray, size: CGSize(width: 1000, height: 400))
+    let sponsorsNode = SKNode()
+    
+    var currentSponsor: Sponsor = sponsors[0]
+    
     
     var speedProgressBar: SKSpriteNode!
     var speedCurrentValue: Double = 10
@@ -47,6 +55,8 @@ class MenuScene: SKScene {
     
     var strengthProgressBar: SKSpriteNode!
     var strengthCurrentValue: Double = 10
+    
+    var reputationCurrentValue: Double = 0
     
     var previousTouchPositionY: CGFloat? = CGFloat(0)
     
@@ -80,6 +90,7 @@ class MenuScene: SKScene {
         saveStat(currentCoach.speedBoost, key: GameConstants.Keys.speedKey)
         saveStat(currentCoach.skillBoost, key: GameConstants.Keys.skillKey)
         saveStat(currentCoach.strengthBoost, key: GameConstants.Keys.strengthKey)
+        saveReputation(GameConstants.Keys.reputationKey)
         
         speedCurrentValue = getStat(key: GameConstants.Keys.speedKey)
         skillCurrentValue = getStat(key: GameConstants.Keys.skillKey)
@@ -94,11 +105,23 @@ class MenuScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: self)
-        print(location)
+    
+        
+        print("Touch began at: \(location)")
+        print("scrollableSponsors frame: \(scrollableSponsors.frame)")
+        print("scrollableSponsors position: \(scrollableSponsors.position)")
+        print("Is scrollableSponsors hidden? \(scrollableSponsors.isHidden)")
+        print("Is sponsorshipLayer hidden? \(sponsorshipLayer.isHidden)")
+        
+        
         let node = self.atPoint(location)
         
         if scrollableArea.contains(location) {
-            previousTouchPositionY = location.y
+            previousCoachTouchY = location.y
+        }
+        if scrollableSponsors.contains(location) {
+            print("Touch detected within scrollableSponsors")
+            previousSponsorTouchY = location.y
         }
         
         if node.name == GameConstants.StringConstants.hundredLinker {
@@ -123,8 +146,20 @@ class MenuScene: SKScene {
                 self.isUserInteractionEnabled = true
             }
             print("Coach button hit")
-        } else if node.name == "backButton" {
+            
+        } else if node.name == "sponsorDetailNode" {
+            isUserInteractionEnabled = false
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.scrollableSponsors.isHidden = false
+                self.isUserInteractionEnabled = true
+            }
+            print("Sponsor button hit")
+            
+        } else if node.name == "BackCoach" {
             scrollableArea.isHidden = true
+        } else if node.name == "BackSponsor" {
+            scrollableSponsors.isHidden = true
         } else if let name = node.name, coaches.contains(where: { $0.name == name }) {
             var i = 0
             for coach in coaches {
@@ -157,20 +192,56 @@ class MenuScene: SKScene {
                 }
                 i += 1
             }
+        } else if let name = node.name, sponsors.contains(where: { $0.name == name }) {
+            var i = 0
+            for sponsor in sponsors {
+                if sponsor.name == node.name {
+                    showAlertForSponsor(sponsor: sponsor) { confirmed in
+                        if confirmed {
+                            if MenuScene.checkReputation(newReputation: sponsor.reputationRequirement) {
+                                self.saveCurrentSponsorIndex(i)
+                                self.scrollableSponsors.isHidden = true
+                                self.updateMenu()
+                            } else {
+                                let alert = UIAlertController(title: "Insufficient Reputation", message: "Your reputation is too low for this sponsor", preferredStyle: .alert
+                                )
+                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                                
+                                
+                                if let viewController = self.view?.window?.rootViewController {
+                                    viewController.present(alert, animated: true, completion: nil)
+                                    self.scrollableSponsors.isHidden = true
+                                }
+                            }
+                        }
+                    }
+                    updateMenu()
+                    break
+                }
+                i += 1
+            }
         }
     }
-
    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
-            let touchLocation = touch.location(in: self)
-            
+        let touchLocation = touch.location(in: self)
+        
 
-            if scrollableArea.contains(touchLocation), let previousY = previousTouchPositionY {
-                let deltaY = touchLocation.y - previousY
-                coachesNode.position.y += deltaY
-                previousTouchPositionY = touchLocation.y
-            }
+        if scrollableArea.contains(touchLocation), let previousY = previousCoachTouchY {
+            let deltaY = touchLocation.y - previousY
+            print("COACHES before move: \(coachesNode.position.y)")
+            coachesNode.position.y += deltaY
+            print("COACHES after move: \(coachesNode.position.y)")
+            previousCoachTouchY = touchLocation.y
+        }
+        if scrollableSponsors.contains(touchLocation), let previousY = previousSponsorTouchY {
+            let deltaY = touchLocation.y - previousY
+            print("SPONSORS before move: \(sponsorsNode.position.y)")
+            sponsorsNode.position.y += deltaY
+            print("SPONSORS after move: \(sponsorsNode.position.y)")
+            previousSponsorTouchY = touchLocation.y
+        }
     }
     
     func showAlertForCoach(coach: Coach, completion: @escaping (Bool) -> Void) {
@@ -189,6 +260,25 @@ class MenuScene: SKScene {
         alert.addAction(confirmAction)
         alert.addAction(cancelAction)
 
+        if let viewController = self.scene?.view?.window?.rootViewController {
+            viewController.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func showAlertForSponsor(sponsor: Sponsor, completion: @escaping (Bool) -> Void) {
+        let alert = UIAlertController(title: "Confirm Sponsor", message: "Do you want to accept \(sponsor.name)'s offer?", preferredStyle: .alert)
+        
+        let confirmAction = UIAlertAction(title: "Yes", style: .default) { _ in
+            completion(true)
+        }
+        
+        let cancelAction = UIAlertAction(title: "No", style: .cancel) { _ in
+            completion(false)
+        };
+        
+        alert.addAction(confirmAction)
+        alert.addAction(cancelAction)
+        
         if let viewController = self.scene?.view?.window?.rootViewController {
             viewController.present(alert, animated: true, completion: nil)
         }
@@ -230,6 +320,7 @@ class MenuScene: SKScene {
         speedCurrentValue = getStat(key: GameConstants.Keys.speedKey)
         skillCurrentValue = getStat(key: GameConstants.Keys.skillKey)
         strengthCurrentValue = getStat(key: GameConstants.Keys.skillKey)
+        reputationCurrentValue = getReputation()
         
         
         addProgressBar(progressBar: speedProgressBar, positionX: (frame.midX/4.0), positionY: (frame.midY/3.0) + yBuffer)
@@ -327,45 +418,11 @@ class MenuScene: SKScene {
         setupCurrentCoachNode()
     }
     
-    func addCoachNodes(coachArray: [Int]) {
-        
-    }
-    
-    
-    func setupChooseCoachLayer(tier: Int) {
-        if tier == 1 {
-            tier1Layer.name = "Tier1Layer"
-            addCoachNodes(coachArray: [1,2,3,4])
-        } else if tier == 2 {
-            tier2Layer.name = "Tier1Layer"
-            addCoachNodes(coachArray: [5,6,7,8])
-        } else if tier == 3 {
-            tier3Layer.name = "Tier1Layer"
-            addCoachNodes(coachArray: [9,10,11,12])
-        } else if tier == 4 {
-            tier4Layer.name = "Tier1Layer"
-            addCoachNodes(coachArray: [13,14,15,16])
-        } else if tier == 5 {
-            tier5Layer.name = "Tier1Layer"
-            addCoachNodes(coachArray: [17,18,19,20])
-        } else if tier == 6 {
-            tier6Layer.name = "Tier1Layer"
-            addCoachNodes(coachArray: [21,22,23,24,25])
-        } else if tier == 7 {
-            tier7Layer.name = "Tier1Layer"
-            addCoachNodes(coachArray: [26])
-        }
-    }
-    
     func setupSponsorLayer () {
         sponsorshipLayer.name = "SponsorshipLayer"
-        let label = SKLabelNode(text: "Sponsorship Layer")
-        label.name = "SponsorLabel"
-        label.position = CGPoint(x: frame.midX, y: frame.midY)
-        label.fontColor = .black
-        label.fontName = "Helvetica-Bold"
         sponsorshipLayer.zPosition = GameConstants.zPositions.topZ
-        sponsorshipLayer.addChild(label)
+        
+        setupCurrentSponsorNode()
     }
     
     func setupCalendarLayer () {
@@ -430,6 +487,29 @@ class MenuScene: SKScene {
         setupScrollableArea()
     }
     
+    func setupCurrentSponsorNode() {
+        if (getCurrentSponsorIndex() ?? 0) > 26 {
+            saveCurrentSponsorIndex(0)
+        }
+        currentSponsor = sponsors[getCurrentSponsorIndex() ?? 0]
+        
+        let sponsorText = "\(currentSponsor.name)\n Reputation Required: \(currentSponsor.reputationRequirement)\n Contract Length: \(currentSponsor.lengthOfContract)\n Reward Multiplier: \(currentSponsor.rewardMultiplier)"
+        let sponsorDetailNode = createMultilineLabel(text: sponsorText, fontSize: 12, position: CGPoint(x: frame.midX, y: frame.midY + 65))
+        sponsorDetailNode.zPosition = GameConstants.zPositions.hudZ - 0.1
+        sponsorshipLayer.addChild(sponsorDetailNode)
+        
+        let borderSponsor = SKShapeNode(rectOf: CGSize(width: 150+borderWidth, height: 60+borderWidth), cornerRadius: 2.0)
+        borderSponsor.lineWidth = borderWidth
+        borderSponsor.fillColor = .clear
+        borderSponsor.strokeColor = .black
+        borderSponsor.position = CGPoint(x: frame.midX, y: frame.midY + 50)
+        borderSponsor.zPosition = GameConstants.zPositions.hudZ
+        borderSponsor.name = "sponsorDetailNode"
+        sponsorshipLayer.addChild(borderSponsor)
+        
+        setupScrollableSponsors()
+    }
+    
     func setupScrollableArea() {
         scrollableArea.position = CGPoint(x: frame.midX, y: frame.midY)
         scrollableArea.isHidden = true
@@ -458,32 +538,71 @@ class MenuScene: SKScene {
             coachesNode.addChild(border)
             
             yOffset -= 40
+            
+            coachesNode.position.y = -CGFloat(coaches.count * 40) / 2
         }
         
-        let backButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
-        backButton.name = "backButton"
-        backButton.position = CGPoint(x: frame.minX - 300, y: frame.midY - 300)
+        makeBackButton(name: "BackCoach", parent: scrollableArea, sizeW: 90, sizeH: 40, posX: frame.minX - 300, posY: frame.midY - 300)
+    }
+    
+    func makeBackButton(name: String, parent: SKSpriteNode, sizeW: Int, sizeH: Int, posX: CGFloat, posY: CGFloat) {
+        let backButton = SKSpriteNode(color: .white, size: CGSize(width: sizeW, height: sizeH))
+        backButton.name = name
+        backButton.position = CGPoint(x: posX, y: posY)
         backButton.zPosition = GameConstants.zPositions.hudZ + 0.1
-        scrollableArea.addChild(backButton)
+        parent.addChild(backButton)
         
-        let border = SKShapeNode(rectOf: CGSize(width: 90+borderWidth, height: 40+borderWidth), cornerRadius: 2.0)
+        let border = SKShapeNode(rectOf: CGSize(width: sizeW, height: sizeH), cornerRadius: 2.0)
         border.strokeColor = .black
         border.lineWidth = borderWidth
         border.fillColor = .clear
-        border.position = CGPoint(x: frame.minX - 300, y: frame.midY - 300)
+        border.position = CGPoint(x: posX, y: posY)
         border.zPosition = GameConstants.zPositions.hudZ - 0.1
-        scrollableArea.addChild(border)
-        
-        coachesNode.position.y = -CGFloat(coaches.count * 40) / 2
+        parent.addChild(border)
         
         let backLabel = SKLabelNode(text: "Back")
         backLabel.fontName = "Helvetica-Bold"
         backLabel.fontColor = .black
         backLabel.fontSize = 12
         backLabel.verticalAlignmentMode = .center
-        backLabel.position = CGPoint(x: frame.minX - 300, y: frame.midY - 300)
+        backLabel.position = CGPoint(x: posX, y: posY)
         backLabel.zPosition = GameConstants.zPositions.hudZ + 0.2
-        scrollableArea.addChild(backLabel)
+        parent.addChild(backLabel)
+    }
+    
+    func setupScrollableSponsors() {
+        scrollableSponsors.position = CGPoint(x: frame.midX, y: frame.midY)
+        scrollableSponsors.isHidden = true
+        scrollableSponsors.zPosition = GameConstants.zPositions.topZ
+        sponsorshipLayer.addChild(scrollableSponsors)
+        
+        sponsorsNode.position = CGPoint(x: 0, y: -scrollableSponsors.size.height / 2)
+        scrollableSponsors.addChild(sponsorsNode)
+        
+        var yOffset = 10.0
+        for sponsor in sponsors {
+            let sponsorNode = SKLabelNode(text: "\(sponsor.name): Reputation Required: \(sponsor.reputationRequirement), Contract Length: \(sponsor.lengthOfContract), Reward Multiplier: \(sponsor.rewardMultiplier)")
+            sponsorNode.zPosition = GameConstants.zPositions.topZ + 0.1
+            sponsorNode.position = CGPoint(x: frame.minX + 10, y: frame.maxY - yOffset)
+            sponsorNode.fontSize = 15
+            sponsorNode.fontName = "Helvetica-Bold"
+            sponsorsNode.addChild(sponsorNode)
+            
+            let border = SKShapeNode(rectOf: CGSize(width: (frame.maxX - 180)+borderWidth, height: 20+borderWidth), cornerRadius: 2.0)
+            border.strokeColor = .black
+            border.lineWidth = borderWidth
+            border.fillColor = .clear
+            border.position = CGPoint(x: frame.minX + 30, y: frame.maxY - yOffset + 3)
+            border.zPosition = GameConstants.zPositions.topZ + 0.2
+            border.name = sponsor.name
+            sponsorsNode.addChild(border)
+            
+            yOffset -= 40
+            
+            sponsorsNode.position.y = -CGFloat(sponsors.count * 40) / 2
+        }
+        
+        makeBackButton(name: "BackSponsor", parent: scrollableSponsors, sizeW: 90, sizeH: 40, posX: frame.minX - 350, posY: frame.midY - 300)
     }
     
     func createMultilineLabel(text: String, fontSize: CGFloat, position: CGPoint) -> SKNode {
@@ -512,6 +631,14 @@ class MenuScene: SKScene {
         return UserDefaults.standard.double(forKey: GameConstants.Keys.bankBalanceKey)
     }
     
+    static func saveReputation(_ level: Double) {
+        UserDefaults.standard.set(level, forKey: GameConstants.Keys.reputationKey)
+    }
+    
+    static func getReputation() -> Double {
+        return UserDefaults.standard.double(forKey: GameConstants.Keys.reputationKey)
+    }
+    
     static func reward(amount: Double) {
         var currentBalance = getBankBalance()
         currentBalance += amount
@@ -524,6 +651,15 @@ class MenuScene: SKScene {
             currentBalance -= amount
             saveBankBalance(currentBalance)
             print(getBankBalance())
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    static func checkReputation(newReputation: Double) -> Bool {
+        var currentReputation = getReputation()
+        if newReputation <= currentReputation {
             return true
         } else {
             return false
@@ -572,6 +708,14 @@ class MenuScene: SKScene {
     
     func getCurrentCoachIndex() -> Int? {
         return UserDefaults.standard.value(forKey: GameConstants.Keys.coachKey) as? Int
+    }
+    
+    func saveCurrentSponsorIndex(_ index: Int) {
+        UserDefaults.standard.set(index, forKey: GameConstants.Keys.sponsorKey)
+    }
+    
+    func getCurrentSponsorIndex() -> Int? {
+        return UserDefaults.standard.value(forKey: GameConstants.Keys.sponsorKey) as? Int
     }
 
     
