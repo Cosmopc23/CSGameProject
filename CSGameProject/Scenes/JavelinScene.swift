@@ -25,6 +25,8 @@ class JavelinScene: BaseGameScene {
     var timesThrown: Int = 0
     var playerThrows: [Double] = []
     
+    var bestDistance: Double = 0.0
+    
     // Progress bar
     var progressBar: SKSpriteNode!
     var currentValue: CGFloat = 0.0
@@ -52,6 +54,12 @@ class JavelinScene: BaseGameScene {
     private var maxRunningDistance: CGFloat = 200.0
     private var speedLockLabel: SKLabelNode?
     private var angleBorder: SKShapeNode?
+    
+    convenience init(size: CGSize, numberOfThrows: Int = 0, previousThrows: [Double] = []) {
+        self.init(size: size)
+        self.timesThrown = numberOfThrows
+        self.playerThrows = previousThrows
+    }
     
     var gameState = JavelinGameState.ready {
         willSet {
@@ -100,8 +108,6 @@ class JavelinScene: BaseGameScene {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
-        timesThrown = 0
-        playerThrows = []
             
         // Progress bar setup
         progressBar = SKSpriteNode(color: .green, size: CGSize(width: 300, height: 20))
@@ -254,6 +260,9 @@ class JavelinScene: BaseGameScene {
     }
     
     func returnToMenu() {
+        playerThrows = []
+        timesThrown = 0
+        
         let transition = SKTransition.fade(withDuration: 1.0)
         let scene = MenuScene(size: self.size)
         scene.scaleMode = .aspectFill
@@ -303,7 +312,11 @@ class JavelinScene: BaseGameScene {
         playerThrows.append(finalDistance)
         timesThrown += 1
         
-        let bestDistance = playerThrows.max()
+        print(playerThrows)
+        
+        bestDistance = playerThrows.max() ?? 0.0
+        
+        print(bestDistance)
         
         let finishScreen = SKSpriteNode(color: .black, size: CGSize(width: self.size.width, height: self.size.height))
         finishScreen.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
@@ -311,62 +324,54 @@ class JavelinScene: BaseGameScene {
         finishScreen.alpha = 0.75
         self.addChild(finishScreen)
         
+        let titleLabel = SKLabelNode(text: "Throw \(timesThrown)")
+        titleLabel.position = CGPoint(x: frame.midX, y: frame.midY + 50)
+        titleLabel.fontColor = .yellow
+        titleLabel.fontSize = 30
+        titleLabel.zPosition = GameConstants.zPositions.topZ
+        self.addChild(titleLabel)
+        
+        
+        var yOffset: CGFloat = 40
+        var i = 1
+        for attempt in playerThrows {
+            let resultLabel = SKLabelNode(text: "Attempt \(i). \(String(format: "%.2f", attempt))m")
+            resultLabel.fontSize = 24
+            resultLabel.fontColor = .white
+            resultLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 150 - yOffset)
+            resultLabel.zPosition = GameConstants.zPositions.topZ
+            self.addChild(resultLabel)
+            i += 1
+            
+            yOffset += 30
+        }
+        
         if timesThrown == 3 {
-            
-            distances["Player"] = finalDistance
-            generateCompetitorThrow()
-            
-            let sortedResults = distances.sorted { $0.value < $1.value }
-            
-            
-            sortResults(string: "m      Reward: ", sortedResults: sortedResults)
-            
-            //        let resultLabel = SKLabelNode(text: "Player Distance: \(String(format: "%.2f", finalDistance))m")
-            //        resultLabel.position = CGPoint(x: frame.midX, y: frame.midY)
-            //        resultLabel.fontColor = .white
-            //        resultLabel.fontSize = 36
-            //        resultLabel.zPosition = GameConstants.zPositions.hudZ
-            //        addChild(resultLabel)
-            
-            let menuButton = SKLabelNode(text: "Return to Menu")
-            menuButton.position = CGPoint(x: frame.midX, y: frame.midY - 110)
-            menuButton.fontColor = .yellow
-            menuButton.fontSize = 24
-            menuButton.name = "returnToMenu"
-            menuButton.zPosition = GameConstants.zPositions.topZ
-            addChild(menuButton)
-            
-            print("THROW COMPLETE")
-            
+            let continueLabel = SKLabelNode(text: "Continue to Results")
+            continueLabel.position = CGPoint(x: frame.midX, y: frame.midY - 110)
+            continueLabel.fontColor = .yellow
+            continueLabel.fontSize = 24
+            continueLabel.zPosition = GameConstants.zPositions.topZ
+            continueLabel.name = "continue"
+            self.addChild(continueLabel)
         } else {
-            let titleLabel = SKLabelNode(text: "Throw \(timesThrown)")
-            titleLabel.position = CGPoint(x: frame.midX, y: frame.midY + 50)
-            titleLabel.fontColor = .yellow
-            titleLabel.fontSize = 30
-            titleLabel.zPosition = GameConstants.zPositions.topZ
-            
-            
-            var yOffset: CGFloat = 100
-            var i = timesThrown
-            for attempt in playerThrows {
-                let resultLabel = SKLabelNode(text: "Attempt \(i). \(String(format: "%.2f", attempt))m")
-                resultLabel.fontSize = 24
-                resultLabel.fontColor = .white
-                resultLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 150 - yOffset)
-                resultLabel.zPosition = GameConstants.zPositions.topZ
-                self.addChild(resultLabel)
-                i -= 1
-                
-                yOffset -= 30
-            }
-            
             let resetLabel = SKLabelNode(text: "Next Attempt")
             resetLabel.position = CGPoint(x: frame.midX, y: frame.midY - 110)
             resetLabel.fontColor = .yellow
             resetLabel.fontSize = 24
             resetLabel.zPosition = GameConstants.zPositions.topZ
             resetLabel.name = "resetLabel"
-            
+            self.addChild(resetLabel)
+        }
+    }
+    
+    
+    func cleanupThrowScreen() {
+        self.children.forEach { node in
+            // Remove all labels and the finish screen
+            if node is SKLabelNode || node.name == "finishScreen" {
+                node.removeFromParent()
+            }
         }
     }
     
@@ -394,6 +399,32 @@ class JavelinScene: BaseGameScene {
             if nodeAtPoint.name == "returnToMenu" {
                 returnToMenu()
             } else if nodeAtPoint.name == "resetLabel" {
+                let transition = SKTransition.fade(withDuration: 1.0)
+                let scene = JavelinScene(size: self.size, numberOfThrows: self.timesThrown, previousThrows: self.playerThrows)
+                scene.scaleMode = .aspectFill
+                self.view?.presentScene(scene, transition: transition)
+            } else if nodeAtPoint.name == "continue" {
+                cleanupThrowScreen()
+                
+                distances["Player"] = bestDistance
+                generateCompetitorThrow()
+                
+                let sortedResults = distances.sorted { $0.value < $1.value }
+                
+                
+                sortResults(string: "m      Reward: ", sortedResults: sortedResults)
+                
+                
+                let menuButton = SKLabelNode(text: "Return to Menu")
+                menuButton.position = CGPoint(x: frame.midX, y: frame.midY - 110)
+                menuButton.fontColor = .yellow
+                menuButton.fontSize = 24
+                menuButton.name = "returnToMenu"
+                menuButton.zPosition = GameConstants.zPositions.topZ
+                addChild(menuButton)
+                
+                print("THROW COMPLETE")
+                
                 
             }
         default:

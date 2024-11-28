@@ -172,7 +172,12 @@ class MenuScene: SKScene {
                             if MenuScene.transaction(amount: coach.price) {
                                 self.newCoach(oldCoach: self.currentCoach, newCoach: coach)
                                 self.saveCurrentCoachIndex(i)
-                                self.scrollableArea.isHidden = true
+                                
+                                let transition = SKTransition.fade(withDuration: 0.3)
+                                let scene = MenuScene(size: self.size)
+                                scene.scaleMode = .aspectFill
+                                self.view?.presentScene(scene, transition: transition)
+                                
                                 self.updateMenu()
                             } else {
                                 let alert = UIAlertController(
@@ -186,6 +191,7 @@ class MenuScene: SKScene {
                                 if let viewController = self.view?.window?.rootViewController {
                                     viewController.present(alert, animated: true, completion: nil)
                                     self.scrollableArea.isHidden = true
+                                    
                                 }
                             }
                         }
@@ -203,7 +209,12 @@ class MenuScene: SKScene {
                         if confirmed {
                             if MenuScene.checkReputationLevel(newReputation: sponsor.reputationRequirement) {
                                 self.saveCurrentSponsorIndex(i)
-                                self.scrollableSponsors.isHidden = true
+                                
+                                let transition = SKTransition.fade(withDuration: 0.3)
+                                let scene = MenuScene(size: self.size)
+                                scene.scaleMode = .aspectFill
+                                self.view?.presentScene(scene, transition: transition)
+                                
                                 self.updateMenu()
                             } else {
                                 let alert = UIAlertController(title: "Insufficient Reputation", message: "Your reputation is too low for this sponsor", preferredStyle: .alert
@@ -214,7 +225,9 @@ class MenuScene: SKScene {
                                 if let viewController = self.view?.window?.rootViewController {
                                     viewController.present(alert, animated: true, completion: nil)
                                     self.scrollableSponsors.isHidden = true
+                                    
                                 }
+                                
                             }
                         }
                     }
