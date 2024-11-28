@@ -7,7 +7,7 @@
 
 struct Sponsor {
     let name: String
-    let reputationRequirement: Double
+    let reputationRequirement: Int
     let lengthOfContract: Int
     let rewardMultiplier: Double
 }

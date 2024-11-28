@@ -59,7 +59,7 @@ class MenuScene: SKScene {
     var reputationProgressBar: SKSpriteNode!
     
     var reputationCurrentValue: Double = 0
-    var reputationCurrentLevel: Double = 0
+    var reputationCurrentLevel: Int = 0
     
     var previousTouchPositionY: CGFloat? = CGFloat(0)
     
@@ -320,7 +320,7 @@ class MenuScene: SKScene {
         addLabel(label: "Speed", positionX: (frame.midX/4.0) - 40, positionY: ((frame.midY/3.0) + yBuffer - 5))
         addLabel(label: "Skill", positionX: (frame.midX/4.0) - 40, positionY: (frame.midY/3.0) - 5)
         addLabel(label: "Strength", positionX: (frame.midX/4.0) - 40, positionY: ((frame.midY/3.0) - yBuffer - 5))
-        addLabel(label: "Reputation", positionX: (frame.midX/4.0) - 40, positionY: ((frame.midY/3.0) + (2 * yBuffer) - 5))
+        addLabel(label: "Reputation", positionX: (frame.midX/4.0) - 45, positionY: ((frame.midY/3.0) + (2 * yBuffer) - 5))
         
         
         speedCurrentValue = getStat(key: GameConstants.Keys.speedKey)
@@ -337,7 +337,7 @@ class MenuScene: SKScene {
         
         addProgressBar(progressBar: reputationProgressBar, positionX: frame.midX/4.0, positionY: ((frame.midY/3.0) + (2 * yBuffer)))
         
-        addLabel(label: "\(MenuScene.getReputationLevel())", positionX: frame.midX/4.0, positionY: ((frame.midY/3.0) + (2 * yBuffer) - 5))
+        addLabel(label: "\(MenuScene.getReputationLevel())", positionX: frame.midX/4.0 + 75, positionY: ((frame.midY/3.0) + (2 * yBuffer) - 6))
         
         updateProgressbar(progressBar: speedProgressBar, currentValue: speedCurrentValue)
         updateProgressbar(progressBar: skillProgressBar, currentValue: skillCurrentValue)
@@ -650,22 +650,21 @@ class MenuScene: SKScene {
         UserDefaults.standard.set(currentReputationLevel, forKey: GameConstants.Keys.reputationKey)
     }
     
-    static func getReputationLevel() -> Double {
-        return UserDefaults.standard.double(forKey: GameConstants.Keys.reputationKey)
+    static func getReputationLevel() -> Int {
+        return UserDefaults.standard.integer(forKey: GameConstants.Keys.reputationKey)
     }
     
-    static func increaseReputationBar(_ amount: Double) -> Double {
+    static func increaseReputationBar(_ amount: Double) {
         let currentReputationBar = getReputationBar()
         
         var newReputation: Double = 0
         if currentReputationBar + amount < 100 {
             newReputation = currentReputationBar + amount
-            return newReputation
         } else {
             increaseReputationLevel()
-            newReputation = 100 - (currentReputationBar + amount)
-            return newReputation
+            newReputation = (currentReputationBar + amount) - 100
         }
+        UserDefaults.standard.set(newReputation, forKey: GameConstants.Keys.reputationBarKey)
     }
     
     static func getReputationBar() -> Double {
@@ -690,7 +689,7 @@ class MenuScene: SKScene {
         }
     }
     
-    static func checkReputationLevel(newReputation: Double) -> Bool {
+    static func checkReputationLevel(newReputation: Int) -> Bool {
         var currentReputation = getReputationLevel()
         if newReputation <= currentReputation {
             return true
@@ -775,6 +774,7 @@ class MenuScene: SKScene {
         finishedLabel.fontSize = 15
         finishedLabel.fontColor = .black
         finishedLabel.position = CGPoint(x: positionX, y: positionY)
+        finishedLabel.zPosition = GameConstants.zPositions.topZ
         
         
         outerLayer.addChild(finishedLabel)

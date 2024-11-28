@@ -18,6 +18,7 @@ class BaseGameScene: SKScene, SKPhysicsContactDelegate {
     
     var playerFinishPosition: Int = 0
     var rewards: [Double] = [40.0, 30.0, 20.0, 10.0]
+    var reputationIncrease: [Double] = [80.0, 40.0, 20.0, 10.0]
     
     var characterSpeed: CGFloat = 0.0 {
         didSet {
@@ -52,6 +53,7 @@ class BaseGameScene: SKScene, SKPhysicsContactDelegate {
             if character == "Player" {
                 playerFinishPosition = i
                 MenuScene.reward(amount: rewards[playerFinishPosition])
+                MenuScene.increaseReputationBar(reputationIncrease[playerFinishPosition])
             }
             
             yOffSet -= 30
