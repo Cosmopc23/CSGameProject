@@ -24,13 +24,6 @@ class MenuScene: SKScene {
     let trainingLayer = SKNode()
     let sponsorshipLayer = SKNode()
     let calendarLayer = SKNode()
-    let tier1Layer = SKNode()
-    let tier2Layer = SKNode()
-    let tier3Layer = SKNode()
-    let tier4Layer = SKNode()
-    let tier5Layer = SKNode()
-    let tier6Layer = SKNode()
-    let tier7Layer = SKNode()
     
     let borderWidth: CGFloat = 2.0
     
@@ -473,13 +466,6 @@ class MenuScene: SKScene {
         trainingLayer.isHidden = true
         sponsorshipLayer.isHidden = true
         calendarLayer.isHidden = true
-        tier1Layer.isHidden = true
-        tier2Layer.isHidden = true
-        tier3Layer.isHidden = true
-        tier4Layer.isHidden = true
-        tier5Layer.isHidden = true
-        tier6Layer.isHidden = true
-        tier7Layer.isHidden = true
         
         layer.isHidden = false
         
