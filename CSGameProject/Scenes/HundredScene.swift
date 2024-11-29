@@ -130,6 +130,9 @@ class HundredScene: BaseGameScene {
         competitor1.competitor1Acceleration = CGFloat.random(in: 5...10)
         competitor1.competitor1TopSpeed = CGFloat.random(in: 73...90)
         
+        competitor1.competitor1Acceleration = CGFloat(10)
+        competitor1.competitor1Speed = CGFloat(90)
+        
         competitor1.loadTextures()
         competitor1.state = .idle
         
@@ -148,6 +151,10 @@ class HundredScene: BaseGameScene {
         competitor2.competitor2Speed = 0.0
         competitor2.competitor2Acceleration = CGFloat.random(in: 5...10)
         competitor2.competitor2TopSpeed = CGFloat.random(in: 73...90)
+        
+        competitor2.competitor2Acceleration = CGFloat(5)
+        competitor2.competitor2Speed = CGFloat(73)
+        
         
         competitor2.loadTextures()
         competitor2.state = .idle

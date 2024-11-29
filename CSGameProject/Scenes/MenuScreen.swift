@@ -8,6 +8,7 @@
 import SpriteKit
 import Foundation
 
+
 class MenuScene: SKScene {
     
     var speedBar: ProgressBar!
@@ -55,6 +56,13 @@ class MenuScene: SKScene {
     var reputationCurrentLevel: Int = 0
     
     var previousTouchPositionY: CGFloat? = CGFloat(0)
+    
+    var difficulty: Int = 1
+    
+    convenience init(size: CGSize, difficulty: Int) {
+        self.init(size: size)
+        self.difficulty = difficulty
+    }
     
     
     override func didMove(to view: SKView) {
