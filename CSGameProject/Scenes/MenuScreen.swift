@@ -697,7 +697,7 @@ class MenuScene: SKScene {
     }
     
     static func checkReputationLevel(newReputation: Int) -> Bool {
-        var currentReputation = getReputationLevel()
+        let currentReputation = getReputationLevel()
         if newReputation <= currentReputation {
             return true
         } else {
