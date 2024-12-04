@@ -62,6 +62,9 @@ class MenuScene: SKScene {
     
     let playerTexture = SKTexture(imageNamed: GameConstants.StringConstants.playerImageName)
     
+    var isFirstTime: Bool = false
+    
+    var playerName: String = "Player"
     
     
     convenience init(size: CGSize, difficulty: Int) {
@@ -72,6 +75,13 @@ class MenuScene: SKScene {
     
     override func didMove(to view: SKView) {
 //        MenuScene.saveBankBalance(10000)
+        isFirstTime = getFirstTime()
+        
+        if isFirstTime == false {
+            playerName = getPlayerName()
+        } else {
+            print("First Time")
+        }
         
         addChild(outerLayer)
         
@@ -305,14 +315,33 @@ class MenuScene: SKScene {
             viewController.present(alert, animated: true, completion: nil)
         }
     }
+    
+    func getPlayerName() -> String {
+        return UserDefaults.standard.string(forKey: GameConstants.Keys.playerNameKey)!
+    }
+    
+    func savePlayerName(name: String) {
+        UserDefaults.standard.set(name, forKey: GameConstants.Keys.playerNameKey)
+    }
+    
+    func getFirstTime() -> Bool {
+        return UserDefaults.standard.bool(forKey: GameConstants.Keys.isFirstTimeKey)
+    }
+    
+    func saveFirstTime(currentTimeValue: Bool) {
+        UserDefaults.standard.set(currentTimeValue, forKey: GameConstants.Keys.isFirstTimeKey)
+    }
 
     
     func setupOuterLayer() {
         
         let playerSprite = SKSpriteNode(texture: playerTexture)
-        playerSprite.position = CGPoint(x: frame.minX + xBuffer, y: frame.midY + yBuffer * 2)
+        playerSprite.position = CGPoint(x: frame.minX + xBuffer/2, y: frame.midY + yBuffer * 2)
         playerSprite.size = CGSize(width: 150, height: 150)
         outerLayer.addChild(playerSprite)
+        
+        let name = getPlayerName()
+        let nameLabel = SKLabelNode(text: "Name: \(name)")
         
         speedProgressBar = SKSpriteNode(color: .blue, size: CGSize(width: 150, height: 15))
         

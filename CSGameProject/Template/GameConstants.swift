@@ -103,6 +103,8 @@ struct GameConstants {
         static let sponsorKey = "sponsor"
         static let reputationKey = "reputation"
         static let reputationBarKey = "reputationBar"
+        static let playerNameKey = "playerName"
+        static let isFirstTimeKey = "firstTime"
     }
 }
 
