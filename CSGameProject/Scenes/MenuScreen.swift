@@ -66,6 +66,10 @@ class MenuScene: SKScene {
     
     var playerName: String = "Player"
     
+    var countryFlag: FlagNode!
+    
+    var playerCountry: String = "BR"
+    
     
     convenience init(size: CGSize, difficulty: Int) {
         self.init(size: size)
@@ -75,6 +79,8 @@ class MenuScene: SKScene {
     
     override func didMove(to view: SKView) {
 //        MenuScene.saveBankBalance(10000)
+        
+        playerCountry = getPlayerCountry()
         isFirstTime = getFirstTime()
         
         if isFirstTime == false {
@@ -331,6 +337,14 @@ class MenuScene: SKScene {
     func saveFirstTime(currentTimeValue: Bool) {
         UserDefaults.standard.set(currentTimeValue, forKey: GameConstants.Keys.isFirstTimeKey)
     }
+    
+    func savePlayerCountry(_ country: String) {
+        UserDefaults.standard.set(country, forKey: GameConstants.Keys.countryKey)
+    }
+
+    func getPlayerCountry() -> String {
+        return UserDefaults.standard.string(forKey: GameConstants.Keys.countryKey) ?? "BR"
+    }
 
     
     func setupOuterLayer() {
@@ -473,6 +487,12 @@ class MenuScene: SKScene {
         calendarLabel.verticalAlignmentMode = .center
         calendarLabel.position = CGPoint(x: 0, y: 0)
         calendarButton.addChild(calendarLabel)
+        
+        let flagSize = CGSize(width: 100, height: 60)
+        countryFlag = FlagNode(country: playerCountry, size: flagSize)
+        countryFlag.position = CGPoint(x: frame.minX + xBuffer, y: frame.maxY - yBuffer * 3)
+        countryFlag.zPosition = GameConstants.zPositions.hudZ
+        outerLayer.addChild(countryFlag)
         
     }
     
