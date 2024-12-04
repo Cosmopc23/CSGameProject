@@ -59,6 +59,11 @@ class MenuScene: SKScene {
     
     var difficulty: Int = 1
     
+    
+    let playerTexture = SKTexture(imageNamed: GameConstants.StringConstants.playerImageName)
+    
+    
+    
     convenience init(size: CGSize, difficulty: Int) {
         self.init(size: size)
         self.difficulty = difficulty
@@ -303,6 +308,11 @@ class MenuScene: SKScene {
 
     
     func setupOuterLayer() {
+        
+        let playerSprite = SKSpriteNode(texture: playerTexture)
+        playerSprite.position = CGPoint(x: frame.minX + xBuffer, y: frame.midY + yBuffer * 2)
+        playerSprite.size = CGSize(width: 150, height: 150)
+        outerLayer.addChild(playerSprite)
         
         speedProgressBar = SKSpriteNode(color: .blue, size: CGSize(width: 150, height: 15))
         
