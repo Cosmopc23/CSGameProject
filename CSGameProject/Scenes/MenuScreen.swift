@@ -80,15 +80,17 @@ class MenuScene: SKScene {
     override func didMove(to view: SKView) {
 //        MenuScene.saveBankBalance(10000)
         
-        playerCountry = getPlayerCountry()
-        playerCountry = "SE"
-        isFirstTime = getFirstTime()
+        playerCountry = "FR"
         
         if isFirstTime == false {
             playerName = getPlayerName()
+            playerCountry = getPlayerCountry()
         } else {
             print("First Time")
+            setupStartScreen()
         }
+        
+        playerCountry = "GB"
         
         addChild(outerLayer)
         
@@ -108,6 +110,23 @@ class MenuScene: SKScene {
         updateMenu()
         
     }
+    
+    func setupStartScreen() {
+        let startScreen = SKSpriteNode(color: .black, size: CGSize(width: self.size.width, height: self.size.height))
+        startScreen.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
+        startScreen.zPosition = GameConstants.zPositions.topZ + 1
+        self.addChild(startScreen)
+        
+        let titleLabel = SKLabelNode(text: "Welcome")
+        titleLabel.position = CGPoint(x: frame.midX, y: frame.midY + 50)
+        titleLabel.fontColor = .yellow
+        titleLabel.fontSize = 30
+        titleLabel.zPosition = GameConstants.zPositions.topZ + 2
+        self.addChild(titleLabel)
+        
+        
+    }
+
     
     func updateMenu(){
 //        print(getCurrentCoachIndex()!)
@@ -351,12 +370,18 @@ class MenuScene: SKScene {
     func setupOuterLayer() {
         
         let playerSprite = SKSpriteNode(texture: playerTexture)
-        playerSprite.position = CGPoint(x: frame.minX + xBuffer/2, y: frame.midY + yBuffer * 2)
+        playerSprite.position = CGPoint(x: frame.minX + xBuffer, y: frame.maxY - yBuffer * 5)
         playerSprite.size = CGSize(width: 150, height: 150)
+        playerSprite.zPosition = GameConstants.zPositions.topZ
         outerLayer.addChild(playerSprite)
         
         let name = getPlayerName()
-        let nameLabel = SKLabelNode(text: "Name: \(name)")
+        let nameLabel = SKLabelNode(text: "\(name)")
+        nameLabel.position = CGPoint(x: frame.minX + xBuffer, y: frame.maxY - yBuffer * 15/2)
+        nameLabel.fontSize = 12
+        nameLabel.fontName = "Helvetica-Bold"
+        nameLabel.fontColor = .black
+        outerLayer.addChild(nameLabel)
         
         speedProgressBar = SKSpriteNode(color: .blue, size: CGSize(width: 150, height: 15))
         
@@ -491,7 +516,7 @@ class MenuScene: SKScene {
         
         let flagSize = CGSize(width: 100, height: 60)
         countryFlag = FlagNode(country: playerCountry, size: flagSize)
-        countryFlag.position = CGPoint(x: frame.minX + xBuffer, y: frame.maxY - yBuffer * 3)
+        countryFlag.position = CGPoint(x: frame.minX + xBuffer/2, y: frame.maxY - yBuffer * 5)
         countryFlag.zPosition = GameConstants.zPositions.hudZ
         outerLayer.addChild(countryFlag)
         

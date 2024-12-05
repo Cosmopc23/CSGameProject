@@ -82,6 +82,7 @@ struct GameConstants {
     }
 
     struct zPositions {
+        static let bottomZ: CGFloat = -1
         static let backgroundZ: CGFloat = 0
         static let worldZ: CGFloat = 1
         static let competitor3Z: CGFloat = 2
