@@ -46,6 +46,14 @@ class FlagNode: SKSpriteNode {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    private func addBorder() {
+        let border = SKShapeNode(rect: CGRect(origin: .zero, size: size))
+        border.fillColor = .clear
+        border.strokeColor = UIColor.black
+        border.lineWidth = 1.0
+        addChild(border)
+    }
 
 
     private func createGBFlag() {
@@ -108,6 +116,8 @@ class FlagNode: SKSpriteNode {
         redHorizontal.fillColor = UIColor(red: 200/255, green: 16/255, blue: 46/255, alpha: 1.0)
         redHorizontal.strokeColor = .clear
         addChild(redHorizontal)
+        
+        addBorder()
     }
 
     
@@ -124,6 +134,8 @@ class FlagNode: SKSpriteNode {
             stripe.strokeColor = .clear
             addChild(stripe)
         }
+        
+        addBorder()
     }
     
     private func createGermanyFlag() {
@@ -135,6 +147,8 @@ class FlagNode: SKSpriteNode {
             stripe.strokeColor = .clear
             addChild(stripe)
         }
+        
+        addBorder()
     }
     
     private func createItalyFlag() {
@@ -150,6 +164,8 @@ class FlagNode: SKSpriteNode {
             stripe.strokeColor = .clear
             addChild(stripe)
         }
+        
+        addBorder()
     }
     
     private func createUSFlag() {
@@ -171,6 +187,8 @@ class FlagNode: SKSpriteNode {
                 addChild(stripe)
             }
         }
+        
+        addBorder()
     }
     
     private func createCanadaFlag() {
@@ -219,6 +237,8 @@ class FlagNode: SKSpriteNode {
         leafNode.fillColor = redColor
         leafNode.strokeColor = .clear
         addChild(leafNode)
+        
+        addBorder()
     }
     
     private func createBrazilFlag() {
@@ -244,13 +264,16 @@ class FlagNode: SKSpriteNode {
         circle.fillColor = UIColor(red: 0/255, green: 39/255, blue: 118/255, alpha: 1.0)
         circle.strokeColor = .clear
         addChild(circle)
+        
+        addBorder()
     }
     
     private func createMexicoFlag() {
+        // Tricolor background
         let colors: [UIColor] = [
-            UIColor(red: 0/255, green: 104/255, blue: 71/255, alpha: 1.0),
+            UIColor(red: 0/255, green: 104/255, blue: 71/255, alpha: 1.0),    // Green
             .white,
-            UIColor(red: 206/255, green: 17/255, blue: 38/255, alpha: 1.0)
+            UIColor(red: 206/255, green: 17/255, blue: 38/255, alpha: 1.0)    // Red
         ]
         
         for i in 0..<3 {
@@ -259,6 +282,46 @@ class FlagNode: SKSpriteNode {
             stripe.strokeColor = .clear
             addChild(stripe)
         }
+        
+        // Simplified coat of arms in the center
+        let centerX = size.width * 0.5
+        let centerY = size.height * 0.5
+        let emblemSize = min(size.width * 0.2, size.height * 0.3)
+        
+        // Brown branch/perch (simplified)
+        let branch = SKShapeNode(rect: CGRect(x: centerX - emblemSize/2,
+                                            y: centerY - emblemSize/6,
+                                            width: emblemSize,
+                                            height: emblemSize/8))
+        branch.fillColor = UIColor(red: 101/255, green: 67/255, blue: 33/255, alpha: 1.0)
+        branch.strokeColor = .clear
+        addChild(branch)
+        
+        // Eagle body (simplified as a triangle)
+        let eaglePath = UIBezierPath()
+        eaglePath.move(to: CGPoint(x: centerX, y: centerY + emblemSize/2))
+        eaglePath.addLine(to: CGPoint(x: centerX - emblemSize/3, y: centerY - emblemSize/4))
+        eaglePath.addLine(to: CGPoint(x: centerX + emblemSize/3, y: centerY - emblemSize/4))
+        eaglePath.close()
+        
+        let eagle = SKShapeNode(path: eaglePath.cgPath)
+        eagle.fillColor = UIColor.darkGray
+        eagle.strokeColor = .clear
+        addChild(eagle)
+        
+        // Snake (simplified as a curved line)
+        let snakePath = UIBezierPath()
+        snakePath.move(to: CGPoint(x: centerX - emblemSize/4, y: centerY))
+        snakePath.addCurve(to: CGPoint(x: centerX + emblemSize/4, y: centerY),
+                          controlPoint1: CGPoint(x: centerX, y: centerY + emblemSize/6),
+                          controlPoint2: CGPoint(x: centerX, y: centerY - emblemSize/6))
+        
+        let snake = SKShapeNode(path: snakePath.cgPath)
+        snake.strokeColor = UIColor(red: 34/255, green: 139/255, blue: 34/255, alpha: 1.0)
+        snake.lineWidth = size.width * 0.02
+        addChild(snake)
+        
+        addBorder()
     }
     
     private func createJapanFlag() {
@@ -272,6 +335,8 @@ class FlagNode: SKSpriteNode {
         circle.fillColor = UIColor(red: 188/255, green: 0/255, blue: 45/255, alpha: 1.0)
         circle.strokeColor = .clear
         addChild(circle)
+        
+        addBorder()
     }
     
     private func createChinaFlag() {
@@ -284,7 +349,9 @@ class FlagNode: SKSpriteNode {
         bigStar.position = CGPoint(x: size.width * 0.2, y: size.height * 0.7)
         bigStar.fillColor = UIColor(red: 255/255, green: 222/255, blue: 0/255, alpha: 1.0)
         bigStar.strokeColor = .clear
-        addChild(bigStar)
+        addChild(bigStar) 
+        
+        addBorder()
     }
     
     private func createSouthKoreaFlag() {
@@ -363,6 +430,8 @@ class FlagNode: SKSpriteNode {
        rightCircle.fillColor = UIColor(red: 0/255, green: 71/255, blue: 160/255, alpha: 1.0)
        rightCircle.strokeColor = .clear
        addChild(rightCircle)
+        
+        addBorder()
     }
     
     private func createIndiaFlag() {
@@ -384,6 +453,8 @@ class FlagNode: SKSpriteNode {
         wheel.strokeColor = UIColor(red: 0/255, green: 0/255, blue: 128/255, alpha: 1.0)
         wheel.lineWidth = 1
         addChild(wheel)
+        
+        addBorder()
     }
     
     private func createAustraliaFlag() {
@@ -425,6 +496,8 @@ class FlagNode: SKSpriteNode {
             star.strokeColor = .clear
             addChild(star)
         }
+        
+        addBorder()
     }
     
     private func createNewZealandFlag() {
@@ -467,34 +540,72 @@ class FlagNode: SKSpriteNode {
            innerStar.strokeColor = .clear
            addChild(innerStar)
        }
+        
+        addBorder()
     }
         
-        private func createRussiaFlag() {
-            let colors: [UIColor] = [
-                .white,
-                UIColor(red: 0/255, green: 57/255, blue: 166/255, alpha: 1.0),
-                UIColor(red: 213/255, green: 43/255, blue: 30/255, alpha: 1.0)
-            ]
-            
-            for i in 0..<3 {
-                let stripe = SKShapeNode(rect: CGRect(x: 0, y: CGFloat(2-i)*size.height/3, width: size.width, height: size.height/3))
-                stripe.fillColor = colors[i]
-                stripe.strokeColor = .clear
-                addChild(stripe)
-            }
+    private func createRussiaFlag() {
+        let colors: [UIColor] = [
+            .white,
+            UIColor(red: 0/255, green: 57/255, blue: 166/255, alpha: 1.0),
+            UIColor(red: 213/255, green: 43/255, blue: 30/255, alpha: 1.0)
+        ]
+        
+        for i in 0..<3 {
+            let stripe = SKShapeNode(rect: CGRect(x: 0, y: CGFloat(2-i)*size.height/3, width: size.width, height: size.height/3))
+            stripe.fillColor = colors[i]
+            stripe.strokeColor = .clear
+            addChild(stripe)
         }
         
-        private func createSpainFlag() {
-            let background = SKShapeNode(rect: CGRect(origin: .zero, size: size))
-            background.fillColor = UIColor(red: 255/255, green: 196/255, blue: 0/255, alpha: 1.0)
-            background.strokeColor = .clear
-            addChild(background)
-            
-            let redStripe = SKShapeNode(rect: CGRect(x: 0, y: size.height * 0.25, width: size.width, height: size.height * 0.5))
-            redStripe.fillColor = UIColor(red: 198/255, green: 11/255, blue: 30/255, alpha: 1.0)
-            redStripe.strokeColor = .clear
-            addChild(redStripe)
-        }
+        addBorder()
+    }
+        
+    private func createSpainFlag() {
+    // Red background
+        let background = SKShapeNode(rect: CGRect(origin: .zero, size: size))
+        background.fillColor = UIColor(red: 170/255, green: 21/255, blue: 27/255, alpha: 1.0)  // Red
+        background.strokeColor = .clear
+        addChild(background)
+        
+        // Yellow middle stripe (taking up 1/2 of height)
+        let middleStripe = SKShapeNode(rect: CGRect(x: 0,
+                                                  y: size.height * 0.25,
+                                                  width: size.width,
+                                                  height: size.height * 0.5))
+        middleStripe.fillColor = UIColor(red: 250/255, green: 198/255, blue: 8/255, alpha: 1.0)  // Yellow
+        middleStripe.strokeColor = .clear
+        addChild(middleStripe)
+        
+        let centerX = size.width * 0.35
+        let centerY = size.height * 0.5
+        let emblemSize = size.height * 0.5
+        
+        // Crown (simplified as a rectangle with small points)
+        let crownBase = SKShapeNode(rect: CGRect(x: centerX - emblemSize * 0.3, y: centerY + emblemSize * 0.1, width: emblemSize * 0.6, height: emblemSize * 0.15))
+        crownBase.fillColor = UIColor(red: 128/255, green: 0/255, blue: 0/255, alpha: 1.0)
+        crownBase.strokeColor = .clear
+        addChild(crownBase)
+        
+        // Main shield (simplified as a rectangle)
+        let shield = SKShapeNode(rect: CGRect(x: centerX - emblemSize * 0.25, y: centerY - emblemSize * 0.3, width: emblemSize * 0.5, height: emblemSize * 0.4))
+        shield.fillColor = UIColor(red: 128/255, green: 0/255, blue: 0/255, alpha: 1.0)
+        shield.strokeColor = .clear
+        addChild(shield)
+        
+        // Two small pillars on sides
+        let leftPillar = SKShapeNode(rect: CGRect(x: centerX - emblemSize * 0.35, y: centerY - emblemSize * 0.25, width: emblemSize * 0.08, height: emblemSize * 0.3))
+        leftPillar.fillColor = UIColor(red: 139/255, green: 69/255, blue: 19/255, alpha: 1.0)
+        leftPillar.strokeColor = .clear
+        addChild(leftPillar)
+        
+        let rightPillar = SKShapeNode(rect: CGRect(x: centerX + emblemSize * 0.27, y: centerY - emblemSize * 0.25, width: emblemSize * 0.08, height: emblemSize * 0.3))
+        rightPillar.fillColor = UIColor(red: 139/255, green: 69/255, blue: 19/255, alpha: 1.0)
+        rightPillar.strokeColor = .clear
+        addChild(rightPillar)
+        
+        addBorder()
+    }
         
         private func createSwedenFlag() {
             let background = SKShapeNode(rect: CGRect(origin: .zero, size: size))
@@ -511,6 +622,8 @@ class FlagNode: SKSpriteNode {
             horizontalStripe.fillColor = UIColor(red: 254/255, green: 204/255, blue: 0/255, alpha: 1.0)
             horizontalStripe.strokeColor = .clear
             addChild(horizontalStripe)
+            
+            addBorder()
         }
         
         private func createNetherlandsFlag() {
@@ -526,6 +639,8 @@ class FlagNode: SKSpriteNode {
                 stripe.strokeColor = .clear
                 addChild(stripe)
             }
+            
+            addBorder()
         }
         
         private func createSwitzerlandFlag() {
@@ -543,6 +658,8 @@ class FlagNode: SKSpriteNode {
             horizontalStripe.fillColor = .white
             horizontalStripe.strokeColor = .clear
             addChild(horizontalStripe)
+            
+            addBorder()
         }
         
         private func createBelgiumFlag() {
@@ -558,5 +675,7 @@ class FlagNode: SKSpriteNode {
                 stripe.strokeColor = .clear
                 addChild(stripe)
             }
+            
+            addBorder()
         }
     }

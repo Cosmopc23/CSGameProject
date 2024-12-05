@@ -81,6 +81,7 @@ class MenuScene: SKScene {
 //        MenuScene.saveBankBalance(10000)
         
         playerCountry = getPlayerCountry()
+        playerCountry = "SE"
         isFirstTime = getFirstTime()
         
         if isFirstTime == false {
