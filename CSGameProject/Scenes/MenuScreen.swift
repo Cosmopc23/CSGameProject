@@ -59,6 +59,7 @@ class MenuScene: SKScene {
     
     var difficulty: Int = 1
     
+    let backgroundTexture: SKTexture? = SKTexture(imageNamed: "background")
     
     let playerTexture = SKTexture(imageNamed: GameConstants.StringConstants.playerImageName)
     
@@ -80,15 +81,21 @@ class MenuScene: SKScene {
     override func didMove(to view: SKView) {
 //        MenuScene.saveBankBalance(10000)
         
-        playerCountry = "FR"
+        let backgroundTexture = SKTexture(imageNamed: "background")
+        let background = SKSpriteNode(texture: backgroundTexture)
+        background.position = CGPoint(x: frame.midX, y: frame.midY)
+        background.size = self.size
+        background.zPosition = -100
+        addChild(background)
         
-        if isFirstTime == false {
-            playerName = getPlayerName()
-            playerCountry = getPlayerCountry()
-        } else {
-            print("First Time")
-            setupStartScreen()
-        }
+        
+//        if isFirstTime == false {
+//            playerName = getPlayerName()
+//            playerCountry = getPlayerCountry()
+//        } else {
+//            print("First Time")
+//            setupStartScreen()
+//        }
         
         playerCountry = "GB"
         
@@ -110,6 +117,8 @@ class MenuScene: SKScene {
         updateMenu()
         
     }
+    
+
     
     func setupStartScreen() {
         let startScreen = SKSpriteNode(color: .black, size: CGSize(width: self.size.width, height: self.size.height))
@@ -343,7 +352,7 @@ class MenuScene: SKScene {
     }
     
     func getPlayerName() -> String {
-        return UserDefaults.standard.string(forKey: GameConstants.Keys.playerNameKey)!
+        return UserDefaults.standard.string(forKey: GameConstants.Keys.playerNameKey) ?? "Player (nil)"
     }
     
     func savePlayerName(name: String) {
