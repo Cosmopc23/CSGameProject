@@ -145,9 +145,9 @@ class MenuScene: SKScene {
         saveStat(currentCoach.skillBoost, key: GameConstants.Keys.skillKey)
         saveStat(currentCoach.strengthBoost, key: GameConstants.Keys.strengthKey)
         
-        speedCurrentValue = getStat(key: GameConstants.Keys.speedKey)
-        skillCurrentValue = getStat(key: GameConstants.Keys.skillKey)
-        strengthCurrentValue = getStat(key: GameConstants.Keys.strengthKey)
+        speedCurrentValue = MenuScene.getStat(key: GameConstants.Keys.speedKey)
+        skillCurrentValue = MenuScene.getStat(key: GameConstants.Keys.skillKey)
+        strengthCurrentValue = MenuScene.getStat(key: GameConstants.Keys.strengthKey)
         
         
         updateProgressbar(progressBar: speedProgressBar, currentValue: speedCurrentValue)
@@ -425,9 +425,9 @@ class MenuScene: SKScene {
         addLabel(label: "Reputation", positionX: (frame.midX/4.0) - 45, positionY: ((frame.midY/3.0) + (2 * yBuffer) - 5))
         
         
-        speedCurrentValue = getStat(key: GameConstants.Keys.speedKey)
-        skillCurrentValue = getStat(key: GameConstants.Keys.skillKey)
-        strengthCurrentValue = getStat(key: GameConstants.Keys.skillKey)
+        speedCurrentValue = MenuScene.getStat(key: GameConstants.Keys.speedKey)
+        skillCurrentValue = MenuScene.getStat(key: GameConstants.Keys.skillKey)
+        strengthCurrentValue = MenuScene.getStat(key: GameConstants.Keys.skillKey)
         
         reputationCurrentValue = MenuScene.getReputationBar()
         reputationCurrentLevel = MenuScene.getReputationLevel()
@@ -811,20 +811,20 @@ class MenuScene: SKScene {
         UserDefaults.standard.set(currentValue, forKey: key)
     }
     
-    func getStat(key: String) -> Double {
+    static func getStat(key: String) -> Double {
         return UserDefaults.standard.double(forKey: key)
     }
     
     func changeStat(amount: Double, key: String) {
-        var currentValue = getStat(key: key)
+        var currentValue = MenuScene.getStat(key: key)
         currentValue += amount
         saveStat(currentValue, key: key)
     }
     
     func newCoach(oldCoach: Coach, newCoach: Coach) {
-        let currentSpeedStat = getStat(key: GameConstants.Keys.speedKey) - oldCoach.speedBoost
-        let currentSkillStat = getStat(key: GameConstants.Keys.skillKey) - oldCoach.skillBoost
-        let currentStrengthStat = getStat(key: GameConstants.Keys.strengthKey) - oldCoach.strengthBoost
+        let currentSpeedStat = MenuScene.getStat(key: GameConstants.Keys.speedKey) - oldCoach.speedBoost
+        let currentSkillStat = MenuScene.getStat(key: GameConstants.Keys.skillKey) - oldCoach.skillBoost
+        let currentStrengthStat = MenuScene.getStat(key: GameConstants.Keys.strengthKey) - oldCoach.strengthBoost
         
         let newSpeedStat = currentSpeedStat + newCoach.speedBoost
         let newSkillStat = currentSkillStat + newCoach.skillBoost
