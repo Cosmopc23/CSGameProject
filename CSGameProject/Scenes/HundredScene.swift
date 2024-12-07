@@ -22,14 +22,8 @@ class HundredScene: BaseGameScene {
     var decreaseRate: CGFloat = 4
     var timer: Timer?
     
-    var targetMinValue: CGFloat {
-        let skillBoost = MenuScene.getStat(key: GameConstants.StringConstants.skillKey)
-        return 60 - (CGFloat(skillBoost) / 6.0)
-    }
-    var targetMaxValue: CGFloat {
-        let skillBoost = MenuScene.getStat(key: GameConstants.StringConstants.skillKey)
-        return 80 + (CGFloat(skillBoost) / 6.0)
-    }
+    var targetMinValue: CGFloat = 0.0
+    var targetMaxValue: CGFloat = 0.0
     
     var targetMinIndicator: SKSpriteNode!
     var targetMaxIndicator: SKSpriteNode!
@@ -79,6 +73,10 @@ class HundredScene: BaseGameScene {
         
         playerSkill = MenuScene.getStat(key: GameConstants.StringConstants.skillKey)
         playerSpeed = MenuScene.getStat(key: GameConstants.StringConstants.speedKey)
+        
+        targetMinValue = 60 - (CGFloat(playerSkill) / 6.0)
+        
+        targetMaxValue = 80 + (CGFloat(playerSkill) / 6.0)
         
         // running bar
         progressBar = SKSpriteNode(color: .red, size: CGSize(width: 300, height: 20))
@@ -284,8 +282,7 @@ class HundredScene: BaseGameScene {
     }
     
     func adjustSpeed() {
-        let speedBoost = MenuScene.getStat(key: GameConstants.StringConstants.speedKey)
-        let baseMultiplier = 1.0 + (speedBoost / 100.0)
+        let baseMultiplier = 1.0 + (playerSpeed / 100.0)
 
         if currentValue == 0 {
             characterSpeed = 0
