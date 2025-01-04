@@ -109,6 +109,9 @@ struct GameConstants {
         static let isFirstTimeKey = "firstTime"
         
         static let countryKey = "playerCountry"
+        
+        static let hundredDifficultyKey = "hundredDifficulty"
+        static let javelinDifficultyKey = "javelinDifficulty"
     }
 }
 

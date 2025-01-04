@@ -22,6 +22,7 @@
 		324571412C8C83D7007A3AC7 /* CSGameProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324571402C8C83D7007A3AC7 /* CSGameProjectTests.swift */; };
 		3245714B2C8C83D7007A3AC7 /* CSGameProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245714A2C8C83D7007A3AC7 /* CSGameProjectUITests.swift */; };
 		3245714D2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */; };
+		324A5C2D2D28B83700984F98 /* DifficultySystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324A5C2C2D28B83700984F98 /* DifficultySystem.swift */; };
 		325250642CB0484C00CCC726 /* Competitors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325250632CB0484C00CCC726 /* Competitors.swift */; };
 		3265059E2CC324050044CBB0 /* Coaches.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3265059D2CC324050044CBB0 /* Coaches.swift */; };
 		32A2C6582C9A1BFE00294609 /* ObjectHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A2C6572C9A1BFE00294609 /* ObjectHelper.swift */; };
@@ -74,6 +75,7 @@
 		324571462C8C83D7007A3AC7 /* CSGameProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSGameProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3245714A2C8C83D7007A3AC7 /* CSGameProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameProjectUITests.swift; sourceTree = "<group>"; };
 		3245714C2C8C83D7007A3AC7 /* CSGameProjectUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CSGameProjectUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		324A5C2C2D28B83700984F98 /* DifficultySystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DifficultySystem.swift; sourceTree = "<group>"; };
 		325250632CB0484C00CCC726 /* Competitors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Competitors.swift; sourceTree = "<group>"; };
 		3265059D2CC324050044CBB0 /* Coaches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coaches.swift; sourceTree = "<group>"; };
 		32A2C6572C9A1BFE00294609 /* ObjectHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectHelper.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				32CFA2FA2CBB28F40041929C /* ProgressBar.swift */,
 				3265059D2CC324050044CBB0 /* Coaches.swift */,
 				32A629602D01160600314802 /* Country Flags.swift */,
+				324A5C2C2D28B83700984F98 /* DifficultySystem.swift */,
 			);
 			path = "Custom Classes";
 			sourceTree = "<group>";
@@ -399,6 +402,7 @@
 				32CFA2FD2CBFD2810041929C /* JavelinScene.swift in Sources */,
 				3245712D2C8C83D4007A3AC7 /* HundredScene.swift in Sources */,
 				32A629612D01160600314802 /* Country Flags.swift in Sources */,
+				324A5C2D2D28B83700984F98 /* DifficultySystem.swift in Sources */,
 				321F1A032C91AFDF006AA50F /* GameConstants.swift in Sources */,
 				32A2C6582C9A1BFE00294609 /* ObjectHelper.swift in Sources */,
 				32C8051E2CE10E320049B33E /* BaseGameScene.swift in Sources */,

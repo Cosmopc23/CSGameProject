@@ -13,12 +13,8 @@ class FlagNode: SKSpriteNode {
         super.init(texture: nil, color: .clear, size: size)
         
         switch country {
-        case "GB": 
-            print("Creating GB flag")
-            createGBFlag()
-        case "FR":
-            createFRFlag()
-            print("Creating FR flag")
+        case "GB": createGBFlag()
+        case "FR": createFRFlag()
         case "DE": createGermanyFlag()
         case "IT": createItalyFlag()
         case "US": createUSFlag()

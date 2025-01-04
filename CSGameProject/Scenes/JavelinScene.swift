@@ -55,10 +55,13 @@ class JavelinScene: BaseGameScene {
     private var speedLockLabel: SKLabelNode?
     private var angleBorder: SKShapeNode?
     
-    convenience init(size: CGSize, numberOfThrows: Int = 0, previousThrows: [Double] = []) {
+    var difficulty: RaceDifficulty = .intermediate
+    
+    convenience init(size: CGSize, numberOfThrows: Int = 0, previousThrows: [Double] = [], difficulty: RaceDifficulty = .intermediate) {
         self.init(size: size)
         self.timesThrown = numberOfThrows
         self.playerThrows = previousThrows
+        self.difficulty = difficulty
     }
     
     var gameState = JavelinGameState.ready {
@@ -284,7 +287,7 @@ class JavelinScene: BaseGameScene {
             let newX = angleBar.position.x - (angleBar.size.width/2) + (angleBar.size.width * progress)
             angleIndicator.position.x = newX
             
-            print(progress)
+//            print(progress)
         }
     }
     
@@ -294,13 +297,20 @@ class JavelinScene: BaseGameScene {
     }
     
     func generateCompetitorThrow() {
-        let Competitor1Distance = generateRandomDistance()
-        let Competitor2Distance = generateRandomDistance()
-        let Competitor3Distance = generateRandomDistance()
+//        let Competitor1Distance = generateRandomDistance()
+//        let Competitor2Distance = generateRandomDistance()
+//        let Competitor3Distance = generateRandomDistance()
         
-        print("Competitor 1 Distance: \(Competitor1Distance) m")
-        print("Competitor 2 Distance: \(Competitor2Distance) m")
-        print("Competitor 3 Distance: \(Competitor3Distance) m")
+        let Competitor1Distance = DifficultyManager.generateCompetitorThrow(self, for: difficulty)
+        let Competitor2Distance = DifficultyManager.generateCompetitorThrow(self, for: difficulty)
+        let Competitor3Distance = DifficultyManager.generateCompetitorThrow(self, for: difficulty)
+        
+        print("\n=== JAVELIN THROW DEBUG ===")
+        print("Current Difficulty: \(difficulty)")
+        print("Competitor 1 Distance: \(String(format: "%.2f", Competitor1Distance))m")
+        print("Competitor 2 Distance: \(String(format: "%.2f", Competitor2Distance))m")
+        print("Competitor 3 Distance: \(String(format: "%.2f", Competitor3Distance))m")
+        print("========================\n")
         
         distances[GameConstants.StringConstants.competitor1Name] = Competitor1Distance
         distances[GameConstants.StringConstants.competitor2Name] = Competitor2Distance
@@ -400,7 +410,7 @@ class JavelinScene: BaseGameScene {
                 returnToMenu()
             } else if nodeAtPoint.name == "resetLabel" {
                 let transition = SKTransition.fade(withDuration: 1.0)
-                let scene = JavelinScene(size: self.size, numberOfThrows: self.timesThrown, previousThrows: self.playerThrows)
+                let scene = JavelinScene(size: self.size, numberOfThrows: self.timesThrown, previousThrows: self.playerThrows, difficulty: self.difficulty)
                 scene.scaleMode = .aspectFill
                 self.view?.presentScene(scene, transition: transition)
             } else if nodeAtPoint.name == "continue" {

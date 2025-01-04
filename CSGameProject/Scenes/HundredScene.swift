@@ -46,6 +46,8 @@ class HundredScene: BaseGameScene {
     
     var touch = false
     
+    var difficulty: RaceDifficulty = .intermediate
+    
     var gameState = HundredGameState.ready {
         willSet {
             switch newValue {
@@ -66,6 +68,11 @@ class HundredScene: BaseGameScene {
                 competitor3.state = .idle
             }
         }
+    }
+    
+    convenience init(size: CGSize, difficulty: RaceDifficulty = .intermediate) {
+        self.init(size: size)
+        self.difficulty = difficulty
     }
     
     override func didMove(to view: SKView) {
@@ -110,6 +117,18 @@ class HundredScene: BaseGameScene {
         addCompetitor1()
         addCompetitor2()
         addCompetitor3()
+        
+        DifficultyManager.configureCompetitors(self, for: difficulty)
+        
+        
+        print("\n=== 100M RACE DEBUG ===")
+        print("Current Difficulty: \(difficulty)")
+        print("Competitor 1 - Speed: \(String(format: "%.2f", competitor1.competitor1TopSpeed)), Acceleration: \(String(format: "%.2f", competitor1.competitor1Acceleration))")
+        print("Competitor 2 - Speed: \(String(format: "%.2f", competitor2.competitor2TopSpeed)), Acceleration: \(String(format: "%.2f", competitor2.competitor2Acceleration))")
+        print("Competitor 3 - Speed: \(String(format: "%.2f", competitor3.competitor3TopSpeed)), Acceleration: \(String(format: "%.2f", competitor3.competitor3Acceleration))")
+        print("=====================\n")
+        
+        
     }
     
     func addPlayer() {
@@ -137,11 +156,6 @@ class HundredScene: BaseGameScene {
         competitor1.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         competitor1.competitor1Speed = 0.0
-        competitor1.competitor1Acceleration = CGFloat.random(in: 5...10)
-        competitor1.competitor1TopSpeed = CGFloat.random(in: 73...90)
-        
-        competitor1.competitor1Acceleration = CGFloat(10)
-        competitor1.competitor1Speed = CGFloat(90)
         
         competitor1.loadTextures()
         competitor1.state = .idle
@@ -159,11 +173,6 @@ class HundredScene: BaseGameScene {
         competitor2.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         competitor2.competitor2Speed = 0.0
-        competitor2.competitor2Acceleration = CGFloat.random(in: 5...10)
-        competitor2.competitor2TopSpeed = CGFloat.random(in: 73...90)
-        
-        competitor2.competitor2Acceleration = CGFloat(5)
-        competitor2.competitor2Speed = CGFloat(73)
         
         
         competitor2.loadTextures()
@@ -182,8 +191,6 @@ class HundredScene: BaseGameScene {
         competitor3.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         competitor3.competitor3Speed = 0.0
-        competitor3.competitor3Acceleration = CGFloat.random(in: 5...10)
-        competitor3.competitor3TopSpeed = CGFloat.random(in: 73...90)
         
         competitor3.loadTextures()
         competitor3.state = .idle
@@ -413,7 +420,12 @@ class HundredScene: BaseGameScene {
             }
             
             if finishers == 4 {
-                print("Finish")
+                print("\n=== RACE FINISH TIMES ===")
+                print("Current Difficulty: \(difficulty)")
+                for (name, time) in finishTimes.sorted(by: { $0.value < $1.value }) {
+                    print("\(name): \(abs(time)) seconds")
+                }
+                print("=====================\n")
                 handleFinish()
             }
         }

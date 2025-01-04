@@ -57,7 +57,6 @@ class MenuScene: SKScene {
     
     var previousTouchPositionY: CGFloat? = CGFloat(0)
     
-    var difficulty: Int = 1
     
     let backgroundTexture: SKTexture? = SKTexture(imageNamed: "background")
     
@@ -70,6 +69,9 @@ class MenuScene: SKScene {
     var countryFlag: FlagNode!
     
     var playerCountry: String = "BR"
+    
+    
+    var difficulty: Int = 1
     
     
     convenience init(size: CGSize, difficulty: Int) {
@@ -180,11 +182,11 @@ class MenuScene: SKScene {
         
         if node.name == GameConstants.StringConstants.hundredLinker {
             let transition = SKTransition.fade(withDuration: 1.0)
-            let gameScene = HundredScene(size: self.size)
+            let gameScene = HundredScene(size: self.size, difficulty: .beginner)
             view?.presentScene(gameScene, transition: transition)
         } else if node.name == GameConstants.StringConstants.javelinLinker {
             let transition = SKTransition.fade(withDuration: 1.0)
-            let gameScene = JavelinScene(size: self.size)
+            let gameScene = JavelinScene(size: self.size, numberOfThrows: 0, previousThrows: [], difficulty: .elite)
             view?.presentScene(gameScene, transition: transition)
         } else if node.name == "trainingButton" {
             showLayer(trainingLayer)
@@ -389,7 +391,7 @@ class MenuScene: SKScene {
         nameLabel.position = CGPoint(x: frame.minX + xBuffer, y: frame.maxY - yBuffer * 15/2)
         nameLabel.fontSize = 12
         nameLabel.fontName = "Helvetica-Bold"
-        nameLabel.fontColor = .black
+        nameLabel.fontColor = .white
         outerLayer.addChild(nameLabel)
         
         speedProgressBar = SKSpriteNode(color: .blue, size: CGSize(width: 150, height: 15))
@@ -405,7 +407,7 @@ class MenuScene: SKScene {
         let titleLabel = SKLabelNode(text: "Olympics Game")
         titleLabel.fontName = "Helvetica-Bold"
         titleLabel.fontSize = 40
-        titleLabel.fontColor = .black
+        titleLabel.fontColor = .white
         titleLabel.position = CGPoint(x: frame.midX, y: frame.midY + 150)
         outerLayer.addChild(titleLabel)
     
@@ -413,7 +415,7 @@ class MenuScene: SKScene {
         let balanceLabel = SKLabelNode(text: "Balance: \(MenuScene.getBankBalance()) ")
         balanceLabel.fontName = "Helvetica-Bold"
         balanceLabel.fontSize = 15
-        balanceLabel.fontColor = .black
+        balanceLabel.fontColor = .white
         balanceLabel.zPosition = GameConstants.zPositions.topZ + 100
         balanceLabel.position = CGPoint(x: frame.minX + xBuffer, y: frame.maxY - yBuffer)
         
@@ -584,16 +586,16 @@ class MenuScene: SKScene {
         
         let coachText = "\(currentCoach.name)\n Speed Boost: \(currentCoach.speedBoost)\n Skill Boost: \(currentCoach.skillBoost) \n StrengthBoost: \(currentCoach.strengthBoost)"
         let coachDetailNode = createMultilineLabel(text: coachText, fontSize: 12, position: CGPoint(x: frame.midX, y: frame.midY + 65))
-        coachDetailNode.zPosition = GameConstants.zPositions.hudZ - 0.1
+        coachDetailNode.zPosition = GameConstants.zPositions.hudZ
         trainingLayer.addChild(coachDetailNode)
         
         
         let borderCoach = SKShapeNode(rectOf: CGSize(width: 130+borderWidth, height: 60+borderWidth), cornerRadius: 2.0)
         borderCoach.strokeColor = .black
         borderCoach.lineWidth = borderWidth
-        borderCoach.fillColor = .clear
+        borderCoach.fillColor = .white
         borderCoach.position = CGPoint(x: frame.midX, y: frame.midY + 50)
-        borderCoach.zPosition = GameConstants.zPositions.hudZ
+        borderCoach.zPosition = GameConstants.zPositions.hudZ - 0.1
         borderCoach.name = "coachDetailNode"
         trainingLayer.addChild(borderCoach)
         
@@ -609,15 +611,15 @@ class MenuScene: SKScene {
         
         let sponsorText = "\(currentSponsor.name)\n Reputation Required: \(currentSponsor.reputationRequirement)\n Contract Length: \(currentSponsor.lengthOfContract)\n Reward Multiplier: \(currentSponsor.rewardMultiplier)"
         let sponsorDetailNode = createMultilineLabel(text: sponsorText, fontSize: 12, position: CGPoint(x: frame.midX, y: frame.midY + 65))
-        sponsorDetailNode.zPosition = GameConstants.zPositions.hudZ - 0.1
+        sponsorDetailNode.zPosition = GameConstants.zPositions.hudZ
         sponsorshipLayer.addChild(sponsorDetailNode)
         
         let borderSponsor = SKShapeNode(rectOf: CGSize(width: 150+borderWidth, height: 60+borderWidth), cornerRadius: 2.0)
         borderSponsor.lineWidth = borderWidth
-        borderSponsor.fillColor = .clear
+        borderSponsor.fillColor = .white
         borderSponsor.strokeColor = .black
         borderSponsor.position = CGPoint(x: frame.midX, y: frame.midY + 50)
-        borderSponsor.zPosition = GameConstants.zPositions.hudZ
+        borderSponsor.zPosition = GameConstants.zPositions.hudZ - 0.1
         borderSponsor.name = "sponsorDetailNode"
         sponsorshipLayer.addChild(borderSponsor)
         
@@ -873,7 +875,7 @@ class MenuScene: SKScene {
         let finishedLabel = SKLabelNode(text: label)
         finishedLabel.fontName = "Helvetica-Bold"
         finishedLabel.fontSize = 15
-        finishedLabel.fontColor = .black
+        finishedLabel.fontColor = .white
         finishedLabel.position = CGPoint(x: positionX, y: positionY)
         finishedLabel.zPosition = GameConstants.zPositions.topZ
         
