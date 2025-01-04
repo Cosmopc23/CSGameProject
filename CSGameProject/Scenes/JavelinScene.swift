@@ -57,11 +57,23 @@ class JavelinScene: BaseGameScene {
     
     var difficulty: RaceDifficulty = .intermediate
     
-    convenience init(size: CGSize, numberOfThrows: Int = 0, previousThrows: [Double] = [], difficulty: RaceDifficulty = .intermediate) {
+    var playerStrength: Double = 10.0
+    var playerSkill: Double = 10.0
+    
+    convenience init(size: CGSize, numberOfThrows: Int = 0, previousThrows: [Double] = [], difficulty: RaceDifficulty = .intermediate, strength: Double = 10.0, skill: Double = 10.0) {
         self.init(size: size)
         self.timesThrown = numberOfThrows
         self.playerThrows = previousThrows
         self.difficulty = difficulty
+        self.playerStrength = strength
+        self.playerSkill = skill
+    
+        
+        // Adjust angleSwingSpeed based on skill
+        // At 80 skill (current), speed is 2.0
+        // At 100 skill, speed will be 1.2 (much easier to time)
+        // At 0 skill, speed will be 4.0 (much harder to time)
+        self.angleSwingSpeed = 4.0 - (skill / 100.0 * 2.8)
     }
     
     var gameState = JavelinGameState.ready {
@@ -248,7 +260,12 @@ class JavelinScene: BaseGameScene {
         throwStartPosition = player.position
         virtualPositionX = 0
         
-        initialVelocity = lockedValue
+        // Modify initial velocity based on strength
+        // At 80 strength (current), velocity is lockedValue
+        // At 100 strength, velocity should be 25% higher
+        // At 0 strength, velocity should be 50% lower
+        let strengthMultiplier = 0.5 + (playerStrength / 100.0 * 0.75)
+        initialVelocity = lockedValue * CGFloat(strengthMultiplier)
         
         javelinSprite.isHidden = false
         javelinSprite.position = CGPoint(x: player.position.x + 30, y: player.position.y + 20)
@@ -410,7 +427,7 @@ class JavelinScene: BaseGameScene {
                 returnToMenu()
             } else if nodeAtPoint.name == "resetLabel" {
                 let transition = SKTransition.fade(withDuration: 1.0)
-                let scene = JavelinScene(size: self.size, numberOfThrows: self.timesThrown, previousThrows: self.playerThrows, difficulty: self.difficulty)
+                let scene = JavelinScene(size: self.size, numberOfThrows: self.timesThrown, previousThrows: self.playerThrows, difficulty: self.difficulty, strength: self.playerStrength, skill: self.playerSkill)
                 scene.scaleMode = .aspectFill
                 self.view?.presentScene(scene, transition: transition)
             } else if nodeAtPoint.name == "continue" {

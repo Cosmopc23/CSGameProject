@@ -81,7 +81,8 @@ class MenuScene: SKScene {
     
     
     override func didMove(to view: SKView) {
-//        MenuScene.saveBankBalance(10000)
+        // FOR TESTING
+        MenuScene.saveBankBalance(10000)
         
         let backgroundTexture = SKTexture(imageNamed: "background")
         let background = SKSpriteNode(texture: backgroundTexture)
@@ -186,7 +187,7 @@ class MenuScene: SKScene {
             view?.presentScene(gameScene, transition: transition)
         } else if node.name == GameConstants.StringConstants.javelinLinker {
             let transition = SKTransition.fade(withDuration: 1.0)
-            let gameScene = JavelinScene(size: self.size, numberOfThrows: 0, previousThrows: [], difficulty: .elite)
+            let gameScene = JavelinScene(size: self.size, numberOfThrows: 0, previousThrows: [], difficulty: .intermediate, strength: strengthCurrentValue, skill: skillCurrentValue)
             view?.presentScene(gameScene, transition: transition)
         } else if node.name == "trainingButton" {
             showLayer(trainingLayer)
@@ -584,11 +585,6 @@ class MenuScene: SKScene {
         }
         currentCoach = coaches[getCurrentCoachIndex() ?? 0]
         
-        let coachText = "\(currentCoach.name)\n Speed Boost: \(currentCoach.speedBoost)\n Skill Boost: \(currentCoach.skillBoost) \n StrengthBoost: \(currentCoach.strengthBoost)"
-        let coachDetailNode = createMultilineLabel(text: coachText, fontSize: 12, position: CGPoint(x: frame.midX, y: frame.midY + 65))
-        coachDetailNode.zPosition = GameConstants.zPositions.hudZ
-        trainingLayer.addChild(coachDetailNode)
-        
         
         let borderCoach = SKShapeNode(rectOf: CGSize(width: 130+borderWidth, height: 60+borderWidth), cornerRadius: 2.0)
         borderCoach.strokeColor = .black
@@ -598,6 +594,12 @@ class MenuScene: SKScene {
         borderCoach.zPosition = GameConstants.zPositions.hudZ - 0.1
         borderCoach.name = "coachDetailNode"
         trainingLayer.addChild(borderCoach)
+        
+        let coachText = "\(currentCoach.name)\n Speed Boost: \(currentCoach.speedBoost)\n Skill Boost: \(currentCoach.skillBoost) \n StrengthBoost: \(currentCoach.strengthBoost)"
+        let coachDetailNode = createMultilineLabel(text: coachText, fontSize: 12, position: CGPoint(x: frame.midX, y: frame.midY + 65))
+        coachDetailNode.zPosition = GameConstants.zPositions.hudZ
+        coachDetailNode.isUserInteractionEnabled = false
+        trainingLayer.addChild(coachDetailNode)
         
         
         setupScrollableArea()
@@ -609,10 +611,6 @@ class MenuScene: SKScene {
         }
         currentSponsor = sponsors[getCurrentSponsorIndex() ?? 0]
         
-        let sponsorText = "\(currentSponsor.name)\n Reputation Required: \(currentSponsor.reputationRequirement)\n Contract Length: \(currentSponsor.lengthOfContract)\n Reward Multiplier: \(currentSponsor.rewardMultiplier)"
-        let sponsorDetailNode = createMultilineLabel(text: sponsorText, fontSize: 12, position: CGPoint(x: frame.midX, y: frame.midY + 65))
-        sponsorDetailNode.zPosition = GameConstants.zPositions.hudZ
-        sponsorshipLayer.addChild(sponsorDetailNode)
         
         let borderSponsor = SKShapeNode(rectOf: CGSize(width: 150+borderWidth, height: 60+borderWidth), cornerRadius: 2.0)
         borderSponsor.lineWidth = borderWidth
@@ -622,6 +620,12 @@ class MenuScene: SKScene {
         borderSponsor.zPosition = GameConstants.zPositions.hudZ - 0.1
         borderSponsor.name = "sponsorDetailNode"
         sponsorshipLayer.addChild(borderSponsor)
+        
+        let sponsorText = "\(currentSponsor.name)\n Reputation Required: \(currentSponsor.reputationRequirement)\n Contract Length: \(currentSponsor.lengthOfContract)\n Reward Multiplier: \(currentSponsor.rewardMultiplier)"
+        let sponsorDetailNode = createMultilineLabel(text: sponsorText, fontSize: 12, position: CGPoint(x: frame.midX, y: frame.midY + 65))
+        sponsorDetailNode.zPosition = GameConstants.zPositions.hudZ
+        sponsorDetailNode.isUserInteractionEnabled = false
+        sponsorshipLayer.addChild(sponsorDetailNode)
         
         setupScrollableSponsors()
     }

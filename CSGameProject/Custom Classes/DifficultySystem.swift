@@ -76,15 +76,15 @@ enum RaceDifficulty: Int {
     private var javelinParameters: JavelinParams {
         switch self {
         case .elite:
-            return JavelinParams(distanceRange: 85...90)
+            return JavelinParams(distanceRange: 110...125)
         case .professional:
-            return JavelinParams(distanceRange: 75...80)
+            return JavelinParams(distanceRange: 95...105)
         case .intermediate:
-            return JavelinParams(distanceRange: 65...70)
+            return JavelinParams(distanceRange: 80...90)
         case .amateur:
-            return JavelinParams(distanceRange: 55...60)
+            return JavelinParams(distanceRange: 65...75)
         case .beginner:
-            return JavelinParams(distanceRange: 45...50)
+            return JavelinParams(distanceRange: 50...60)
         }
     }
 }
