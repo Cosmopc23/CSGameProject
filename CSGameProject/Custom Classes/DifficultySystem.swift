@@ -22,7 +22,7 @@ struct JavelinParams {
     let distanceRange: ClosedRange<Double>
 }
 
-enum RaceDifficulty: Int {
+enum Difficulty: Int {
     case beginner = 1
     case amateur = 2
     case intermediate = 3
@@ -91,7 +91,7 @@ enum RaceDifficulty: Int {
 
 
 class DifficultyManager {
-    static func configureCompetitors(_ scene: HundredScene, for difficulty: RaceDifficulty) {
+    static func configureCompetitors(_ scene: HundredScene, for difficulty: Difficulty) {
         guard let params = difficulty.parameters(for: .hundred) as? HundredParams else { return }
         
         scene.competitor1.competitor1TopSpeed = CGFloat.random(in: params.topSpeedRange)
@@ -104,7 +104,7 @@ class DifficultyManager {
         scene.competitor3.competitor3Acceleration = CGFloat.random(in: params.accelerationRange)
     }
     
-    static func generateCompetitorThrow(_ scene: JavelinScene, for difficulty: RaceDifficulty) -> Double {
+    static func generateCompetitorThrow(_ scene: JavelinScene, for difficulty: Difficulty) -> Double {
         guard let params = difficulty.parameters(for: .javelin) as? JavelinParams else { return 0 }
         return Double.random(in: params.distanceRange).rounded(to: 2)
     }

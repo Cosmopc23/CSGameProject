@@ -46,7 +46,7 @@ class HundredScene: BaseGameScene {
     
     var touch = false
     
-    var difficulty: RaceDifficulty = .intermediate
+    var difficulty: Difficulty = .intermediate
     
     var gameState = HundredGameState.ready {
         willSet {
@@ -70,7 +70,7 @@ class HundredScene: BaseGameScene {
         }
     }
     
-    convenience init(size: CGSize, difficulty: RaceDifficulty = .intermediate, skill: Double = 10.0, speed: Double = 10.0) {
+    convenience init(size: CGSize, difficulty: Difficulty = .intermediate, skill: Double = 10.0, speed: Double = 10.0) {
         self.init(size: size)
         self.difficulty = difficulty
         self.playerSkill = skill

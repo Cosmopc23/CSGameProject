@@ -55,12 +55,12 @@ class JavelinScene: BaseGameScene {
     private var speedLockLabel: SKLabelNode?
     private var angleBorder: SKShapeNode?
     
-    var difficulty: RaceDifficulty = .intermediate
+    var difficulty: Difficulty = .intermediate
     
     var playerStrength: Double = 10.0
     var playerSkill: Double = 10.0
     
-    convenience init(size: CGSize, numberOfThrows: Int = 0, previousThrows: [Double] = [], difficulty: RaceDifficulty = .intermediate, strength: Double = 10.0, skill: Double = 10.0) {
+    convenience init(size: CGSize, numberOfThrows: Int = 0, previousThrows: [Double] = [], difficulty: Difficulty = .intermediate, strength: Double = 10.0, skill: Double = 10.0) {
         self.init(size: size)
         self.timesThrown = numberOfThrows
         self.playerThrows = previousThrows

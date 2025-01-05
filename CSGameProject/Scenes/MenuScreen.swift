@@ -82,7 +82,7 @@ class MenuScene: SKScene {
     
     override func didMove(to view: SKView) {
         // FOR TESTING
-        MenuScene.saveBankBalance(10000)
+//        MenuScene.saveBankBalance(10000)
         
         let backgroundTexture = SKTexture(imageNamed: "background")
         let background = SKSpriteNode(texture: backgroundTexture)
@@ -183,11 +183,13 @@ class MenuScene: SKScene {
         
         if node.name == GameConstants.StringConstants.hundredLinker {
             let transition = SKTransition.fade(withDuration: 1.0)
-            let gameScene = HundredScene(size: self.size, difficulty: .elite, skill: skillCurrentValue, speed: speedCurrentValue)
+            // let gameScene = HundredScene(size: self.size, difficulty: .elite, skill: skillCurrentValue, speed: speedCurrentValue)
+            let gameScene = DifficultySelector(size: self.size, event: "Hundred", skill: skillCurrentValue, strength: strengthCurrentValue, speed: speedCurrentValue)
             view?.presentScene(gameScene, transition: transition)
         } else if node.name == GameConstants.StringConstants.javelinLinker {
             let transition = SKTransition.fade(withDuration: 1.0)
-            let gameScene = JavelinScene(size: self.size, numberOfThrows: 0, previousThrows: [], difficulty: .intermediate, strength: strengthCurrentValue, skill: skillCurrentValue)
+//            let gameScene = JavelinScene(size: self.size, numberOfThrows: 0, previousThrows: [], difficulty: .intermediate, strength: strengthCurrentValue, skill: skillCurrentValue)
+            let gameScene = DifficultySelector(size: self.size, event: "Javelin", skill: skillCurrentValue, strength: strengthCurrentValue, speed: speedCurrentValue)
             view?.presentScene(gameScene, transition: transition)
         } else if node.name == "trainingButton" {
             showLayer(trainingLayer)
