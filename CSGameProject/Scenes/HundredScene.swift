@@ -70,20 +70,20 @@ class HundredScene: BaseGameScene {
         }
     }
     
-    convenience init(size: CGSize, difficulty: RaceDifficulty = .intermediate) {
+    convenience init(size: CGSize, difficulty: RaceDifficulty = .intermediate, skill: Double = 10.0, speed: Double = 10.0) {
         self.init(size: size)
         self.difficulty = difficulty
+        self.playerSkill = skill
+        self.playerSpeed = speed
     }
     
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
-        playerSkill = MenuScene.getStat(key: GameConstants.StringConstants.skillKey)
-        playerSpeed = MenuScene.getStat(key: GameConstants.StringConstants.speedKey)
         
-        targetMinValue = 60 - (CGFloat(playerSkill) / 6.0)
+        targetMinValue = 65 - (CGFloat(playerSkill) / 20.0)
         
-        targetMaxValue = 80 + (CGFloat(playerSkill) / 6.0)
+        targetMaxValue = 75 + (CGFloat(playerSkill) / 20.0)
         
         // running bar
         progressBar = SKSpriteNode(color: .red, size: CGSize(width: 300, height: 20))
@@ -289,30 +289,31 @@ class HundredScene: BaseGameScene {
     }
     
     func adjustSpeed() {
-        let baseMultiplier = 1.0 + (playerSpeed / 100.0)
-
+        
+        let speedMultiplier = (playerSpeed / 100.0) + 1.1
+        
         if currentValue == 0 {
             characterSpeed = 0
         } else if currentValue < targetMinValue * 0.2 {
-            characterSpeed = 10.0 * baseMultiplier
+            characterSpeed = 15.0 * speedMultiplier
         } else if currentValue < targetMinValue * 0.4 {
-            characterSpeed = 20.0 * baseMultiplier
+            characterSpeed = 20.0 * speedMultiplier
         } else if currentValue < targetMinValue * 0.6 {
-            characterSpeed = 30.0 * baseMultiplier
+            characterSpeed = 25.0 * speedMultiplier
         } else if currentValue < targetMinValue * 0.8 {
-            characterSpeed = 40.0 * baseMultiplier
+            characterSpeed = 30.0 * speedMultiplier
         } else if currentValue < targetMinValue {
-            characterSpeed = 50.0 * baseMultiplier
+            characterSpeed = 35.0 * speedMultiplier
         } else if currentValue < (targetMinValue + (targetMaxValue - targetMinValue) * 0.33) {
-            characterSpeed = 60.0 * baseMultiplier
+            characterSpeed = 40.0 * speedMultiplier
         } else if currentValue < (targetMinValue + (targetMaxValue - targetMinValue) * 0.66) {
-            characterSpeed = 70.0 * baseMultiplier
+            characterSpeed = 45.0 * speedMultiplier
         } else if currentValue <= targetMaxValue {
-            characterSpeed = 80.0 * baseMultiplier
+            characterSpeed = 50.0 * speedMultiplier
         } else if currentValue <= maxValue * 0.9 {
-            characterSpeed = 40.0 * baseMultiplier
+            characterSpeed = 30.0 * speedMultiplier
         } else {
-            characterSpeed = 20.0 * baseMultiplier
+            characterSpeed = 20.0 * speedMultiplier
         }
     }
     

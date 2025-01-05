@@ -183,7 +183,7 @@ class MenuScene: SKScene {
         
         if node.name == GameConstants.StringConstants.hundredLinker {
             let transition = SKTransition.fade(withDuration: 1.0)
-            let gameScene = HundredScene(size: self.size, difficulty: .beginner)
+            let gameScene = HundredScene(size: self.size, difficulty: .elite, skill: skillCurrentValue, speed: speedCurrentValue)
             view?.presentScene(gameScene, transition: transition)
         } else if node.name == GameConstants.StringConstants.javelinLinker {
             let transition = SKTransition.fade(withDuration: 1.0)
