@@ -46,7 +46,7 @@ class DifficultySelector: SKScene {
         //BEGINNER
         let beginnerButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
         beginnerButton.name = "beginnerButton"
-        beginnerButton.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
+        beginnerButton.position = CGPoint(x: frame.midX, y: frame.midY + 100)
         beginnerButton.zPosition = GameConstants.zPositions.hudZ
         addChild(beginnerButton)
         
@@ -54,16 +54,25 @@ class DifficultySelector: SKScene {
         borderBeginner.strokeColor = .black
         borderBeginner.lineWidth = borderWidth
         borderBeginner.fillColor = .clear
-        borderBeginner.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
-        borderBeginner.zPosition = GameConstants.zPositions.hudZ - 0.1
+        borderBeginner.position = CGPoint(x: frame.midX, y: frame.midY + 100)
+        borderBeginner.zPosition = GameConstants.zPositions.hudZ + 0.1
+        borderBeginner.isUserInteractionEnabled = false
         
         addChild(borderBeginner)
+        
+        let beginnerLabel = SKLabelNode(text: "Beginner")
+        beginnerLabel.fontName = "Helvetica-Bold"
+        beginnerLabel.fontColor = .black
+        beginnerLabel.fontSize = 12
+        beginnerLabel.verticalAlignmentMode = .center
+        beginnerLabel.position = CGPoint(x: 0, y: 0)
+        borderBeginner.addChild(beginnerLabel)
         
         
         //AMATEUR
         let amateurButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
         amateurButton.name = "amateurButton"
-        amateurButton.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
+        amateurButton.position = CGPoint(x: frame.midX, y: frame.midY + 50 )
         amateurButton.zPosition = GameConstants.zPositions.hudZ
         addChild(amateurButton)
         
@@ -71,16 +80,25 @@ class DifficultySelector: SKScene {
         borderAmateur.strokeColor = .black
         borderAmateur.lineWidth = borderWidth
         borderAmateur.fillColor = .clear
-        borderAmateur.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
-        borderAmateur.zPosition = GameConstants.zPositions.hudZ - 0.1
+        borderAmateur.position = CGPoint(x: frame.midX, y: frame.midY + 50)
+        borderAmateur.zPosition = GameConstants.zPositions.hudZ + 0.1
+        borderAmateur.isUserInteractionEnabled = false
         
         addChild(borderAmateur)
+        
+        let amateurLabel = SKLabelNode(text: "Amateur")
+        amateurLabel.fontName = "Helvetica-Bold"
+        amateurLabel.fontColor = .black
+        amateurLabel.fontSize = 12
+        amateurLabel.verticalAlignmentMode = .center
+        amateurLabel.position = CGPoint(x: 0, y: 0)
+        borderAmateur.addChild(amateurLabel)
         
         
         //INTERMEDIATE
         let interButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
         interButton.name = "interButton"
-        interButton.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
+        interButton.position = CGPoint(x: frame.midX, y: frame.midY)
         interButton.zPosition = GameConstants.zPositions.hudZ
         addChild(interButton)
         
@@ -88,16 +106,25 @@ class DifficultySelector: SKScene {
         borderInter.strokeColor = .black
         borderInter.lineWidth = borderWidth
         borderInter.fillColor = .clear
-        borderInter.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
-        borderInter.zPosition = GameConstants.zPositions.hudZ - 0.1
+        borderInter.position = CGPoint(x: frame.midX, y: frame.midY)
+        borderInter.zPosition = GameConstants.zPositions.hudZ + 0.1
+        borderInter.isUserInteractionEnabled = false
         
         addChild(borderInter)
+        
+        let interLabel = SKLabelNode(text: "Intermediate")
+        interLabel.fontName = "Helvetica-Bold"
+        interLabel.fontColor = .black
+        interLabel.fontSize = 12
+        interLabel.verticalAlignmentMode = .center
+        interLabel.position = CGPoint(x: 0, y: 0)
+        borderInter.addChild(interLabel)
         
         
         //PROFESSIONAL
         let proButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
         proButton.name = "proButton"
-        proButton.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
+        proButton.position = CGPoint(x: frame.midX, y: frame.midY - 50)
         proButton.zPosition = GameConstants.zPositions.hudZ
         addChild(proButton)
         
@@ -105,16 +132,25 @@ class DifficultySelector: SKScene {
         borderPro.strokeColor = .black
         borderPro.lineWidth = borderWidth
         borderPro.fillColor = .clear
-        borderPro.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
-        borderPro.zPosition = GameConstants.zPositions.hudZ - 0.1
+        borderPro.position = CGPoint(x: frame.midX, y: frame.midY - 50)
+        borderPro.zPosition = GameConstants.zPositions.hudZ + 0.1
+        borderPro.isUserInteractionEnabled = false
         
         addChild(borderPro)
+        
+        let proLabel = SKLabelNode(text: "Professional")
+        proLabel.fontName = "Helvetica-Bold"
+        proLabel.fontColor = .black
+        proLabel.fontSize = 12
+        proLabel.verticalAlignmentMode = .center
+        proLabel.position = CGPoint(x: 0, y: 0)
+        borderPro.addChild(proLabel)
         
         
         //ELITE
         let eliteButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
         eliteButton.name = "eliteButton"
-        eliteButton.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
+        eliteButton.position = CGPoint(x: frame.midX, y: frame.midY - 100)
         eliteButton.zPosition = GameConstants.zPositions.hudZ
         addChild(eliteButton)
         
@@ -122,10 +158,21 @@ class DifficultySelector: SKScene {
         borderElite.strokeColor = .black
         borderElite.lineWidth = borderWidth
         borderElite.fillColor = .clear
-        borderElite.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
-        borderElite.zPosition = GameConstants.zPositions.hudZ - 0.1
+        borderElite.position = CGPoint(x: frame.midX, y: frame.midY - 100)
+        borderElite.zPosition = GameConstants.zPositions.hudZ + 0.1
+        borderElite.isUserInteractionEnabled = false
         
         addChild(borderElite)
+        
+        
+        let eliteLabel = SKLabelNode(text: "Elite")
+        eliteLabel.fontName = "Helvetica-Bold"
+        eliteLabel.fontColor = .black
+        eliteLabel.fontSize = 12
+        eliteLabel.verticalAlignmentMode = .center
+        eliteLabel.position = CGPoint(x: 0, y: 0)
+        borderElite.addChild(eliteLabel)
+        
     }
     
     func toJavelin(difficulty: Difficulty, strength: Double, skill: Double) {
@@ -141,51 +188,47 @@ class DifficultySelector: SKScene {
         view?.presentScene(gameScene, transition: transition)
     }
     
+    func navigate(difficulty: Difficulty) {
+        if chosenEvent == "Hundred" {
+            toHundred(difficulty: .beginner, skill: playerSkill, speed: playerSpeed)
+        } else if chosenEvent == "Javelin" {
+            toJavelin(difficulty: .beginner, strength: playerStrength, skill: playerSkill)
+        }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: self)
         
         let node = self.atPoint(location)
         
-        
+        print("\(node.name ?? "Nil") clicked")
         
         if node.name == "beginnerButton" {
-            if chosenEvent == "Hundred" {
-                toHundred(difficulty: .beginner, skill: playerSkill, speed: playerSpeed)
-            } else if chosenEvent == "Javelin" {
-                toJavelin(difficulty: .beginner, strength: playerStrength, skill: playerSkill)
-            }
+            
+//            if chosenEvent == "Hundred" {
+//                toHundred(difficulty: .beginner, skill: playerSkill, speed: playerSpeed)
+//            } else if chosenEvent == "Javelin" {
+//                toJavelin(difficulty: .beginner, strength: playerStrength, skill: playerSkill)
+//            }
+            
+            navigate(difficulty: .beginner)
+            
         } else if node.name == "amateurButton" {
             
-            if chosenEvent == "Hundred" {
-                toHundred(difficulty: .amateur, skill: playerSkill, speed: playerSpeed)
-            } else if chosenEvent == "Javelin" {
-                toJavelin(difficulty: .amateur, strength: playerStrength, skill: playerSkill)
-            }
+            navigate(difficulty: .amateur)
             
         } else if node.name == "interButton" {
             
-            if chosenEvent == "Hundred" {
-                toHundred(difficulty: .intermediate, skill: playerSkill, speed: playerSpeed)
-            } else if chosenEvent == "Javelin" {
-                toJavelin(difficulty: .intermediate, strength: playerStrength, skill: playerSkill)
-            }
+            navigate(difficulty: .intermediate)
             
         } else if node.name == "proButton" {
             
-            if chosenEvent == "Hundred" {
-                toHundred(difficulty: .professional, skill: playerSkill, speed: playerSpeed)
-            } else if chosenEvent == "Javelin" {
-                toJavelin(difficulty: .professional, strength: playerStrength, skill: playerSkill)
-            }
+            navigate(difficulty: .professional)
             
         } else if node.name == "eliteButton" {
             
-            if chosenEvent == "Hundred" {
-                toHundred(difficulty: .elite, skill: playerSkill, speed: playerSpeed)
-            } else if chosenEvent == "Javelin" {
-                toJavelin(difficulty: .elite, strength: playerStrength, skill: playerSkill)
-            }
+            navigate(difficulty: .elite)
             
         }
     }
