@@ -13,8 +13,8 @@ class FlagNode: SKSpriteNode {
         super.init(texture: nil, color: .clear, size: size)
         
         switch country {
-        case "GB": createGBFlag()
-        case "FR": createFRFlag()
+        case "GB": createBritishFlag()
+        case "FR": createFranceFlag()
         case "DE": createGermanyFlag()
         case "IT": createItalyFlag()
         case "US": createUSFlag()
@@ -34,7 +34,7 @@ class FlagNode: SKSpriteNode {
         case "CH": createSwitzerlandFlag()
         case "BE": createBelgiumFlag()
         default: 
-            createGBFlag()
+            createBritishFlag()
             print("Using default case")
         }
     }
@@ -52,7 +52,7 @@ class FlagNode: SKSpriteNode {
     }
 
 
-    private func createGBFlag() {
+    private func createBritishFlag() {
         // Navy background
         let background = SKShapeNode(rect: CGRect(origin: .zero, size: size))
         background.fillColor = UIColor(red: 1/255, green: 33/255, blue: 105/255, alpha: 1.0)
@@ -117,7 +117,7 @@ class FlagNode: SKSpriteNode {
     }
 
     
-    private func createFRFlag() {
+    private func createFranceFlag() {
         let colors: [UIColor] = [
             UIColor(red: 0/255, green: 35/255, blue: 149/255, alpha: 1.0),
             .white,

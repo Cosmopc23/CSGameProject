@@ -65,7 +65,7 @@ class MenuScene: SKScene {
     var isFirstTime: Bool = false
     
     var playerName: String = "Player"
-    
+
     var countryFlag: FlagNode!
     
     var playerCountry: String = "BR"
@@ -377,7 +377,7 @@ class MenuScene: SKScene {
     }
 
     func getPlayerCountry() -> String {
-        return UserDefaults.standard.string(forKey: GameConstants.Keys.countryKey) ?? "BR"
+        return UserDefaults.standard.string(forKey: GameConstants.Keys.countryKey) ?? "GB"
     }
 
     
