@@ -439,7 +439,7 @@ class JavelinScene: BaseGameScene {
                 let sortedResults = distances.sorted { $0.value < $1.value }
                 
                 
-                sortResults(string: "m      Reward: ", sortedResults: sortedResults)
+                sortResults(string: "m      Reward: ", sortedResults: sortedResults, difficulty: difficulty)
                 
                 
                 let menuButton = SKLabelNode(text: "Return to Menu")

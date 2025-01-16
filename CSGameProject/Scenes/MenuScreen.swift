@@ -888,4 +888,9 @@ class MenuScene: SKScene {
         
         outerLayer.addChild(finishedLabel)
     }
+    
+    static func getCurrentSponsorMultiplier() -> Double {
+        let sponsorIndex = UserDefaults.standard.integer(forKey: GameConstants.Keys.sponsorKey)
+        return sponsors[sponsorIndex].rewardMultiplier
+    }
 }

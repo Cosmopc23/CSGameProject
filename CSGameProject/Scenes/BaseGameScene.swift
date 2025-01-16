@@ -17,8 +17,8 @@ class BaseGameScene: SKScene, SKPhysicsContactDelegate {
     var dt: TimeInterval = 0
     
     var playerFinishPosition: Int = 0
-    var rewards: [Double] = [40.0, 30.0, 20.0, 10.0]
-    var reputationIncrease: [Double] = [80.0, 40.0, 20.0, 10.0]
+    var rewards: [Double] = [20.0, 15.0, 10.0, 5.0]
+    var reputationIncrease: [Double] = [40.0, 20.0, 10.0, -5.0]
     
     var characterSpeed: CGFloat = 0.0 {
         didSet {
@@ -37,27 +37,63 @@ class BaseGameScene: SKScene, SKPhysicsContactDelegate {
         createLayers()
     }
     
-    func sortResults(string: String, sortedResults: [(String, Double)]){
+    func sortResults(string: String, sortedResults: [(String, Double)], difficulty: Difficulty){
         var yOffSet: CGFloat = 100
         var i = 4
+        let difficultyMultiplier = setDifficultyMultiplier(difficulty: difficulty)
+        
         
         for (character, distance) in sortedResults {
-            let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", distance)) \(string) \(rewards[(i-1)])")
+            
+            var displayedReward = 0.0
+            
+            displayedReward = rewards[(i-1)] * difficultyMultiplier
+            
+            
+            if character == "Player" {
+                playerFinishPosition = i - 1
+                
+                let playerReward = ((rewards[playerFinishPosition]) * difficultyMultiplier)
+                
+                
+                
+                MenuScene.reward(amount: playerReward * getCurrentRewardMultiplier())
+                MenuScene.increaseReputationBar(reputationIncrease[playerFinishPosition] * difficultyMultiplier)
+                
+                displayedReward = playerReward
+                
+            }
+            
+            let resultLabel = SKLabelNode(text: "\(i). \(character.capitalized): \(String(format: "%.2f", distance)) \(string) \(displayedReward)")
             resultLabel.fontSize = 24
             resultLabel.fontColor = .white
             resultLabel.position = CGPoint(x: self.size.width / 2, y: self.size.height - 150 - yOffSet)
             resultLabel.zPosition = GameConstants.zPositions.topZ
             self.addChild(resultLabel)
             i -= 1
-            
-            if character == "Player" {
-                playerFinishPosition = i
-                MenuScene.reward(amount: rewards[playerFinishPosition])
-                MenuScene.increaseReputationBar(reputationIncrease[playerFinishPosition])
-            }
+                                 
             
             yOffSet -= 30
         }
+    }
+    
+    func setDifficultyMultiplier(difficulty: Difficulty) -> Double {
+        switch difficulty {
+        case .beginner:
+            return 1.0
+        case .amateur:
+            return 2.0
+        case .intermediate:
+            return 3.0
+        case .professional:
+            return 4.0
+        case .elite:
+            return 5.0
+        }
+    }
+    
+    func getCurrentRewardMultiplier() -> Double {
+        return MenuScene.getCurrentSponsorMultiplier()
     }
     
     func createLayers() {

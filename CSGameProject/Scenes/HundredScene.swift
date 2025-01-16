@@ -222,7 +222,7 @@ class HundredScene: BaseGameScene {
         
         let sortedResults = finishTimes.sorted { $0.value < $1.value }
         
-        sortResults(string: " seconds    Reward: ", sortedResults: sortedResults)
+        sortResults(string: " seconds    Reward: ", sortedResults: sortedResults, difficulty: difficulty)
         
         let restartButton = SKLabelNode(text: "Return to Menu")
         restartButton.fontSize = 30

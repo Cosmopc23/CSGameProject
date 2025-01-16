@@ -45,18 +45,18 @@ class DifficultySelector: SKScene {
     func setupNodes() {
         //BEGINNER
         let beginnerButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
-        beginnerButton.name = "beginnerButton"
         beginnerButton.position = CGPoint(x: frame.midX, y: frame.midY + 100)
         beginnerButton.zPosition = GameConstants.zPositions.hudZ
         addChild(beginnerButton)
         
         let borderBeginner = SKShapeNode(rectOf: CGSize(width: 90+borderWidth, height: 40+borderWidth), cornerRadius: 2.0)
+        borderBeginner.name = "beginnerButton"
         borderBeginner.strokeColor = .black
         borderBeginner.lineWidth = borderWidth
         borderBeginner.fillColor = .clear
         borderBeginner.position = CGPoint(x: frame.midX, y: frame.midY + 100)
         borderBeginner.zPosition = GameConstants.zPositions.hudZ + 0.1
-        borderBeginner.isUserInteractionEnabled = false
+
         
         addChild(borderBeginner)
         
@@ -71,18 +71,17 @@ class DifficultySelector: SKScene {
         
         //AMATEUR
         let amateurButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
-        amateurButton.name = "amateurButton"
         amateurButton.position = CGPoint(x: frame.midX, y: frame.midY + 50 )
         amateurButton.zPosition = GameConstants.zPositions.hudZ
         addChild(amateurButton)
         
         let borderAmateur = SKShapeNode(rectOf: CGSize(width: 90+borderWidth, height: 40+borderWidth), cornerRadius: 2.0)
+        borderAmateur.name = "amateurButton"
         borderAmateur.strokeColor = .black
         borderAmateur.lineWidth = borderWidth
         borderAmateur.fillColor = .clear
         borderAmateur.position = CGPoint(x: frame.midX, y: frame.midY + 50)
         borderAmateur.zPosition = GameConstants.zPositions.hudZ + 0.1
-        borderAmateur.isUserInteractionEnabled = false
         
         addChild(borderAmateur)
         
@@ -97,18 +96,17 @@ class DifficultySelector: SKScene {
         
         //INTERMEDIATE
         let interButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
-        interButton.name = "interButton"
         interButton.position = CGPoint(x: frame.midX, y: frame.midY)
         interButton.zPosition = GameConstants.zPositions.hudZ
         addChild(interButton)
         
         let borderInter = SKShapeNode(rectOf: CGSize(width: 90+borderWidth, height: 40+borderWidth), cornerRadius: 2.0)
+        borderInter.name = "interButton"
         borderInter.strokeColor = .black
         borderInter.lineWidth = borderWidth
         borderInter.fillColor = .clear
         borderInter.position = CGPoint(x: frame.midX, y: frame.midY)
         borderInter.zPosition = GameConstants.zPositions.hudZ + 0.1
-        borderInter.isUserInteractionEnabled = false
         
         addChild(borderInter)
         
@@ -123,18 +121,18 @@ class DifficultySelector: SKScene {
         
         //PROFESSIONAL
         let proButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
-        proButton.name = "proButton"
+
         proButton.position = CGPoint(x: frame.midX, y: frame.midY - 50)
         proButton.zPosition = GameConstants.zPositions.hudZ
         addChild(proButton)
         
         let borderPro = SKShapeNode(rectOf: CGSize(width: 90+borderWidth, height: 40+borderWidth), cornerRadius: 2.0)
+        borderPro.name = "proButton"
         borderPro.strokeColor = .black
         borderPro.lineWidth = borderWidth
         borderPro.fillColor = .clear
         borderPro.position = CGPoint(x: frame.midX, y: frame.midY - 50)
         borderPro.zPosition = GameConstants.zPositions.hudZ + 0.1
-        borderPro.isUserInteractionEnabled = false
         
         addChild(borderPro)
         
@@ -149,18 +147,17 @@ class DifficultySelector: SKScene {
         
         //ELITE
         let eliteButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
-        eliteButton.name = "eliteButton"
         eliteButton.position = CGPoint(x: frame.midX, y: frame.midY - 100)
         eliteButton.zPosition = GameConstants.zPositions.hudZ
         addChild(eliteButton)
         
         let borderElite = SKShapeNode(rectOf: CGSize(width: 90+borderWidth, height: 40+borderWidth), cornerRadius: 2.0)
+        borderElite.name = "eliteButton"
         borderElite.strokeColor = .black
         borderElite.lineWidth = borderWidth
         borderElite.fillColor = .clear
         borderElite.position = CGPoint(x: frame.midX, y: frame.midY - 100)
         borderElite.zPosition = GameConstants.zPositions.hudZ + 0.1
-        borderElite.isUserInteractionEnabled = false
         
         addChild(borderElite)
         
@@ -190,9 +187,9 @@ class DifficultySelector: SKScene {
     
     func navigate(difficulty: Difficulty) {
         if chosenEvent == "Hundred" {
-            toHundred(difficulty: .beginner, skill: playerSkill, speed: playerSpeed)
+            toHundred(difficulty: difficulty, skill: playerSkill, speed: playerSpeed)
         } else if chosenEvent == "Javelin" {
-            toJavelin(difficulty: .beginner, strength: playerStrength, skill: playerSkill)
+            toJavelin(difficulty: difficulty, strength: playerStrength, skill: playerSkill)
         }
     }
     
