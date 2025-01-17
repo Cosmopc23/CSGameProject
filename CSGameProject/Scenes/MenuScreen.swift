@@ -407,10 +407,13 @@ class MenuScene: SKScene {
         
         backgroundColor = .white
         
-        let titleLabel = SKLabelNode(text: "Olympics Game")
+        let olympicGold = UIColor(red: 227/255, green: 192/255, blue: 66/255, alpha: 1.0)
+
+        
+        let titleLabel = SKLabelNode(text: "OLYMPUS")
         titleLabel.fontName = "Helvetica-Bold"
         titleLabel.fontSize = 40
-        titleLabel.fontColor = .white
+        titleLabel.fontColor = olympicGold
         titleLabel.position = CGPoint(x: frame.midX, y: frame.midY + 150)
         outerLayer.addChild(titleLabel)
     
@@ -458,7 +461,7 @@ class MenuScene: SKScene {
         
         let trainingButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
         trainingButton.name = "trainingButton"
-        trainingButton.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
+        trainingButton.position = CGPoint(x: frame.midX-60, y: frame.midY/4.0)
         trainingButton.zPosition = GameConstants.zPositions.hudZ
         outerLayer.addChild(trainingButton)
         
@@ -466,7 +469,7 @@ class MenuScene: SKScene {
         border1.strokeColor = .black
         border1.lineWidth = borderWidth
         border1.fillColor = .clear
-        border1.position = CGPoint(x: frame.midX-80, y: frame.midY/4.0)
+        border1.position = CGPoint(x: frame.midX-60, y: frame.midY/4.0)
         border1.zPosition = GameConstants.zPositions.hudZ - 0.1
         
         outerLayer.addChild(border1)
@@ -474,7 +477,7 @@ class MenuScene: SKScene {
         
         let sponsorshipButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
         sponsorshipButton.name = "sponsorshipButton"
-        sponsorshipButton.position = CGPoint(x: frame.midX + 20, y: frame.midY/4.0)
+        sponsorshipButton.position = CGPoint(x: frame.midX + 60, y: frame.midY/4.0)
         sponsorshipButton.zPosition = GameConstants.zPositions.hudZ
         outerLayer.addChild(sponsorshipButton)
         
@@ -482,25 +485,19 @@ class MenuScene: SKScene {
         border2.strokeColor = .black
         border2.lineWidth = borderWidth
         border2.fillColor = .clear
-        border2.position = CGPoint(x: frame.midX + 20, y: frame.midY/4.0)
+        border2.position = CGPoint(x: frame.midX + 60, y: frame.midY/4.0)
         border2.zPosition = GameConstants.zPositions.hudZ - 0.1
         
         outerLayer.addChild(border2)
         
-        let calendarButton = SKSpriteNode(color: .white, size: CGSize(width: 90, height: 40))
+        let calendarButton = SKShapeNode(circleOfRadius: 45)
         calendarButton.name = "calendarButton"
-        calendarButton.position = CGPoint(x: frame.midX + 240, y: frame.midY/4.0)
+        calendarButton.position = CGPoint(x: frame.midX + 320, y: frame.midY/3.0)
         calendarButton.zPosition = GameConstants.zPositions.hudZ
+        calendarButton.fillColor = olympicGold
+        calendarButton.strokeColor = .black
+        calendarButton.lineWidth = borderWidth
         outerLayer.addChild(calendarButton)
-        
-        let border3 = SKShapeNode(rectOf: CGSize(width: 90+borderWidth, height: 40+borderWidth), cornerRadius: 2.0)
-        border3.strokeColor = .black
-        border3.lineWidth = borderWidth
-        border3.fillColor = .clear
-        border3.position = CGPoint(x: frame.midX + 240, y: frame.midY/4.0)
-        border3.zPosition = GameConstants.zPositions.hudZ - 0.1
-        
-        outerLayer.addChild(border3)
         
         
         //labels for buttons
@@ -554,18 +551,18 @@ class MenuScene: SKScene {
     func setupCalendarLayer () {
         calendarLayer.name = "CalendarLayer"
         let startButton = SKLabelNode(text: "Start 100m Race")
-        startButton.fontName = "Helvetica-Bold"
         startButton.fontSize = 30
-        startButton.fontColor = .blue
+        startButton.fontName = "Helvetica-Bold"
+        startButton.fontColor = .white
         startButton.position = CGPoint(x: frame.midX, y: frame.midY)
         startButton.name = GameConstants.StringConstants.hundredLinker
         calendarLayer.addChild(startButton)
         
         
-        let javelinButton = SKLabelNode(text: "Javelin")
-        javelinButton.fontName = "Helvetica-Bold"
+        let javelinButton = SKLabelNode(text: "Start Javelin")
         javelinButton.fontSize = 30
-        javelinButton.fontColor = .blue
+        javelinButton.fontName = "Helvetica-Bold"
+        javelinButton.fontColor = .white
         javelinButton.position = CGPoint(x: frame.midX, y: frame.midY - 50)
         javelinButton.name = GameConstants.StringConstants.javelinLinker
         calendarLayer.addChild(javelinButton)
