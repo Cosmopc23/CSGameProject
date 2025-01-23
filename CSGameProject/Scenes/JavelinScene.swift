@@ -277,6 +277,14 @@ class JavelinScene: BaseGameScene {
         let initialTrajectoryAngle = atan2(verticalVelocity, horizontalVelocity)
         javelinSprite.zRotation = initialTrajectoryAngle - .pi/2
         
+        print("\(initialVelocity)")
+        print("\(throwAngle)")
+        print("\(gravity)")
+        let expectedRange = (pow(initialVelocity, 2) * sin(2 * throwAngle)) / abs(gravity) / 7.0
+        print("Expected range: \(expectedRange)")
+        
+        
+        
     }
     
     func returnToMenu() {
