@@ -14,7 +14,7 @@ enum HundredGameState {
 
 class HundredScene: BaseGameScene {
     
-    // running bar
+    // Running bar for player control
     var progressBar: SKSpriteNode!
     var currentValue: CGFloat = 0.0
     var maxValue: CGFloat = 100.0
@@ -22,12 +22,14 @@ class HundredScene: BaseGameScene {
     var decreaseRate: CGFloat = 4
     var timer: Timer?
     
+    // Target area for optimal running speed
     var targetMinValue: CGFloat = 0.0
     var targetMaxValue: CGFloat = 0.0
     
     var targetMinIndicator: SKSpriteNode!
     var targetMaxIndicator: SKSpriteNode!
     
+    // Track race times
     var finishTimes: [String:TimeInterval] = [:]
     var raceStartTime: TimeInterval = 0
     var playerTime: TimeInterval = 0
@@ -48,6 +50,7 @@ class HundredScene: BaseGameScene {
     
     var difficulty: Difficulty = .intermediate
     
+    // Set character states when game state changes
     var gameState = HundredGameState.ready {
         willSet {
             switch newValue {
@@ -198,6 +201,7 @@ class HundredScene: BaseGameScene {
         addChild(competitor3)
     }
     
+    // End the race and show results
     func handleFinish() {
         gameState = .finished
         print("End")
@@ -206,6 +210,7 @@ class HundredScene: BaseGameScene {
         showFinishLineScreen()
     }
     
+    // Display race results screen
     func showFinishLineScreen() {
         let finishScreen = SKSpriteNode(color: .black, size: CGSize(width: self.size.width, height: self.size.height))
         finishScreen.position = CGPoint(x: self.size.width / 2, y: self.size.height / 2)
@@ -262,6 +267,7 @@ class HundredScene: BaseGameScene {
         self.view?.presentScene(scene, transition: transition)
     }
     
+    // Decrease progress bar value over time
     @objc func decreaseValue() {
         currentValue -= decreaseRate
         if currentValue < 0 {
@@ -271,6 +277,7 @@ class HundredScene: BaseGameScene {
         adjustSpeed()
     }
     
+    // Update progress bar appearance
     func updateProgressBar() {
         let width = (currentValue / maxValue) * 300
         progressBar.size.width = width
@@ -288,6 +295,7 @@ class HundredScene: BaseGameScene {
         targetMaxIndicator.position = CGPoint(x: targetMaxX, y: 0)
     }
     
+    // Set player speed based on progress bar value
     func adjustSpeed() {
         
         let speedMultiplier = (playerSpeed / 100.0) + 1.1
@@ -331,6 +339,7 @@ class HundredScene: BaseGameScene {
             worldLayer.update(dt)
             backgroundLayer.update(dt)
             
+            // Update competitor 1 speed and position
             if competitor1.competitor1Speed > competitor1.competitor1TopSpeed {
                 competitor1.competitor1Speed = competitor1.competitor1TopSpeed
             } else if (competitor1.competitor1Speed) > (competitor1.competitor1TopSpeed - 15) {
@@ -343,6 +352,7 @@ class HundredScene: BaseGameScene {
             let speedDifference1 = characterSpeed - competitor1.competitor1Speed
             competitor1.position.x -= speedDifference1 * CGFloat(deltaTime) * 3
             
+            // Update competitor 2 speed and position
             if competitor2.competitor2Speed > competitor2.competitor2TopSpeed {
                 competitor2.competitor2Speed = competitor2.competitor2TopSpeed
             } else if (competitor2.competitor2Speed) > (competitor2.competitor2TopSpeed - 15) {
@@ -355,6 +365,7 @@ class HundredScene: BaseGameScene {
             let speedDifference2 = characterSpeed - competitor2.competitor2Speed
             competitor2.position.x -= speedDifference2 * CGFloat(deltaTime) * 3
             
+            // Update competitor 3 speed and position
             if competitor3.competitor3Speed > competitor3.competitor3TopSpeed {
                 competitor3.competitor3Speed = competitor3.competitor3TopSpeed
             } else if (competitor3.competitor3Speed) > (competitor3.competitor3TopSpeed - 15) {
@@ -372,10 +383,12 @@ class HundredScene: BaseGameScene {
         }
     }
     
+    // Handle finish line collisions
     override func didBegin(_ contact: SKPhysicsContact) {
             let bodyA = contact.bodyA
             let bodyB = contact.bodyB
             
+            // Player finishes race
             if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.playerCategory) {
                 let currentTime = CACurrentMediaTime()
                 playerTime = raceStartTime - currentTime
@@ -386,6 +399,8 @@ class HundredScene: BaseGameScene {
                 player.state = .idle
                 print("Player Finish")
             }
+            
+            // Competitor 1 finishes race
             if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor1Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor1Category) {
                 
                 let currentTime = CACurrentMediaTime()
@@ -397,6 +412,8 @@ class HundredScene: BaseGameScene {
                 competitor1.state = .idle
                 print("Competitor1 Finish")
             }
+            
+            // Competitor 2 finishes race
             if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor2Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor2Category) {
                 
                 let currentTime = CACurrentMediaTime()
@@ -408,6 +425,8 @@ class HundredScene: BaseGameScene {
                 competitor2.state = .idle
                 print("Competitor2 Finish")
             }
+            
+            // Competitor 3 finishes race
             if (bodyA.categoryBitMask == GameConstants.PhysicsCategories.competitor3Category) && (bodyB.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) || (bodyA.categoryBitMask == GameConstants.PhysicsCategories.finishCategory) &&  (bodyB.categoryBitMask == GameConstants.PhysicsCategories.competitor3Category) {
                 
                 let currentTime = CACurrentMediaTime()
@@ -420,6 +439,7 @@ class HundredScene: BaseGameScene {
                 print("Competitor3 Finish")
             }
             
+            // When all racers have finished, end race
             if finishers == 4 {
                 print("\n=== RACE FINISH TIMES ===")
                 print("Current Difficulty: \(difficulty)")

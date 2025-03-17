@@ -13,11 +13,13 @@ enum EventType {
     case javelin
 }
 
+// Parameters for configuring 100m race events based on difficulty
 struct HundredParams {
     let topSpeedRange: ClosedRange<CGFloat>
     let accelerationRange: ClosedRange<CGFloat>
 }
 
+// Parameters for configuring javelin throw events based on difficulty
 struct JavelinParams {
     let distanceRange: ClosedRange<Double>
 }
@@ -29,6 +31,7 @@ enum Difficulty: Int {
     case professional = 4
     case elite = 5
     
+    // Returns the appropriate parameters object based on event type
     func parameters(for eventType: EventType) -> Any {
         switch eventType {
         case .hundred:
@@ -38,6 +41,7 @@ enum Difficulty: Int {
         }
     }
     
+    // Defines difficulty parameters for 100m race at each level
     private var hundredParameters: HundredParams {
         switch self {
         case .elite:
@@ -73,6 +77,7 @@ enum Difficulty: Int {
         
     }
     
+    // Defines difficulty parameters for javelin throw at each level
     private var javelinParameters: JavelinParams {
         switch self {
         case .elite:
@@ -91,6 +96,7 @@ enum Difficulty: Int {
 
 
 class DifficultyManager {
+    // Applies difficulty settings to competitors in 100m race
     static func configureCompetitors(_ scene: HundredScene, for difficulty: Difficulty) {
         guard let params = difficulty.parameters(for: .hundred) as? HundredParams else { return }
         
@@ -104,6 +110,7 @@ class DifficultyManager {
         scene.competitor3.competitor3Acceleration = CGFloat.random(in: params.accelerationRange)
     }
     
+    // Generates a random throw distance for AI competitors based on difficulty
     static func generateCompetitorThrow(_ scene: JavelinScene, for difficulty: Difficulty) -> Double {
         guard let params = difficulty.parameters(for: .javelin) as? JavelinParams else { return 0 }
         return Double.random(in: params.distanceRange).rounded(to: 2)
@@ -111,6 +118,7 @@ class DifficultyManager {
 }
 
 extension Double {
+    // Rounds a double to specified decimal places
     func rounded(to places: Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor

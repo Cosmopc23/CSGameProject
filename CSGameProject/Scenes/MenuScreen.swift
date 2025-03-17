@@ -15,6 +15,7 @@ class MenuScene: SKScene {
     var strengthBar: ProgressBar!
     var skillBar: ProgressBar!
     
+    // For scrolling selection areas
     var previousCoachTouchY: CGFloat?
     var previousSponsorTouchY: CGFloat?
     
@@ -82,7 +83,7 @@ class MenuScene: SKScene {
     
     override func didMove(to view: SKView) {
         // FOR TESTING
-        MenuScene.saveBankBalance(10000)
+//        MenuScene.saveBankBalance(10000)
         
         let backgroundTexture = SKTexture(imageNamed: "background")
         let background = SKSpriteNode(texture: backgroundTexture)
@@ -140,6 +141,7 @@ class MenuScene: SKScene {
     }
 
     
+    // Updates stats based on current coach
     func updateMenu(){
 //        print(getCurrentCoachIndex()!)
         currentCoach = coaches[getCurrentCoachIndex() ?? 0]
@@ -173,6 +175,7 @@ class MenuScene: SKScene {
         
         let node = self.atPoint(location)
         
+        // Store touch location for scrolling
         if scrollableArea.contains(location) {
             previousCoachTouchY = location.y
         }
@@ -198,6 +201,7 @@ class MenuScene: SKScene {
         } else if node.name == "calendarButton" {
             showLayer(calendarLayer)
         } else if node.name == "coachDetailNode" {
+            // Delay to prevent accidental clicks
             isUserInteractionEnabled = false
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -207,6 +211,7 @@ class MenuScene: SKScene {
             print("Coach button hit")
             
         } else if node.name == "sponsorDetailNode" {
+            // Delay to prevent accidental clicks
             isUserInteractionEnabled = false
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -220,6 +225,7 @@ class MenuScene: SKScene {
         } else if node.name == "BackSponsor" {
             scrollableSponsors.isHidden = true
         } else if let name = node.name, coaches.contains(where: { $0.name == name }) {
+            // Handle coach selection
             var i = 0
             for coach in coaches {
                 if coach.name == node.name {
@@ -258,6 +264,7 @@ class MenuScene: SKScene {
                 i += 1
             }
         } else if let name = node.name, sponsors.contains(where: { $0.name == name }) {
+            // Handle sponsor selection
             var i = 0
             for sponsor in sponsors {
                 if sponsor.name == node.name {
@@ -295,6 +302,7 @@ class MenuScene: SKScene {
         }
     }
    
+    // Handle scrolling for coach and sponsor lists
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let touchLocation = touch.location(in: self)
@@ -568,6 +576,7 @@ class MenuScene: SKScene {
         calendarLayer.addChild(javelinButton)
     }
     
+    // Toggle between different menu layers
     func showLayer(_ layer: SKNode) {
         trainingLayer.isHidden = true
         sponsorshipLayer.isHidden = true
@@ -631,6 +640,7 @@ class MenuScene: SKScene {
         setupScrollableSponsors()
     }
     
+    // Set up scrollable coach selection area
     func setupScrollableArea() {
         scrollableArea.position = CGPoint(x: frame.midX, y: frame.midY)
         scrollableArea.isHidden = true
@@ -657,239 +667,246 @@ class MenuScene: SKScene {
             border.zPosition = GameConstants.zPositions.topZ + 0.2
             border.name = coach.name
             coachesNode.addChild(border)
-            
             yOffset -= 40
-            
-            coachesNode.position.y = -CGFloat(coaches.count * 40) / 2
-        }
+                       
+                       coachesNode.position.y = -CGFloat(coaches.count * 40) / 2
+                   }
+                   
+                   makeBackButton(name: "BackCoach", parent: scrollableArea, sizeW: 90, sizeH: 40, posX: frame.minX - 300, posY: frame.midY - 300)
+               }
         
-        makeBackButton(name: "BackCoach", parent: scrollableArea, sizeW: 90, sizeH: 40, posX: frame.minX - 300, posY: frame.midY - 300)
-    }
-    
+    // Create a back button for selection screens
     func makeBackButton(name: String, parent: SKSpriteNode, sizeW: Int, sizeH: Int, posX: CGFloat, posY: CGFloat) {
-        let backButton = SKSpriteNode(color: .white, size: CGSize(width: sizeW, height: sizeH))
-        backButton.name = name
-        backButton.position = CGPoint(x: posX, y: posY)
-        backButton.zPosition = GameConstants.zPositions.hudZ + 0.1
-        parent.addChild(backButton)
-        
-        let border = SKShapeNode(rectOf: CGSize(width: sizeW, height: sizeH), cornerRadius: 2.0)
-        border.strokeColor = .black
-        border.lineWidth = borderWidth
-        border.fillColor = .clear
-        border.position = CGPoint(x: posX, y: posY)
-        border.zPosition = GameConstants.zPositions.hudZ - 0.1
-        parent.addChild(border)
-        
-        let backLabel = SKLabelNode(text: "Back")
-        backLabel.fontName = "Helvetica-Bold"
-        backLabel.fontColor = .black
-        backLabel.fontSize = 12
-        backLabel.verticalAlignmentMode = .center
-        backLabel.position = CGPoint(x: posX, y: posY)
-        backLabel.zPosition = GameConstants.zPositions.hudZ + 0.2
-        parent.addChild(backLabel)
+       let backButton = SKSpriteNode(color: .white, size: CGSize(width: sizeW, height: sizeH))
+       backButton.name = name
+       backButton.position = CGPoint(x: posX, y: posY)
+       backButton.zPosition = GameConstants.zPositions.hudZ + 0.1
+       parent.addChild(backButton)
+       
+       let border = SKShapeNode(rectOf: CGSize(width: sizeW, height: sizeH), cornerRadius: 2.0)
+       border.strokeColor = .black
+       border.lineWidth = borderWidth
+       border.fillColor = .clear
+       border.position = CGPoint(x: posX, y: posY)
+       border.zPosition = GameConstants.zPositions.hudZ - 0.1
+       parent.addChild(border)
+       
+       let backLabel = SKLabelNode(text: "Back")
+       backLabel.fontName = "Helvetica-Bold"
+       backLabel.fontColor = .black
+       backLabel.fontSize = 12
+       backLabel.verticalAlignmentMode = .center
+       backLabel.position = CGPoint(x: posX, y: posY)
+       backLabel.zPosition = GameConstants.zPositions.hudZ + 0.2
+       parent.addChild(backLabel)
     }
-    
-    func setupScrollableSponsors() {
-        scrollableSponsors.position = CGPoint(x: frame.midX, y: frame.midY)
-        scrollableSponsors.isHidden = true
-        scrollableSponsors.zPosition = GameConstants.zPositions.topZ
-        sponsorshipLayer.addChild(scrollableSponsors)
-        
-        sponsorsNode.position = CGPoint(x: 0, y: -scrollableSponsors.size.height / 2)
-        scrollableSponsors.addChild(sponsorsNode)
-        
-        var yOffset = 10.0
-        for sponsor in sponsors {
-            let sponsorNode = SKLabelNode(text: "\(sponsor.name): Reputation Required: \(sponsor.reputationRequirement), Contract Length: \(sponsor.lengthOfContract), Reward Multiplier: \(sponsor.rewardMultiplier)")
-            sponsorNode.zPosition = GameConstants.zPositions.topZ + 0.1
-            sponsorNode.position = CGPoint(x: frame.minX + 10, y: frame.maxY - yOffset)
-            sponsorNode.fontSize = 15
-            sponsorNode.fontName = "Helvetica-Bold"
-            sponsorsNode.addChild(sponsorNode)
-            
-            let border = SKShapeNode(rectOf: CGSize(width: (frame.maxX - 180)+borderWidth, height: 20+borderWidth), cornerRadius: 2.0)
-            border.strokeColor = .black
-            border.lineWidth = borderWidth
-            border.fillColor = .clear
-            border.position = CGPoint(x: frame.minX + 30, y: frame.maxY - yOffset + 3)
-            border.zPosition = GameConstants.zPositions.topZ + 0.2
-            border.name = sponsor.name
-            sponsorsNode.addChild(border)
-            
-            yOffset -= 40
-            
-            sponsorsNode.position.y = -CGFloat(sponsors.count * 40) / 2
-        }
-        
-        makeBackButton(name: "BackSponsor", parent: scrollableSponsors, sizeW: 90, sizeH: 40, posX: frame.minX - 350, posY: frame.midY - 300)
-    }
-    
-    func createMultilineLabel(text: String, fontSize: CGFloat, position: CGPoint) -> SKNode {
-        let lines = text.components(separatedBy: "\n")
-        let labelNode = SKNode()
+               
+       // Set up scrollable sponsor selection area
+       func setupScrollableSponsors() {
+           scrollableSponsors.position = CGPoint(x: frame.midX, y: frame.midY)
+           scrollableSponsors.isHidden = true
+           scrollableSponsors.zPosition = GameConstants.zPositions.topZ
+           sponsorshipLayer.addChild(scrollableSponsors)
+           
+           sponsorsNode.position = CGPoint(x: 0, y: -scrollableSponsors.size.height / 2)
+           scrollableSponsors.addChild(sponsorsNode)
+           
+           var yOffset = 10.0
+           for sponsor in sponsors {
+               let sponsorNode = SKLabelNode(text: "\(sponsor.name): Reputation Required: \(sponsor.reputationRequirement), Contract Length: \(sponsor.lengthOfContract), Reward Multiplier: \(sponsor.rewardMultiplier)")
+               sponsorNode.zPosition = GameConstants.zPositions.topZ + 0.1
+               sponsorNode.position = CGPoint(x: frame.minX + 10, y: frame.maxY - yOffset)
+               sponsorNode.fontSize = 15
+               sponsorNode.fontName = "Helvetica-Bold"
+               sponsorsNode.addChild(sponsorNode)
+               
+               let border = SKShapeNode(rectOf: CGSize(width: (frame.maxX - 180)+borderWidth, height: 20+borderWidth), cornerRadius: 2.0)
+               border.strokeColor = .black
+               border.lineWidth = borderWidth
+               border.fillColor = .clear
+               border.position = CGPoint(x: frame.minX + 30, y: frame.maxY - yOffset + 3)
+               border.zPosition = GameConstants.zPositions.topZ + 0.2
+               border.name = sponsor.name
+               sponsorsNode.addChild(border)
+               
+               yOffset -= 40
+               
+               sponsorsNode.position.y = -CGFloat(sponsors.count * 40) / 2
+           }
+           
+           makeBackButton(name: "BackSponsor", parent: scrollableSponsors, sizeW: 90, sizeH: 40, posX: frame.minX - 350, posY: frame.midY - 300)
+       }
+       
+       // Create multi-line text from a string with newlines
+       func createMultilineLabel(text: String, fontSize: CGFloat, position: CGPoint) -> SKNode {
+           let lines = text.components(separatedBy: "\n")
+           let labelNode = SKNode()
 
-        for (index, line) in lines.enumerated() {
-            let lineNode = SKLabelNode(text: line)
-            lineNode.fontSize = fontSize
-            lineNode.fontColor = .black
-            lineNode.fontName = "Helvetica-Bold"
-            lineNode.position = CGPoint(x: 0, y: -CGFloat(index) * fontSize - 1)
-            labelNode.addChild(lineNode)
-        }
+           for (index, line) in lines.enumerated() {
+               let lineNode = SKLabelNode(text: line)
+               lineNode.fontSize = fontSize
+               lineNode.fontColor = .black
+               lineNode.fontName = "Helvetica-Bold"
+               lineNode.position = CGPoint(x: 0, y: -CGFloat(index) * fontSize - 1)
+               labelNode.addChild(lineNode)
+           }
 
-        labelNode.position = position
-        return labelNode
-    }
+           labelNode.position = position
+           return labelNode
+       }
 
-    
-    static func saveBankBalance(_ balance: Double) {
-        UserDefaults.standard.set(balance, forKey: GameConstants.Keys.bankBalanceKey)
-    }
-    
-    static func getBankBalance() -> Double {
-        return UserDefaults.standard.double(forKey: GameConstants.Keys.bankBalanceKey)
-    }
-    
-    static func increaseReputationLevel() {
-        var currentReputationLevel = getReputationLevel()
-        currentReputationLevel += 1
-        UserDefaults.standard.set(currentReputationLevel, forKey: GameConstants.Keys.reputationKey)
-    }
-    
-    static func getReputationLevel() -> Int {
-        return UserDefaults.standard.integer(forKey: GameConstants.Keys.reputationKey)
-    }
-    
-    static func increaseReputationBar(_ amount: Double) {
-        let currentReputationBar = getReputationBar()
-        
-        var newReputation: Double = 0
-        if currentReputationBar + amount < 100 {
-            newReputation = currentReputationBar + amount
-        } else {
-            increaseReputationLevel()
-            newReputation = (currentReputationBar + amount) - 100
-        }
-        UserDefaults.standard.set(newReputation, forKey: GameConstants.Keys.reputationBarKey)
-    }
-    
-    static func getReputationBar() -> Double {
-        return UserDefaults.standard.double(forKey: GameConstants.Keys.reputationBarKey)
-    }
-    
-    static func reward(amount: Double) {
-        var currentBalance = getBankBalance()
-        currentBalance += amount
-        saveBankBalance(currentBalance)
-    }
-    
-    static func transaction(amount: Double) -> Bool {
-        var currentBalance = getBankBalance()
-        if amount <= currentBalance {
-            currentBalance -= amount
-            saveBankBalance(currentBalance)
-            print(getBankBalance())
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    static func checkReputationLevel(newReputation: Int) -> Bool {
-        let currentReputation = getReputationLevel()
-        if newReputation <= currentReputation {
-            return true
-        } else {
-            return false
-        }
-    }
-    
-    
-    func updateProgressbar(progressBar: SKSpriteNode, currentValue: Double) {
-        let maxValue: CGFloat = 100
-        let progress = CGFloat(currentValue) / maxValue
-        let width = progress * 150
-        progressBar.size.width = CGFloat(width)
-    }
-    
-    func saveStat(_ currentValue: Double, key: String) {
-        UserDefaults.standard.set(currentValue, forKey: key)
-    }
-    
-    static func getStat(key: String) -> Double {
-        return UserDefaults.standard.double(forKey: key)
-    }
-    
-    func changeStat(amount: Double, key: String) {
-        var currentValue = MenuScene.getStat(key: key)
-        currentValue += amount
-        saveStat(currentValue, key: key)
-    }
-    
-    func newCoach(oldCoach: Coach, newCoach: Coach) {
-        let currentSpeedStat = MenuScene.getStat(key: GameConstants.Keys.speedKey) - oldCoach.speedBoost
-        let currentSkillStat = MenuScene.getStat(key: GameConstants.Keys.skillKey) - oldCoach.skillBoost
-        let currentStrengthStat = MenuScene.getStat(key: GameConstants.Keys.strengthKey) - oldCoach.strengthBoost
-        
-        let newSpeedStat = currentSpeedStat + newCoach.speedBoost
-        let newSkillStat = currentSkillStat + newCoach.skillBoost
-        let newStrengthStat = currentStrengthStat + newCoach.strengthBoost
-        
-        saveStat(newSpeedStat, key: GameConstants.Keys.speedKey)
-        saveStat(newSkillStat, key: GameConstants.Keys.skillKey)
-        saveStat(newStrengthStat, key: GameConstants.Keys.strengthKey)
-    }
-    
-    func saveCurrentCoachIndex(_ index: Int) {
-        UserDefaults.standard.set(index, forKey: GameConstants.Keys.coachKey)
-    }
-    
-    func getCurrentCoachIndex() -> Int? {
-        return UserDefaults.standard.value(forKey: GameConstants.Keys.coachKey) as? Int
-    }
-    
-    func saveCurrentSponsorIndex(_ index: Int) {
-        UserDefaults.standard.set(index, forKey: GameConstants.Keys.sponsorKey)
-    }
-    
-    func getCurrentSponsorIndex() -> Int? {
-        return UserDefaults.standard.value(forKey: GameConstants.Keys.sponsorKey) as? Int
-    }
+       
+       static func saveBankBalance(_ balance: Double) {
+           UserDefaults.standard.set(balance, forKey: GameConstants.Keys.bankBalanceKey)
+       }
+       
+       static func getBankBalance() -> Double {
+           return UserDefaults.standard.double(forKey: GameConstants.Keys.bankBalanceKey)
+       }
+       
+       static func increaseReputationLevel() {
+           var currentReputationLevel = getReputationLevel()
+           currentReputationLevel += 1
+           UserDefaults.standard.set(currentReputationLevel, forKey: GameConstants.Keys.reputationKey)
+       }
+       
+       static func getReputationLevel() -> Int {
+           return UserDefaults.standard.integer(forKey: GameConstants.Keys.reputationKey)
+       }
+       
+       // Handle reputation bar increase with level up
+       static func increaseReputationBar(_ amount: Double) {
+           let currentReputationBar = getReputationBar()
+           
+           var newReputation: Double = 0
+           if currentReputationBar + amount < 100 {
+               newReputation = currentReputationBar + amount
+           } else {
+               increaseReputationLevel()
+               newReputation = (currentReputationBar + amount) - 100
+           }
+           UserDefaults.standard.set(newReputation, forKey: GameConstants.Keys.reputationBarKey)
+       }
+       
+       static func getReputationBar() -> Double {
+           return UserDefaults.standard.double(forKey: GameConstants.Keys.reputationBarKey)
+       }
+       
+       static func reward(amount: Double) {
+           var currentBalance = getBankBalance()
+           currentBalance += amount
+           saveBankBalance(currentBalance)
+       }
+       
+       // Process money transactions with balance check
+       static func transaction(amount: Double) -> Bool {
+           var currentBalance = getBankBalance()
+           if amount <= currentBalance {
+               currentBalance -= amount
+               saveBankBalance(currentBalance)
+               print(getBankBalance())
+               return true
+           } else {
+               return false
+           }
+       }
+       
+       // Check if player's reputation level meets requirement
+       static func checkReputationLevel(newReputation: Int) -> Bool {
+           let currentReputation = getReputationLevel()
+           if newReputation <= currentReputation {
+               return true
+           } else {
+               return false
+           }
+       }
+       
+       
+       func updateProgressbar(progressBar: SKSpriteNode, currentValue: Double) {
+           let maxValue: CGFloat = 100
+           let progress = CGFloat(currentValue) / maxValue
+           let width = progress * 150
+           progressBar.size.width = CGFloat(width)
+       }
+       
+       func saveStat(_ currentValue: Double, key: String) {
+           UserDefaults.standard.set(currentValue, forKey: key)
+       }
+       
+       static func getStat(key: String) -> Double {
+           return UserDefaults.standard.double(forKey: key)
+       }
+       
+       func changeStat(amount: Double, key: String) {
+           var currentValue = MenuScene.getStat(key: key)
+           currentValue += amount
+           saveStat(currentValue, key: key)
+       }
+       
+       // Update stats when changing coaches
+       func newCoach(oldCoach: Coach, newCoach: Coach) {
+           let currentSpeedStat = MenuScene.getStat(key: GameConstants.Keys.speedKey) - oldCoach.speedBoost
+           let currentSkillStat = MenuScene.getStat(key: GameConstants.Keys.skillKey) - oldCoach.skillBoost
+           let currentStrengthStat = MenuScene.getStat(key: GameConstants.Keys.strengthKey) - oldCoach.strengthBoost
+           
+           let newSpeedStat = currentSpeedStat + newCoach.speedBoost
+           let newSkillStat = currentSkillStat + newCoach.skillBoost
+           let newStrengthStat = currentStrengthStat + newCoach.strengthBoost
+           
+           saveStat(newSpeedStat, key: GameConstants.Keys.speedKey)
+           saveStat(newSkillStat, key: GameConstants.Keys.skillKey)
+           saveStat(newStrengthStat, key: GameConstants.Keys.strengthKey)
+       }
+       
+       func saveCurrentCoachIndex(_ index: Int) {
+           UserDefaults.standard.set(index, forKey: GameConstants.Keys.coachKey)
+       }
+       
+       func getCurrentCoachIndex() -> Int? {
+           return UserDefaults.standard.value(forKey: GameConstants.Keys.coachKey) as? Int
+       }
+       
+       func saveCurrentSponsorIndex(_ index: Int) {
+           UserDefaults.standard.set(index, forKey: GameConstants.Keys.sponsorKey)
+       }
+       
+       func getCurrentSponsorIndex() -> Int? {
+           return UserDefaults.standard.value(forKey: GameConstants.Keys.sponsorKey) as? Int
+       }
 
-    
-    func addProgressBar(progressBar: SKSpriteNode, positionX: CGFloat, positionY: CGFloat) {
-        progressBar.position = CGPoint(x: positionX, y: positionY)
-        progressBar.zPosition = GameConstants.zPositions.hudZ
-        progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
-        outerLayer.addChild(progressBar)
-        
-        let borderWidth: CGFloat = 2.0
-        let border = SKShapeNode(rectOf: CGSize(width: 150 + borderWidth, height: 15 + borderWidth), cornerRadius: 2.0)
-        border.strokeColor = .black
-        border.lineWidth = borderWidth
-        border.fillColor = .clear
-        border.position = CGPoint(x: positionX + progressBar.size.width/2, y: positionY)
-        border.zPosition = GameConstants.zPositions.hudZ - 0.1
-        
-        outerLayer.addChild(border)
+       
+       func addProgressBar(progressBar: SKSpriteNode, positionX: CGFloat, positionY: CGFloat) {
+           progressBar.position = CGPoint(x: positionX, y: positionY)
+           progressBar.zPosition = GameConstants.zPositions.hudZ
+           progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+           outerLayer.addChild(progressBar)
+           
+           let borderWidth: CGFloat = 2.0
+           let border = SKShapeNode(rectOf: CGSize(width: 150 + borderWidth, height: 15 + borderWidth), cornerRadius: 2.0)
+           border.strokeColor = .black
+           border.lineWidth = borderWidth
+           border.fillColor = .clear
+           border.position = CGPoint(x: positionX + progressBar.size.width/2, y: positionY)
+           border.zPosition = GameConstants.zPositions.hudZ - 0.1
+           
+           outerLayer.addChild(border)
+       }
+       
+       func addLabel(label: String, positionX: CGFloat, positionY: CGFloat) {
+           let finishedLabel = SKLabelNode(text: label)
+           finishedLabel.fontName = "Helvetica-Bold"
+           finishedLabel.fontSize = 15
+           finishedLabel.fontColor = .white
+           finishedLabel.position = CGPoint(x: positionX, y: positionY)
+           finishedLabel.zPosition = GameConstants.zPositions.topZ
+           
+           
+           outerLayer.addChild(finishedLabel)
+       }
+       
+       // Get current sponsor's reward multiplier
+       static func getCurrentSponsorMultiplier() -> Double {
+           let sponsorIndex = UserDefaults.standard.integer(forKey: GameConstants.Keys.sponsorKey)
+           return sponsors[sponsorIndex].rewardMultiplier
+       }
     }
-    
-    func addLabel(label: String, positionX: CGFloat, positionY: CGFloat) {
-        let finishedLabel = SKLabelNode(text: label)
-        finishedLabel.fontName = "Helvetica-Bold"
-        finishedLabel.fontSize = 15
-        finishedLabel.fontColor = .white
-        finishedLabel.position = CGPoint(x: positionX, y: positionY)
-        finishedLabel.zPosition = GameConstants.zPositions.topZ
-        
-        
-        outerLayer.addChild(finishedLabel)
-    }
-    
-    static func getCurrentSponsorMultiplier() -> Double {
-        let sponsorIndex = UserDefaults.standard.integer(forKey: GameConstants.Keys.sponsorKey)
-        return sponsors[sponsorIndex].rewardMultiplier
-    }
-}

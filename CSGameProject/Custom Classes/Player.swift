@@ -14,9 +14,10 @@ enum PlayerState {
 class Player: SKSpriteNode {
     var idleFrames = [SKTexture]()
     var runFrames = [SKTexture]()
-    var throwIdleFrames = [SKTexture] ()
-    var throwRunFrames = [SKTexture] ()
+    var throwIdleFrames = [SKTexture]()
+    var throwRunFrames = [SKTexture]()
     
+    // State property observer automatically triggers animation when state changes
     var state = PlayerState.idle {
         willSet {
             animate(for: newValue)

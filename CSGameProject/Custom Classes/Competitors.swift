@@ -20,6 +20,7 @@ class Competitor1: SKSpriteNode {
     var competitor1Acceleration: CGFloat = 0.0
     var competitor1TopSpeed: CGFloat = 0.0
 
+    // State property observer automatically triggers animation when state changes
     var state = Competitor1State.idle {
         willSet {
             animate(for: newValue)
@@ -69,6 +70,7 @@ class Competitor2: SKSpriteNode {
     var competitor2Acceleration: CGFloat = 0.0
     var competitor2TopSpeed: CGFloat = 0.0
     
+    // State property observer automatically triggers animation when state changes
     var state = Competitor2State.idle {
         willSet {
             animate(for: newValue)
@@ -104,6 +106,7 @@ class Competitor3: SKSpriteNode {
     var competitor3Acceleration: CGFloat = 0.0
     var competitor3TopSpeed: CGFloat = 0.0
     
+    // State property observer automatically triggers animation when state changes
     var state = Competitor3State.idle {
         willSet {
             animate(for: newValue)

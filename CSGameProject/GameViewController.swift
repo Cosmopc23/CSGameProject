@@ -16,13 +16,15 @@ class GameViewController: UIViewController {
         
         if let view = self.view as! SKView? {
             
+            // Initialize with the menu scene
             let scene = MenuScene(size: view.bounds.size)
                 
             scene.scaleMode = .aspectFill
                 
-
+            // Present the scene
             view.presentScene(scene)
             
+            // Enable debugging options
             view.ignoresSiblingOrder = true
             view.showsPhysics = true
             view.showsFPS = true
@@ -30,14 +32,17 @@ class GameViewController: UIViewController {
         }
     }
     
+    // Hide the status bar
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
+    // Hide the home indicator on iPhone X and newer
     override var prefersHomeIndicatorAutoHidden: Bool {
         return true
     }
     
+    // Helper method to present alerts from any scene
     func showAlert(_ alert: UIAlertController) {
         self.present(alert, animated: true, completion: nil)
     }

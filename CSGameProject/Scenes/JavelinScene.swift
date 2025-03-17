@@ -35,6 +35,7 @@ class JavelinScene: BaseGameScene {
     var timer: Timer?
     var lockedValue: CGFloat = 0.0
     
+    // Javelin physics parameters
     private var throwAngle: CGFloat = 0.0
     private var initialVelocity: CGFloat = 0.0
     private var throwStartTime: TimeInterval = 0
@@ -43,6 +44,7 @@ class JavelinScene: BaseGameScene {
     private var virtualPositionX: CGFloat = 0.0
     private let gravity: CGFloat = -9.81
     
+    // Angle selection interface
     private var angleBar: SKSpriteNode!
     private var angleIndicator: SKSpriteNode!
     private var currentAngle: CGFloat = 0.0
@@ -76,6 +78,7 @@ class JavelinScene: BaseGameScene {
         self.angleSwingSpeed = 4.0 - (skill / 100.0 * 2.8)
     }
     
+    // Manage UI elements and animations based on game state
     var gameState = JavelinGameState.ready {
         willSet {
             switch newValue {
@@ -147,6 +150,7 @@ class JavelinScene: BaseGameScene {
         load(level: "Javelin")
     }
     
+    // Display message when speed is locked in
     func showSpeedLockMessage() {
         speedLockLabel = SKLabelNode(text: "SPEED LOCK")
         speedLockLabel?.fontSize = 48
@@ -174,6 +178,7 @@ class JavelinScene: BaseGameScene {
         decreaseRate = 2
     }
     
+    // Create angle selection interface
     func setupAngleBar() {
         let borderWidth: CGFloat = 2.0
         
@@ -254,6 +259,7 @@ class JavelinScene: BaseGameScene {
         addChild(javelinSprite)
     }
     
+    // Calculate physics for javelin throw
     func initiateThrow() {
         throwAngle = ((currentAngle * .pi) / 180)
         throwStartTime = lastTime
@@ -297,6 +303,7 @@ class JavelinScene: BaseGameScene {
         self.view?.presentScene(scene, transition: transition)
     }
     
+    // Move angle indicator back and forth
     func updateAngleIndicator() {
         if isSwingingAngle {
             currentAngle += angleSwingSpeed * angleDirection
@@ -321,6 +328,7 @@ class JavelinScene: BaseGameScene {
         return (randomValue * 100).rounded() / 100
     }
     
+    // Generate competitor throw distances based on difficulty
     func generateCompetitorThrow() {
 //        let Competitor1Distance = generateRandomDistance()
 //        let Competitor2Distance = generateRandomDistance()
@@ -342,6 +350,7 @@ class JavelinScene: BaseGameScene {
         distances[GameConstants.StringConstants.competitor3Name] = Competitor3Distance
     }
     
+    // Show results after throw is completed
     func handleThrowComplete() {
         let finalDistance = distanceTraveled / 10
         playerThrows.append(finalDistance)
@@ -410,6 +419,7 @@ class JavelinScene: BaseGameScene {
         }
     }
     
+    // Handle touch inputs based on game state
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         switch gameState {
         case .ready:
@@ -467,6 +477,7 @@ class JavelinScene: BaseGameScene {
         }
         }
     
+    // Update game state and physics
     override func update(_ currentTime: TimeInterval) {
             if lastTime > 0 {
                 dt = currentTime - lastTime
@@ -494,6 +505,7 @@ class JavelinScene: BaseGameScene {
             runningDistance += characterSpeed * CGFloat(dt)
         case .throwing:
             if javelinSprite.physicsBody != nil {
+                // Calculate javelin trajectory
                 distanceTraveled = virtualPositionX / 7.0
                 let throwDuration = currentTime - throwStartTime
                         
@@ -539,6 +551,7 @@ class JavelinScene: BaseGameScene {
         }
     }
     
+    // Handle collision between javelin and ground
     override func didBegin(_ contact: SKPhysicsContact) {
         let bodyA = contact.bodyA
         let bodyB = contact.bodyB

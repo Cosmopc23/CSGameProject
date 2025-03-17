@@ -23,10 +23,12 @@ class ProgressBar: SKNode {
         super.init()
 
 
+        // Background bar (gray container)
         let background = SKSpriteNode(color: .darkGray, size: CGSize(width: 200, height: 20))
         self.addChild(background)
 
 
+        // Configure the progress indicator with left-aligned anchor point
         self.bar.anchorPoint = CGPoint(x: 0, y: 0)
         self.addChild(self.bar)
 
@@ -37,6 +39,7 @@ class ProgressBar: SKNode {
         self.addChild(self.label)
 
 
+        // Load saved progress value from UserDefaults
         let initialValue = UserDefaults.standard.float(forKey: userDefaultsKey)
         self.updateProgress(to: CGFloat(initialValue))
     }
@@ -47,7 +50,7 @@ class ProgressBar: SKNode {
     }
 
     func updateProgress(to value: CGFloat) {
-
+        // Clamp value between 0-100 and scale to width
         let clampedValue = max(0, min(100, value))
         let width = 200 * (clampedValue / 100)
         bar.size.width = width

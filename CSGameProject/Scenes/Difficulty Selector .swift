@@ -14,12 +14,15 @@ class DifficultySelector: SKScene {
     
     let borderWidth: CGFloat = 2.0
     
+    // Player stats that affect gameplay difficulty
     var playerSkill: Double = 10.0
     var playerStrength: Double = 10.0
     var playerSpeed: Double = 10.0
     
+    // Currently selected event type
     var chosenEvent: String = "Hundred"
     
+    // Custom initializer that sets up the scene with player stats and event type
     convenience init(size: CGSize, event: String, skill: Double = 10.0, strength: Double = 10.0, speed: Double = 10.0) {
         self.init(size: size)
         
@@ -172,12 +175,14 @@ class DifficultySelector: SKScene {
         
     }
     
+    // Transition to Javelin game scene with selected difficulty and player stats
     func toJavelin(difficulty: Difficulty, strength: Double, skill: Double) {
         let transition = SKTransition.fade(withDuration: 1.0)
         let gameScene = JavelinScene(size: self.size, numberOfThrows: 0, previousThrows: [], difficulty: difficulty, strength: strength, skill: skill)
         view?.presentScene(gameScene, transition: transition)
     }
 
+    // Transition to Hundred meter race scene with selected difficulty and player stats
     func toHundred(difficulty: Difficulty, skill: Double, speed: Double) {
         let transition = SKTransition.fade(withDuration: 1.0)
         let gameScene = HundredScene(size: self.size, difficulty: difficulty, skill: skill, speed: speed)
@@ -185,6 +190,7 @@ class DifficultySelector: SKScene {
         view?.presentScene(gameScene, transition: transition)
     }
     
+    // Route to appropriate game scene based on chosen event type
     func navigate(difficulty: Difficulty) {
         if chosenEvent == "Hundred" {
             toHundred(difficulty: difficulty, skill: playerSkill, speed: playerSpeed)
@@ -193,6 +199,7 @@ class DifficultySelector: SKScene {
         }
     }
     
+    // Handle touch input for difficulty selection buttons
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         let location = touch.location(in: self)
@@ -202,12 +209,6 @@ class DifficultySelector: SKScene {
         print("\(node.name ?? "Nil") clicked")
         
         if node.name == "beginnerButton" {
-            
-//            if chosenEvent == "Hundred" {
-//                toHundred(difficulty: .beginner, skill: playerSkill, speed: playerSpeed)
-//            } else if chosenEvent == "Javelin" {
-//                toJavelin(difficulty: .beginner, strength: playerStrength, skill: playerSkill)
-//            }
             
             navigate(difficulty: .beginner)
             

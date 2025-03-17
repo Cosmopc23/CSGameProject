@@ -7,8 +7,10 @@
 
 import SpriteKit
 
+// Layer that repeats its content for infinite scrolling effect
 class RepeatingLayer: Layer {
     
+    // Override updateNodes to handle repositioning sprites when they move offscreen
     override func updateNodes(_ delta: TimeInterval, childNode: SKNode) {
         if let node = childNode as? SKSpriteNode {
             if node.position.x <= -(node.size.width) {
